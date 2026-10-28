@@ -1,4 +1,4 @@
-# Contención Zombie Manta
+# MantaZero
 
 Herramienta de apoyo a decisiones que simula la propagación de un brote y compara una estrategia de vacunación con dos líneas base: no intervenir e intervenir tarde con menos recursos.
 

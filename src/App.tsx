@@ -29,7 +29,7 @@ export default function App() {
   const update = (key: keyof SimulationInput, value: number) => setInput(current => ({ ...current, [key]: value }))
 
   return <main>
-    <nav><div className="brand"><span className="brand-mark">CM</span><span>Contención Manta</span></div><span className="status"><i /> Simulación reproducible</span></nav>
+    <nav><div className="brand"><span className="brand-mark">M0</span><span>MantaZero</span></div><span className="status"><i /> Simulación reproducible</span></nav>
     <header className="hero">
       <div><p className="eyebrow">COMITÉ DE CONTENCIÓN · TRACK B</p><h1>Decidir antes de que<br/><em>el brote decida.</em></h1><p className="lead">Comparamos estrategias de vacunación con recursos limitados para reducir contagios y comunicar una respuesta clara.</p></div>
       <div className="hero-card"><span>Semilla</span><strong>{input.seed}</strong><small>Misma configuración, mismo resultado</small></div>
