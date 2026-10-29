@@ -1,0 +1,30 @@
+{
+  "baseURL": "http://127.0.0.1:4173",
+  "checks": [
+    "Default: motor real, progreso, tres curvas/bandas, red de repetición 0",
+    "Semilla 87 repetida: resultado completo idéntico; edición no ejecuta ni relabela resultados anteriores",
+    "Red: selector de día/estrategia, posiciones estables, reproducción y pausa",
+    "Cuatro sorpresas acumulativas, reset, cero stock y recomendación de empate",
+    "UI rechaza blanco, semilla fuera de uint32 y exceso de infectados en zona sin iniciar Worker",
+    "Error real del motor se muestra y conserva el resultado previo",
+    "Worker pesado: controles responden, captura configuración, cancela y reejecuta desde cero",
+    "JSON descargado reproduce config y resultado completos",
+    "Diferencia negativa real conservada: población 50, repeticiones 1, stock 10, dosis/día 2, semilla 14",
+    "Vista 390 px sin desbordamiento de página; tabulación entre controles; sin errores JS"
+  ],
+  "pageErrors": [],
+  "negativeScenario": {
+    "population": 50,
+    "days": 30,
+    "initialInfected": 1,
+    "transmissionProbability": 0.08,
+    "recoveryProbability": 0.2,
+    "vaccinesPerDay": 2,
+    "totalVaccines": 10,
+    "interventionDay": 1,
+    "vaccineEfficacy": 0.9,
+    "initialZone": "market",
+    "seed": 14,
+    "repetitions": 1
+  }
+}
