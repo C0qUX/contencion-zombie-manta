@@ -8,7 +8,7 @@ Herramienta de apoyo a decisiones que simula la propagación de un brote y compa
 - Interfaz interactiva para modificar población, contagio, vacunas e inicio de la intervención.
 - Comparación cuantitativa de escenarios y recomendación en lenguaje simple.
 - Pruebas de reproducibilidad, conservación de población y comparación de estrategias.
-- Infraestructura como código para S3 privado + CloudFront mediante CloudFormation.
+- Despliegue estático en AWS Amplify Hosting; configuración de build versionada.
 
 ## Ejecución local
 
@@ -28,13 +28,19 @@ npm run build
 
 ## Despliegue en AWS
 
-Con AWS CLI autenticada y permisos para CloudFormation, S3 y CloudFront:
+Demo pública: **https://main.d3kt9g5gofzhxh.amplifyapp.com/**
 
-```powershell
-./scripts/deploy-aws.ps1
-```
+AWS Amplify Hosting, región **Ohio (`us-east-2`)**, rama **`main`**.
+El archivo [amplify.yml](amplify.yml) instala Node 22 y dependencias con `npm ci`, ejecuta `npm test` y `npm run build`, y publica `dist`.
+La aplicación actual no requiere variables de entorno, claves AWS, API ni base de datos.
 
-El script crea/actualiza el stack, publica `dist/`, invalida la caché y devuelve la URL HTTPS. La infraestructura está descrita en [`infra/template.yaml`](infra/template.yaml).
+[Diagrama de arquitectura SVG](docs/arquitectura.svg) · [Operación del equipo](docs/infraestructura.md) · [Costos](docs/costos.md)
+
+![Arquitectura desplegada](docs/arquitectura.svg)
+
+AWS Budget `spookython-2026-mensual` creado con 5 USD/mes y alertas reales a 1, 4 y 5 USD. **Pendiente verificar el correo y adjuntar captura real del Budget con alertas** (estado consultado el 29/10/2026). La fecha de inicio del período no acredita creación desde el primer día.
+
+El stack S3/CloudFront y el script PowerShell del repositorio son una alternativa histórica; no se utilizan para este despliegue de Amplify.
 
 ## Supuestos del modelo
 
@@ -65,7 +71,7 @@ scripts/            automatización operativa
 
 ## Equipo
 
-Proyecto desarrollado para SpookyThon 2028 · Track B: La Plaga Zombie.
+Proyecto desarrollado para SpookyThon 2026 · Track B: La Plaga Zombie.
 
 ## Licencia
 

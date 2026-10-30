@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="480" viewBox="0 0 1100 480">
+<rect width="1100" height="480" fill="#0b1424"/>
+<g font-family="Arial,sans-serif" fill="#edf4ff">
+<text x="40" y="48" font-size="26">7DaysToSurvive / MantaZero — infraestructura desplegada</text>
+<text x="40" y="80" font-size="17">AWS Amplify Hosting · Ohio (us-east-2) · sitio estático público con HTTPS</text>
+<g fill="#152b42" stroke="#5ce0c4" stroke-width="2">
+<rect x="40" y="140" width="270" height="150" rx="12"/>
+<rect x="410" y="140" width="280" height="150" rx="12"/>
+<rect x="790" y="140" width="270" height="150" rx="12"/>
+<rect x="410" y="350" width="280" height="90" rx="12"/>
+</g>
+<g font-size="18" text-anchor="middle">
+<text x="175" y="175">GitHub · repositorio público</text><text x="175" y="205">main + amplify.yml</text><text x="175" y="235">Código y lockfile</text>
+<text x="550" y="175">Amplify Hosting</text><text x="550" y="205">Node 22 · npm ci · pruebas</text><text x="550" y="235">build → dist → publicación</text>
+<text x="925" y="175">Navegador del visitante</text><text x="925" y="205">React y simulación local</text><text x="925" y="235">Sin API ni base de datos</text>
+<text x="550" y="380">AWS Budgets · 5 USD/mes</text><text x="550" y="410">Avisos: 20 % / 80 % / 100 %</text>
+</g>
+<g stroke="#5ce0c4" stroke-width="3"><path d="M310 215H400m-12 -8 12 8-12 8M690 215H780m-12 -8 12 8-12 8M550 290V340m-8 -12 8 12 8-12" fill="none"/></g>
+<text x="322" y="195" font-size="14">push</text><text x="710" y="195" font-size="14">HTTPS</text>
+<text x="40" y="330" font-size="16">Los parámetros y resultados se procesan en el navegador.</text>
+<text x="40" y="460" font-size="14">No se despliega el stack alternativo de CloudFormation. Los avisos requieren verificar el correo.</text>
+</g></svg>

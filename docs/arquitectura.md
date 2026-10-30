@@ -1,25 +1,23 @@
-# Arquitectura
+# Arquitectura desplegada
 
-La primera versión prioriza una entrega reproducible, segura y de bajo costo.
+![Arquitectura](arquitectura.svg)
 
-```text
-Navegador
-   │ HTTPS
-   ▼
-Amazon CloudFront ── OAC ──► Amazon S3 privado
-                                └── aplicación React/Vite
-```
+El SVG es también el archivo fuente editable del diagrama.
 
-## Decisiones
+- URL pública: https://main.d3kt9g5gofzhxh.amplifyapp.com/
+- Región de la aplicación: Ohio, `us-east-2`.
+- Aplicación de Amplify: `d3kt9g5gofzhxh`; rama de producción: `main`.
+- Hosting estático administrado por AWS Amplify con HTTPS. SSR deshabilitado.
+- GitHub entrega el código a Amplify; `amplify.yml` instala dependencias con el lockfile, ejecuta pruebas y compila a `dist`.
+- La simulación actual se ejecuta en el navegador. No existe una API, base de datos ni almacenamiento remoto de escenarios.
+- Son públicos el repositorio, los archivos JavaScript/HTML/CSS y la URL de la demo. La administración de AWS requiere autenticación.
+- No se necesitan claves de AWS ni secretos de API en el cliente. Las variables `VITE_*` serían públicas.
+- AWS Budgets observa costos; no forma parte del flujo de simulación ni impone un límite duro de consumo.
 
-- El modelo SIR se ejecuta en el navegador para eliminar latencia y costo de cómputo durante la fase inicial.
-- S3 permanece privado. CloudFront accede mediante Origin Access Control y fuerza HTTPS.
-- El modelo es determinista: la misma configuración y semilla produce el mismo resultado.
-- La capa de dominio está separada de la interfaz para permitir migrar simulaciones masivas a Lambda, Batch o Fargate sin reescribir la experiencia web.
+## Alternativa histórica
 
-## Evolución prevista
+`infra/template.yaml` y `scripts/deploy-aws.ps1` describen una alternativa S3/CloudFront con CloudFormation. No son el procedimiento del despliegue actual. No ejecutarlos para actualizar Amplify ni crear infraestructura duplicada.
 
-1. Ejecutar Monte Carlo en AWS Batch o Step Functions Distributed Map.
-2. Guardar escenarios en DynamoDB y resultados en S3/Athena.
-3. Exponer ejecuciones con API Gateway y Lambda.
-4. Incorporar redes reales de barrios, escuelas y transporte de Manta.
+## Operación
+
+Ver [operación y configuración del equipo](infraestructura.md) y [costos](costos.md).
