@@ -54,7 +54,8 @@ describe('comparison audit', () => {
     expect(run.finalZones[2].recovered).toBe(input.initialInfected)
   })
   it('preserves negative paired values and uses interpolated empirical percentiles', () => {
-    expect(summarizeDifferences([-10, 0, 20])).toEqual({ mean: 10 / 3, p10: -8, p90: 16, min: -10, max: 20 })
+    expect(summarizeDifferences([-10, 0, 20])).toEqual({ mean: 10 / 3, median: 0, p10: -8, p90: 16, min: -10, max: 20 })
+    expect(summarizeDifferences([4, 1, 3, 2]).median).toBe(2.5)
   })
   it('reports a real loss without truncating or relabelling it as a benefit', () => {
     const result = compareStrategies({ ...DEFAULT_INPUT, population: 100, initialInfected: 1, days: 30, runs: 1, totalVaccines: 10, vaccinesPerDay: 2, seed: 14 })

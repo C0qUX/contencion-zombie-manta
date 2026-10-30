@@ -26,7 +26,7 @@ const signedClass = (value: number) => value < 0 ? 'negative' : 'good'
 function StrategyRow({ strategy, result }: { strategy: StrategySummary; result: ComparisonResult }) {
   const avoided = result.none.meanAffected - strategy.meanAffected
   return <tr><th scope="row">{strategy.label}</th>
-    <td>{number(strategy.meanAffected)}<small>P10–P90: {number(strategy.p10Affected)}–{number(strategy.p90Affected)}</small><small>Mín.–máx.: {number(strategy.minAffected)}–{number(strategy.maxAffected)}</small></td>
+    <td>{number(strategy.meanAffected)}<small>Mediana: {number(strategy.medianAffected)}</small><small>P10–P90: {number(strategy.p10Affected)}–{number(strategy.p90Affected)}</small><small>Mín.–máx.: {number(strategy.minAffected)}–{number(strategy.maxAffected)}</small></td>
     <td>{number(strategy.meanPeak)}<small>Día medio {number(strategy.meanPeakDay)}</small></td>
     <td>{number(strategy.meanDosesUsed)}<small>Disponibles: {number(strategy.dosesAvailable)}</small></td>
     <td className={signedClass(avoided)}>{number(avoided)}<small>{number(result.none.meanAffected ? avoided / result.none.meanAffected * 100 : 0)} % frente a no actuar</small></td></tr>
@@ -140,14 +140,14 @@ export default function App() {
           <section className="metrics" aria-label="Diferencias de contagios">
             {[{ label: 'Frente a no intervenir', stats: result.pairedVsNone }, { label: 'Frente al azar', stats: result.pairedVsRandom }].map(item => {
               const isNegative = item.stats.mean < 0
-              return <article key={item.label}><span>{item.label} {isNegative ? '(más contagios)' : ''}</span><strong className={signedClass(item.stats.mean)}>{number(item.stats.mean)}</strong><small>{isNegative ? 'La dirigida tuvo más contagios en promedio' : 'Contagios evitados medios'} · P10–P90: {number(item.stats.p10)} a {number(item.stats.p90)}</small></article>
+              return <article key={item.label}><span>{item.label} {isNegative ? '(más contagios)' : ''}</span><strong className={signedClass(item.stats.mean)}>{number(item.stats.mean)}</strong><small>{isNegative ? 'La dirigida tuvo más contagios en promedio' : 'Contagios evitados medios'} · mediana {number(item.stats.median)} · P10–P90: {number(item.stats.p10)} a {number(item.stats.p90)}</small></article>
             })}
             <article><span>Protegidos por vacunación dirigida</span><strong>{number(result.targeted.meanProtected)}</strong><small>{number(result.targeted.meanDosesUsed)} dosis usadas en promedio. No equivale a vidas salvadas.</small></article>
           </section>
           <section className="panel decision"><div><p className="eyebrow">DECISIÓN PARA MANTA</p><h2>{!hasAction ? 'No hay vacunación efectiva dentro de este plan.' : best.id === 'targeted' && result.savedVsRandom > 0 ? 'La estrategia dirigida obtiene menos contagios en promedio.' : best.id === 'random' ? 'El reparto al azar obtiene menos contagios en este escenario.' : best.id === 'none' ? 'No intervenir obtiene la menor media en este experimento.' : 'Las estrategias empatan en promedio.'}</h2>
             {hasAction && <p>Plan dirigido evaluado: empezar el día <b>{result.config.interventionDay}</b>, hasta <b>{number(result.config.vaccinesPerDay)} dosis/día</b> y <b>{number(result.targeted.dosesAvailable)} disponibles</b>. Mayor asignación inicial: <b>{priority.toLowerCase()}</b>; el reparto se vuelve a calcular cada día según el riesgo.</p>}
             <p><b>Recursos equivalentes evaluados:</b> la estrategia dirigida y el reparto al azar compiten con idéntica capacidad máxima (<b>{number(result.config.vaccinesPerDay)} dosis/día</b>) y el mismo stock disponible (<b>{number(result.config.totalVaccines ?? 0)} dosis</b>), iniciando ambas en el día <b>{result.config.interventionDay}</b>.</p>
-            <p>Dirigida frente al azar: <b>{number(result.savedVsRandom)} contagios evitados en promedio</b>, con diferencias pareadas P10–P90 de {number(result.pairedVsRandom.p10)} a {number(result.pairedVsRandom.p90)}. {result.pairedVsRandom.min < 0 ? 'Hubo corridas donde la dirigida perdió.' : 'El resultado no garantiza ganar en otros escenarios.'}</p>
+            <p>Dirigida frente al azar: <b>{number(result.savedVsRandom)} contagios evitados en promedio</b>, mediana {number(result.pairedVsRandom.median)} y diferencias pareadas P10–P90 de {number(result.pairedVsRandom.p10)} a {number(result.pairedVsRandom.p90)}. {result.pairedVsRandom.min < 0 ? 'Hubo corridas donde la dirigida perdió.' : 'El resultado no garantiza ganar en otros escenarios.'}</p>
             <p>La menor media es una comparación del escenario, no una garantía causal ni una búsqueda del óptimo global.</p>
           </div></section>
           <section className="panel chart-panel"><div className="section-title"><span>02</span><h2>Curva de infecciosos</h2></div><CurveChart targeted={result.targeted} random={result.random} none={result.none} interventionDay={result.config.interventionDay} /></section>

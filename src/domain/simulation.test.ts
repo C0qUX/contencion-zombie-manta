@@ -53,6 +53,8 @@ describe('seeded epidemic simulation', () => {
     for (const strategy of [result.targeted, result.random, result.none]) {
       expect(strategy.p10Affected).toBeLessThanOrEqual(strategy.meanAffected)
       expect(strategy.meanAffected).toBeLessThanOrEqual(strategy.p90Affected)
+      expect(strategy.p10Affected).toBeLessThanOrEqual(strategy.medianAffected)
+      expect(strategy.medianAffected).toBeLessThanOrEqual(strategy.p90Affected)
       expect(strategy.timeline).toHaveLength(scenario.days + 1)
     }
   })

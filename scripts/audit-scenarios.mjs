@@ -16,7 +16,7 @@ try {
     experiments.push({
       scenario: variant.id, config: result.config,
       strategies: [result.targeted, result.random, result.none].map(item => ({
-        strategy: item.id, meanAffected: item.meanAffected, p10: item.p10Affected, p90: item.p90Affected,
+        strategy: item.id, meanAffected: item.meanAffected, medianAffected: item.medianAffected, p10: item.p10Affected, p90: item.p90Affected,
         meanPeak: item.meanPeak, meanPeakDay: item.meanPeakDay, dosesUsed: item.meanDosesUsed, dosesAvailable: item.dosesAvailable,
       })), pairedVsNone: result.pairedVsNone, pairedVsRandom: result.pairedVsRandom,
     })

@@ -62,6 +62,7 @@ export type StrategySummary = {
   label: string
   timeline: AggregateDay[]
   meanAffected: number
+  medianAffected: number
   p10Affected: number
   p90Affected: number
   meanPeak: number
@@ -90,7 +91,7 @@ export type ComparisonResult = {
   example: Record<StrategyId, RunResult>
 }
 
-export type DifferenceSummary = { mean: number; p10: number; p90: number; min: number; max: number }
+export type DifferenceSummary = { mean: number; median: number; p10: number; p90: number; min: number; max: number }
 
 export type ZoneState = { susceptible: number; exposed: number; infected: number; recovered: number; vaccinated: number }
 type Random = () => number
@@ -349,6 +350,7 @@ function aggregate(id: StrategyId, label: string, runs: RunResult[]): StrategySu
       return { day: day.day, mean: mean(infected), p10: quantile(infected, 0.1), p90: quantile(infected, 0.9) }
     }),
     meanAffected: mean(affected),
+    medianAffected: quantile(affected, 0.5),
     p10Affected: quantile(affected, 0.1),
     p90Affected: quantile(affected, 0.9),
     meanPeak: mean(runs.map(run => run.peakInfected)),
@@ -364,7 +366,7 @@ function aggregate(id: StrategyId, label: string, runs: RunResult[]): StrategySu
 
 export function summarizeDifferences(values: number[]): DifferenceSummary {
   if (!values.length || values.some(value => !Number.isFinite(value))) throw new Error('Muestra de diferencias inválida.')
-  return { mean: mean(values), p10: quantile(values, .1), p90: quantile(values, .9), min: Math.min(...values), max: Math.max(...values) }
+  return { mean: mean(values), median: quantile(values, .5), p10: quantile(values, .1), p90: quantile(values, .9), min: Math.min(...values), max: Math.max(...values) }
 }
 
 export function compareStrategies(input: SimulationInput, onProgress?: (completed: number, total: number) => void): ComparisonResult {
