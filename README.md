@@ -132,7 +132,9 @@ scripts/            automatización operativa
 - [Modelo, parámetros y evidencia](docs/modelo.md)
 - [Mapa automático de Manta, navegación y prueba de semillas](docs/mapa-manta.md)
 - [Recorrido de cinco minutos y respuestas](docs/demo.md)
-- [Presentación del pitch](docs/presentacion.html) · [PDF para entrega](docs/presentacion.pdf) — regenerar con `PLAYWRIGHT_MODULE=/ruta/a/playwright node scripts/export-presentation.cjs`
+- **Pitch final de seis diapositivas:** [PDF](docs/pitch-corto.pdf) · [PowerPoint editable](docs/pitch-corto.pptx) · [Guion de cinco minutos y diagrama](docs/pitch-corto.md).
+- [Diagrama de tecnologías para la presentación](docs/arquitectura-presentacion.png).
+- Presentación anterior, conservada como histórica: [HTML](docs/presentacion.html) · [PDF](docs/presentacion.pdf).
 
 ## Equipo
 

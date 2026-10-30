@@ -30,6 +30,10 @@ La configuración del repositorio `amplify.yml` tiene prioridad sobre la configu
 
 ## Último despliegue verificado
 
+Actualización de cierre: `4b33529` integra el dashboard claro, el mapa con reproducción continua y el informe PDF. La URL pública entrega los mismos hashes de JavaScript/CSS que el build local verificado. En producción pasaron 12 recorridos generales y seis de reproducción/PDF, sin errores JavaScript; se recorrieron realmente 90 días y se descargó el PDF. Evidencias: [dashboard final](evidencia/aws/verificacion-dashboard-final.json) y [reproducción e informe](evidencia/aws/verificacion-reproduccion-final.json). Las peticiones cartográficas se interceptan en automatización; revisar disponibilidad de calles con conexión antes de presentar.
+
+Los registros de la tabla siguiente describen la verificación anterior del motor, no el cierre del dashboard.
+
 | Dato | Valor |
 |---|---|
 | Fecha | 30/10/2026, 16:09 UTC (Amplify publicó a las 16:08:29 UTC, dos minutos después de fusionar) |
