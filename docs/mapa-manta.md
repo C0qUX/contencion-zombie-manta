@@ -39,4 +39,4 @@ La validación final pasó 70 pruebas y build con Node 22.23.4, las 11 comprobac
 - Edge: día 0/final, cambio de estrategia, reproducción/pausa, movimiento reducido, fallo de cartografía, batería reproducible, descarga JSON y móvil de 390 px.
 - Regresión: ejecutar el script existente scripts/verify-ui.cjs contra el build servido.
 
-La rama de mapa parte de mejora/cierre-reto para conservar el trabajo reciente del equipo. Integrar primero esa base y revisar el PR del mapa después; no reemplaza automáticamente main ni modifica AWS o la release entregada.
+El mapa se desarrolló sobre mejora/cierre-reto para conservar el trabajo reciente del equipo. Esa base ya fue integrada por el equipo en main y la rama del mapa se actualizó con main 2e94420, incluido el PDF. El PR del mapa apunta ahora a main; no se despliega automáticamente hasta integrarlo y no modifica AWS ni la release entregada.
