@@ -13,6 +13,7 @@
 - Red de 5 lugares: hogares, colegio, mercado, bus, barrio.
 - Escenario oficial, semilla 2026, 120 corridas Monte Carlo.
 - Tres estrategias con igual presupuesto: 7DaysToSurvive (dirigida), azar y no intervenir.
+- La dirigida elige su regla entre 32 en 24 futuros de calibración y se evalúa en 120 futuros distintos.
 - Leer diferencias frente a ambas referencias y sus rangos P10–P90.
 
 ### 1:30–2:15 — Comparación justa
@@ -29,6 +30,7 @@
 
 ### 3:20–4:10 — Decisión y detalles
 - Decisión para Manta: qué política obtiene menor media.
+- Regla elegida y ganancia frente a la regla fija original; desplegar las 32 reglas evaluadas.
 - Reparto inicial por lugar, corrida 1 de N como ejemplo individual.
 - Exportación JSON con versión del algoritmo.
 - Enlace reproducible con la configuración.
@@ -37,7 +39,7 @@
 - Amplify sirve por HTTPS desde Ohio; el dispositivo calcula.
 - Budget: 5 USD mensuales, alertas a 1, 4 y 5 USD. No corta gasto.
 - Costo estimado: ~2.76 USD/mes.
-- Limitaciones: datos sintéticos, sin calibración clínica, heurística no óptima.
+- Limitaciones: datos sintéticos, sin calibración clínica, mejor regla de una familia acotada y no óptimo global.
 - "Decidir antes de que el brote decida."
 
 ## Respuestas breves para preguntas del jurado
@@ -46,7 +48,8 @@
 - **¿Por qué Monte Carlo?** Una trayectoria puede ser afortunada. Evaluamos 120 futuros y reportamos variabilidad empírica.
 - **¿Por qué esa semilla?** Pública y reproducible. Hay batería con cinco semillas y pérdidas preservadas.
 - **¿Comparación justa?** Mismo stock, capacidad, inicio, eficacia, horizonte y estado inicial; azar por eventos comunes. Consumo real visible porque elegibilidad puede cambiar.
-- **¿Óptimo?** No. Heurística por susceptibles, prevalencia y conectividad ficticia. No prometemos óptimo global.
+- **¿Óptimo?** Mejor de una familia acotada: 32 reglas probadas en 24 futuros de calibración. En el escenario oficial evita 451,5 contagios frente al azar (la regla fija evitaba 134,7) y 316,8 más que esa regla fija. No prometemos óptimo global.
+- **¿No hacen trampa al elegir la regla?** Se elige en futuros de calibración que nunca entran en los 120 evaluados. El azar y no intervenir dan exactamente los mismos resultados que antes.
 - **¿AWS?** Amplify instala, prueba, compila y sirve. Monte Carlo corre en Web Worker del navegador.
 - **¿Costo?** Ver supuestos y fechas en docs/costos.md; no prometer factura final cero ni que Budget detenga servicios.
 - **¿Si pierde?** Mostramos diferencia negativa y una decisión condicionada. No se cambia la semilla para aparentar éxito.
@@ -67,6 +70,6 @@ Ensayar antes del pitch con al menos estas variaciones:
 | Intervención tardía | Campo "Día de intervención" → 25 → Ejecutar | Menos días para actuar |
 | Combinación | Contagio ×2 + Mitad stock + Ejecutar | Escenario extremo |
 
-Si la dirigida pierde: explicar honestamente que es una heurística, no un óptimo.
+Si la dirigida pierde: explicar honestamente que es la mejor regla de una familia acotada, no un óptimo, y que la derrota se mide en futuros nuevos.
 
 Ensayar en la URL final antes de presentar. Las evidencias locales no prueban AWS; no cambiar v0.1.0 sin comprobar las reglas.

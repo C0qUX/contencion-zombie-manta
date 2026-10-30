@@ -5,9 +5,10 @@ Herramienta de apoyo a decisiones que simula una plaga estocástica sobre una re
 ## Estado del proyecto
 
 - Modelo SEIR estocástico ejecutado día a día sobre hogares, colegio, mercado, bus y barrio.
-- Semilla real y 120 repeticiones Monte Carlo por defecto, con media y rango percentil 10–90.
+- Semilla real y 120 repeticiones Monte Carlo por defecto, con media, mediana y rango percentil 10–90.
 - Interfaz para el Brote Sorpresa: origen, contagiosidad, vacunas, eficacia, inicio y semilla.
 - Comparación justa entre 7DaysToSurvive, reparto aleatorio y no intervenir.
+- Estrategia que optimiza: elige su regla entre 32 candidatas en 24 futuros de calibración que nunca entran en la evaluación, y reporta la ganancia frente a la regla fija original.
 - Worker con progreso y cancelación, seis escenarios, exportación JSON, enlace compartible e informe imprimible.
 - Diferencias pareadas firmadas, tres bandas P10–P90 y consumos reales visibles, incluidos escenarios donde la dirigida pierde.
 - Pruebas de reproducibilidad, conservación, elegibilidad, recursos equivalentes y casos negativos.
@@ -56,7 +57,7 @@ El stack S3/CloudFront y el script PowerShell del repositorio son una alternativ
 - Grupos excluyentes S/E/I/R/V: S sano (susceptible), E mordido (expuesto, aún no infeccioso), I zombie (infeccioso), R exorcizado (recuperado) y V protegido por vacuna. La suma de los cinco conserva la población.
 - La contagiosidad combina 74 % de exposición dentro del lugar y 26 % entre lugares conectados.
 - Una dosis solo se ofrece a susceptibles. Un fallo consume recurso y conserva S; puede haber otro intento en un día posterior. Se supone protección inmediata y observación perfecta del estado.
-- La estrategia dirigida pondera susceptibles, prevalencia y conectividad. La línea aleatoria recibe el mismo inventario y calendario.
+- La estrategia dirigida elige, entre 32 reglas que ponderan potencial de propagación, casos activos y conectividad, la de menos contagios en 24 futuros de calibración. La línea aleatoria recibe el mismo inventario y calendario.
 - Eventos pseudoaleatorios con claves de semilla/corrida/día/lugar/tipo, comunes entre estrategias; el reparto usa un flujo separado.
 - No se modelan nacimientos, fallecimientos, reinfección ni pérdida de inmunidad en esta fase.
 
@@ -76,26 +77,38 @@ El stack S3/CloudFront y el script PowerShell del repositorio son una alternativ
 | Semilla | 2026 | Valor público para reproducir el resultado |
 | Monte Carlo | 120 corridas | Balance entre estabilidad y respuesta inmediata en el navegador |
 
-Para reproducir esta versión: pulsar **Restablecer escenario oficial**, confirmar semilla `2026` y pulsar **Ejecutar simulación**. Los controles editados no cambian resultados anteriores. Exportar JSON conserva configuración, resultado y versión `seir-places-2.0.0`; la duración queda fuera del resultado reproducible. La demo pública quedó verificada con esta versión el 30/10/2026: Amplify sirve los mismos archivos que el build local de `a165890` y la batería de navegador pasó 11/11 comprobaciones contra la URL de AWS ([evidencia](docs/evidencia/aws/verificacion.json)).
+Para reproducir esta versión: pulsar **Restablecer escenario oficial**, confirmar semilla `2026` y pulsar **Ejecutar simulación**. Los controles editados no cambian resultados anteriores. Exportar JSON conserva configuración, resultado, regla elegida y versión `seir-places-3.0.0`; la duración queda fuera del resultado reproducible. La demo pública verificada el 30/10/2026 sirve `a165890` con `seir-places-2.0.0`: Amplify entrega los mismos archivos que el build local y la batería de navegador pasó 11/11 comprobaciones contra la URL de AWS ([evidencia](docs/evidencia/aws/verificacion.json)). La versión 3.0.0 se publica al integrar esta rama en `main`; después hay que repetir la verificación.
 
 Los números son parámetros educativos, no predicciones clínicas. La inspiración narrativa es COVID-19; sus tasas no calibran este modelo. [Método y fuentes](docs/modelo.md).
 
 ## Cómo funciona la estrategia
 
-Cada día calcula un puntaje por lugar usando susceptibles, casos E/I y conectividad ficticia. Reparte proporcionalmente a ese puntaje. El azar muestrea uniformemente sin reemplazo entre susceptibles del día con el mismo stock, capacidad, inicio y eficacia. Los consumos realizados pueden diferir al agotarse la elegibilidad: se reportan explícitamente. No se promete igual número de dosis consumidas ni una estrategia óptima global.
+Antes de cada comparación, la estrategia prueba 32 reglas de reparto diario: repartir proporcionalmente o concentrar por tandas, y cuánto pesan el potencial de propagación de un caso en cada lugar, los casos activos (E/I) y la conectividad ficticia. Todas se ejecutan en los mismos 24 futuros de calibración y gana la de menor media de contagios. Esos futuros nunca entran en la evaluación: la regla elegida se compara después en las 120 corridas pareadas contra el azar, contra no intervenir y contra la regla fija de la versión 2.0.0, que sigue siendo una candidata y reproduce exactamente sus resultados anteriores.
+
+El azar muestrea uniformemente sin reemplazo entre susceptibles del día con el mismo stock, capacidad, inicio y eficacia. Los consumos realizados pueden diferir al agotarse la elegibilidad: se reportan explícitamente. Es la mejor regla de una familia acotada; no se promete igual número de dosis consumidas ni un óptimo global.
+
+| Escenario oficial · semilla 2026 · 120 corridas | Regla fija (2.0.0) | Búsqueda (3.0.0) |
+|---|---:|---:|
+| Contagios acumulados, media | 2.826,7 | 2.509,9 |
+| Evitados frente al azar | 134,7 | **451,5** (P10–P90: 326,6 a 595,6) |
+| Evitados frente a no intervenir | 9.432,4 | 9.749,2 |
+| Ganancia frente a la regla fija, mismas corridas | — | 316,8 (P10–P90: 207,6 a 438,5) |
+
+La regla elegida en este escenario concentra las dosis por tandas según potencial de propagación al cuadrado y casos activos; su primera asignación va entera al mercado, donde empezó el brote.
 
 La decisión utiliza resultados reales, incluidos negativos; la prioridad inicial proviene de las dosis asignadas, no del lugar donde empezó el brote. Los percentiles se interpolan linealmente y P10–P90 describe ejecuciones, no un intervalo de confianza de la media.
 
 ### Batería registrada
 
-`node scripts/audit-scenarios.mjs` ejecuta 40 experimentos predefinidos con cinco semillas y 120 corridas cada uno. [Resultados completos](docs/evidencia/sensibilidad.json). La variante de algoritmo corrige el día de comienzo (día 0 sin acciones), el reparto al azar y la alineación de eventos. Cambian los números respecto a `07877a2`; se conservaron las tasas oficiales, sin ajustarlas para favorecer una victoria.
+`node scripts/audit-scenarios.mjs` ejecuta 40 experimentos predefinidos (ocho escenarios × cinco semillas, 120 corridas cada uno). [Resultados completos](docs/evidencia/sensibilidad.json). Con `seir-places-3.0.0`, la regla elegida supera al azar en media en 40 de 40 experimentos; el P10 pareado más bajo frente al azar es +100,9. La ganancia media frente a la regla fija va de 144 contagios (intervención tardía) a 392 (baja eficacia). Se conservaron las tasas oficiales, sin ajustarlas para favorecer una victoria. Un caso límite separado (población 100, una corrida, semilla 9) conserva una derrota real frente al azar.
 
 ## Limitaciones conocidas
 
 - La red es sintética y agregada; no reproduce calles, movilidad ni población real de Manta.
 - La aproximación binomial para grupos grandes prioriza velocidad de la demo.
 - No existe calibración epidemiológica ni validación clínica.
-- El cálculo corre en el navegador; no se ejecutan todavía miles de corridas distribuidas en AWS.
+- La búsqueda cubre 32 reglas de una familia; no explora todas las asignaciones posibles ni garantiza un óptimo global.
+- El cálculo corre en el navegador (~2–3 s para el escenario oficial en un portátil actual); no se ejecutan todavía miles de corridas distribuidas en AWS.
 
 ## Estructura
 

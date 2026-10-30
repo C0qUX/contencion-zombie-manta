@@ -1013,7 +1013,7 @@
               <div class="pill-tag">Estrategia Recomendada</div>
               <h3 class="card-title">Dirigida (7DaysToSurvive)</h3>
               <p class="card-body">
-                Algoritmo heurístico inteligente que calcula dinámicamente el riesgo combinando <b>susceptibles locales</b>, <b>prevalencia activa</b> (E+I) y <b>conectividad</b> de cada lugar en la red.
+                Elige la mejor de <b>32 reglas</b> en 24 futuros de calibración y la evalúa en 120 futuros nuevos. Pondera <b>potencial de propagación</b>, <b>casos activos</b> (E+I) y <b>conectividad</b>. Oficial: <b>451 contagios evitados frente al azar</b> (regla fija: 135).
               </p>
             </div>
 
@@ -1021,7 +1021,7 @@
               <div class="pill-tag orange">Línea Base Neutral</div>
               <h3 class="card-title">Distribución al Azar</h3>
               <p class="card-body">
-                Reparto uniforme sin reemplazo entre la población susceptible. Utiliza exactamente el mismo inventario y calendario para medir el valor agregado de la heurística.
+                Reparto uniforme sin reemplazo entre la población susceptible. Utiliza exactamente el mismo inventario y calendario para medir el valor agregado de la regla elegida.
               </p>
             </div>
 
@@ -1057,7 +1057,7 @@
            ==================================================================== -->
       <section class="slide" id="slide-4">
         <div class="slide-header">
-          <div class="slide-eyebrow"><span class="dot"></span> Fundamento Matemático <span class="event-badge">Algoritmo seir-places-2.0.0</span></div>
+          <div class="slide-eyebrow"><span class="dot"></span> Fundamento Matemático <span class="event-badge">Algoritmo seir-places-3.0.0</span></div>
           <h2 class="slide-title">El <em>modelo SEIR</em>: Red sintética y estocástica</h2>
           <p class="slide-subtitle">Dinámica de compartimentos estocásticos sobre una topología urbana sintética de Manta.</p>
         </div>
@@ -1201,7 +1201,7 @@
                 </tr>
                 <tr class="highlight-row">
                   <td class="dim-header">Lógica de Asignación</td>
-                  <td style="color: var(--teal-primary); font-weight: 700;">Prioriza: Susceptibles × Prevalencia × Conectividad</td>
+                  <td style="color: var(--teal-primary); font-weight: 700;">Mejor de 32 reglas: propagación × casos activos × conectividad</td>
                   <td style="color: var(--orange-primary); font-weight: 700;">Uniforme sin reemplazo entre susceptibles</td>
                   <td>Sin intervención médica</td>
                 </tr>
@@ -1324,7 +1324,7 @@
               <div class="card-num">RESULTADOS EN SEGUNDOS</div>
               <h3 class="card-title">Cálculo instantáneo y honesto</h3>
               <p class="card-body">
-                El Web Worker recalcula las 120 corridas en ~1.5 segundos. <b>Si la estrategia dirigida pierde frente al azar, se muestra honestamente</b> con delta negativo.
+                El Web Worker vuelve a elegir la regla y recalcula las 120 corridas en ~2–3 segundos. <b>Si la estrategia dirigida pierde frente al azar, se muestra honestamente</b> con delta negativo.
               </p>
             </div>
           </div>
@@ -1444,7 +1444,7 @@
 
             <div class="card highlight-orange">
               <div class="card-num orange">RESULTADO 03</div>
-              <h3 class="card-title">La Heurística Puede Perder</h3>
+              <h3 class="card-title">La Regla Elegida Puede Perder</h3>
               <p class="card-body">
                 En ciertos escenarios extremos o brotes saturados, <b>el azar puede superar a la estrategia dirigida</b>, y el sistema lo muestra abiertamente.
               </p>
@@ -1504,7 +1504,7 @@
               <div style="display: flex; flex-direction: column; gap: 8px;">
                 <span style="font-size: 24px; color: var(--text-faint); text-transform: uppercase; font-weight: 700;">Reproducibilidad</span>
                 <span style="font-size: 30px; font-weight: 800; color: var(--teal-primary);">Semilla 2026 · 120 Corridas</span>
-                <span style="font-size: 24px; color: var(--text-muted); font-family: var(--font-mono);">seir-places-2.0.0</span>
+                <span style="font-size: 24px; color: var(--text-muted); font-family: var(--font-mono);">seir-places-3.0.0</span>
               </div>
 
               <div style="display: flex; flex-direction: column; gap: 8px;">

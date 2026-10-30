@@ -58,6 +58,17 @@ Pendientes antes del pitch:
 3. Comprobar con el titular el correo de Budget y el gasto actualizado.
 4. Tener la presentación PDF/PPTX lista (docs/presentacion.html → imprimir a PDF).
 
+## Cierre del reto — rama mejora/cierre-reto
+
+| Criterio | Estado | Evidencia |
+|---|---|---|
+| Estrategia que optimiza | Cumple | Búsqueda entre 32 reglas en 24 futuros de calibración separados; `seir-places-3.0.0` |
+| Media, mediana y P10–P90 | Cumple | Tabla, métricas y decisión muestran la mediana |
+| Impacto frente al azar, escenario oficial | 451,5 contagios evitados (antes 134,7) | [sensibilidad.json](evidencia/sensibilidad.json): 40/40 experimentos positivos |
+| Demo pública verificada | `a165890` (2.0.0), 11/11 | [verificacion.json](evidencia/aws/verificacion.json) |
+
+Tras integrar en `main`: esperar el despliegue de Amplify, repetir `scripts/verify-ui.cjs` contra la URL pública y actualizar la tabla. Siguen pendientes, por parte del titular de la cuenta AWS: verificar el correo del Budget y registrar el gasto final.
+
 Este documento sustituye el roadmap anterior, que mezclaba tareas ya completadas y propuestas. Método completo en docs/modelo.md y recorrido en docs/demo.md.
 
 ## Repetir la aceptación en navegador
