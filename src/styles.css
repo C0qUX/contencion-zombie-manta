@@ -187,3 +187,16 @@ summary { padding: 12px 0; font-size: 13px; }
 .policy-search table { min-width: 520px; }
 .policy-search tbody th small { display: inline-block; margin: 0 0 0 8px; }
 @media print { .policy-search { display: none; } }
+.place-controls { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: flex-end; }
+.place-controls .day-slider { flex: 1 1 260px; max-width: none; }
+.day-slider span { display: block; margin-bottom: 8px; }
+.day-slider input { width: 100%; accent-color: #4de0c2; }
+.state-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 14px 0 0; }
+.state-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.seg-s { fill: #5b7a90; background: #5b7a90; }
+.seg-e { fill: #f5b94c; background: #f5b94c; }
+.seg-i { fill: #ff627d; background: #ff627d; }
+.seg-r { fill: #a58bff; background: #a58bff; }
+.seg-v { fill: #4de0c2; background: #4de0c2; }
+.places svg text.place-note { font-size: 11px; fill: #afc4d3; }
+@media print { .place-controls button, .day-slider input { display: none; } }

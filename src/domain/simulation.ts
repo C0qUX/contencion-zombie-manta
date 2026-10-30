@@ -68,6 +68,8 @@ export type RunResult = {
   dosesByLocation: number[]
   firstAllocation: number[]
   finalZones: ZoneState[]
+  // Estado diario por lugar; solo en la corrida ilustrada para no engordar el resultado.
+  zoneTimeline?: ZoneState[][]
 }
 
 export type AggregateDay = { day: number; mean: number; p10: number; p90: number }
@@ -328,7 +330,7 @@ export function randomAllocation(zones: ZoneState[], doses: number, random: Rand
   return complement ? zones.map((zone, index) => zone.susceptible - allocation[index]) : allocation
 }
 
-export function simulateOnce(input: SimulationInput, strategy: StrategyId, runIndex = 0, policy: Policy = REFERENCE_POLICY): RunResult {
+export function simulateOnce(input: SimulationInput, strategy: StrategyId, runIndex = 0, policy: Policy = REFERENCE_POLICY, recordZones = false): RunResult {
   validateInput(input)
   validatePolicy(policy)
   if (!['targeted', 'random', 'none'].includes(strategy)) throw new Error('Estrategia desconocida.')
@@ -343,7 +345,10 @@ export function simulateOnce(input: SimulationInput, strategy: StrategyId, runIn
   const dosesByLocation = zones.map(() => 0)
   let firstAllocation = zones.map(() => 0)
 
+  const zoneTimeline: ZoneState[][] = []
+  const snapshot = () => { if (recordZones) zoneTimeline.push(zones.map(zone => ({ ...zone }))) }
   timeline.push(totals(zones, 0))
+  snapshot()
   for (let day = 1; day <= safeInput.days; day += 1) {
 
     if (strategy !== 'none' && day >= safeInput.interventionDay) {
@@ -384,6 +389,7 @@ export function simulateOnce(input: SimulationInput, strategy: StrategyId, runIn
     })
     next.forEach((zone, index) => { zones[index] = zone })
     timeline.push(totals(zones, day))
+    snapshot()
   }
 
   const peak = timeline.reduce((best, current) => current.infected > best.infected ? current : best)
@@ -396,6 +402,7 @@ export function simulateOnce(input: SimulationInput, strategy: StrategyId, runIn
     dosesUsed,
     dosesAvailable,
     dosesByLocation, firstAllocation, finalZones: zones.map(zone => ({ ...zone })),
+    ...(recordZones ? { zoneTimeline } : {}),
   }
 }
 
@@ -475,10 +482,10 @@ export function compareStrategies(input: SimulationInput, onProgress?: ProgressC
   const strategies: Record<StrategyId, RunResult[]> = { targeted: [], random: [], none: [] }
   const reference: RunResult[] = []
   for (let run = 0; run < runCount; run += 1) {
-    strategies.targeted.push(simulateOnce(input, 'targeted', run, policySearch.chosen))
-    strategies.random.push(simulateOnce(input, 'random', run))
-    strategies.none.push(simulateOnce(input, 'none', run))
-    reference.push(reuseReference ? strategies.targeted[run] : simulateOnce(input, 'targeted', run, REFERENCE_POLICY))
+    strategies.targeted.push(simulateOnce(input, 'targeted', run, policySearch.chosen, run === 0))
+    strategies.random.push(simulateOnce(input, 'random', run, REFERENCE_POLICY, run === 0))
+    strategies.none.push(simulateOnce(input, 'none', run, REFERENCE_POLICY, run === 0))
+    reference.push(reuseReference ? strategies.targeted[run] : simulateOnce(input, 'targeted', run))
     onProgress?.(calibrationTotal + (run + 1) * 4, total, 'evaluacion')
   }
   const targeted = aggregate('targeted', '7DaysToSurvive', strategies.targeted)
