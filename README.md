@@ -38,7 +38,7 @@ La aplicación actual no requiere variables de entorno, claves AWS, API ni base 
 
 ![Arquitectura desplegada](docs/arquitectura.svg)
 
-AWS Budget `spookython-2026-mensual` creado con 5 USD/mes y alertas reales a 1, 4 y 5 USD. **Pendiente verificar el correo y adjuntar captura real del Budget con alertas** (estado consultado el 29/10/2026). La fecha de inicio del período no acredita creación desde el primer día.
+AWS Budget `spookython-2026-mensual` creado con 5 USD/mes y alertas reales a 1, 4 y 5 USD. Las capturas recortadas documentan el presupuesto y sus umbrales sin exponer datos personales. **El correo seguía pendiente de verificación el 30/10/2026**; debe verificarse para recibir los avisos. El Budget avisa, pero no detiene servicios ni constituye un límite duro de gasto.\n\n![AWS Budget de 5 USD](docs/budget.jpg)\n\n![Umbrales configurados en AWS Budget](docs/budget-alertas.jpg)
 
 El stack S3/CloudFront y el script PowerShell del repositorio son una alternativa histórica; no se utilizan para este despliegue de Amplify.
 

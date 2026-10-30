@@ -39,7 +39,7 @@ Conservar la URL pública. Para deshacer un cambio defectuoso, revertir el commi
 ## Pendientes que requieren comprobación humana
 
 - Verificar el destinatario de AWS Budgets; última consulta: Inactive.
-- Añadir captura real de Budget y alertas con los datos personales ocultos.
+- Las capturas del Budget ya están en el repositorio; mantenerlas sin datos personales si se actualizan.
 - Revisar MFA y recuperación del perfil del propietario; no se ha acreditado su configuración.
 - Registrar el costo final del evento cuando AWS actualice la facturación.
 - Mantener la demo hasta el pitch; no eliminar la aplicación antes.

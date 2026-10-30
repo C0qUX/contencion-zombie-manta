@@ -55,6 +55,6 @@ export default function App() {
         <section className="panel recommendation"><div><p className="eyebrow">RECOMENDACIÓN</p><h2>Intervenir desde el día {input.interventionDay}</h2><p>La estrategia configurada evita <b>{number(saved)}</b> contagios frente a no actuar y mejora en <b>{number(randomSaved)}</b> casos la intervención tardía de referencia.</p></div><div className="badge">Impacto<br/><strong>{results.noIntervention.totalAffected ? Math.round(saved / results.noIntervention.totalAffected * 100) : 0}%</strong></div></section>
       </div>
     </section>
-    <footer><span>Modelo SIR determinista · horizonte de {input.days} días</span><span>AWS · CloudFront + S3</span></footer>
+    <footer><span>Modelo SIR determinista · horizonte de {input.days} días</span><span>AWS Amplify Hosting · us-east-2</span></footer>
   </main>
 }
