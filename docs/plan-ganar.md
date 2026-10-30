@@ -1,91 +1,55 @@
-# Plan de implementación para la prueba de fuego
+# Auditoría y preparación de demo — 30 de octubre de 2026
 
-Auditoría realizada el 30 de octubre de 2026 contra los requisitos oficiales del Track B.
+## Base comprobada
 
-## Diagnóstico actual
+Base: origin/main en 07877a2. La copia de esta sesión estaba en una revisión anterior con cambios locales; se guardaron íntegramente en un stash identificado antes de crear **mejora/demo-rigor**. No se mezcló el motor SIRV anterior por personas con el SEIR agregado actual.
 
-| Criterio | Estado | Evidencia o problema |
+La base pasó 12 pruebas y build con Node 22.23.4. La release v0.1.0 conserva el tag anterior 49b4e6b; su descripción apunta a la demo actual. Esta rama no modifica tag, release ni producción.
+
+## Auditoría breve
+
+| Área | Estado inicial | Cambio local |
 |---|---|---|
-| Simulación día a día | Cumple | SEIR estocástico sobre hogares, colegio, mercado, bus y barrio. |
-| Intervención limitada | Cumple base | Vacunas por día, eficacia y fecha de inicio; presupuesto monetario queda como mejora. |
-| Dos líneas base | Cumple | No intervenir y reparto aleatorio con el mismo inventario/calendario. |
-| Repeticiones, promedios y rangos | Cumple | Monte Carlo configurable con media y percentiles 10–90. |
-| Parámetros interactivos | Cumple | Semilla, contagiosidad, vacunas, eficacia, origen e inicio editables. |
-| Reproducibilidad por semilla | Cumple | PRNG determinista cubierto por pruebas. |
-| Estrategia que optimiza | Cumple base | Heurística de riesgo, conectividad y susceptibles; falta búsqueda global. |
-| AWS | Cumple | Amplify Hosting público en `us-east-2`, con CI y Budget documentados. |
-| Supuestos y fuentes | Parcial | Hay supuestos, pero los números epidemiológicos no tienen fuentes o justificación visible. |
-| Prueba Brote Sorpresa | Cumple base | Origen, eficacia, contagiosidad, recursos, inicio y semilla pueden cambiarse en vivo. |
+| SEIR y semilla | Existían con 120 corridas | Conservados; versión del algoritmo explícita |
+| Comparación | Igual presupuesto, consumo no necesariamente idéntico | Disponibilidad y consumo visibles; azar uniforme diario |
+| Azar | Flujo secuencial se desalineaba; eficacia compartía flujo con selección | Claves por corrida/día/lugar/evento |
+| Efectos negativos | Truncados a cero | Diferencias pareadas firmadas y percentiles |
+| Recomendación | Dirigida siempre recomendada; origen afirmado como prioridad | Decisión condicionada y primera asignación observada |
+| Ejecución | Monte Carlo síncrono durante render | Worker, progreso, cancelación, errores y resultado anterior |
+| Validación | Acotación silenciosa; origen desbordaba hacia otros lugares | Rechazo explícito en dominio, formulario y URL |
+| Banda | Solo dirigida; retorno cruzado del polígono | Tres bandas correctas y marcador de intervención |
+| Comunicación | Protección llamada independiente aunque sumaba fuera de SEIR | Cinco grupos excluyentes y supuestos visibles |
+| AWS | Hosting existente según documentación | Se conservó; sin infraestructura adicional |
 
-## P0: obligatorio antes del pitch
+## Validación de esta rama
 
-1. **Rehacer el motor como simulación estocástica reproducible.** Implementar un generador pseudoaleatorio con semilla y usarlo en contagios, recuperaciones y selección de personas.
-2. **Representar una población de Manta.** Crear una red sintética explicable con hogares, colegios, buses, mercados y barrios. Mantener un modo rápido para el navegador.
-3. **Corregir las líneas base.** Comparar: no intervenir; intervención aleatoria con exactamente el mismo stock, fechas y eficacia; estrategia propuesta.
-4. **Ejecutar Monte Carlo.** Correr por defecto 100–300 repeticiones, informar media, mediana y rango percentil 10–90. Permitir cambiar el número de corridas.
-5. **Construir una estrategia real.** Priorizar nodos/lugares por riesgo esperado (grado, centralidad y casos cercanos) y escoger la asignación que minimice contagios dentro del presupuesto.
-6. **Hacer editable la semilla.** Mostrarla en la URL o permitir copiar la configuración para que el jurado repita exactamente el resultado.
-7. **Preparar el Brote Sorpresa.** Añadir controles para contagiosidad, vacunas disponibles, eficacia de vacuna, lugar inicial y día de intervención.
-8. **Mostrar las tres comparaciones.** Gráfica y tabla con estrategia, aleatoria y no intervenir; recursos usados deben quedar visibles.
-9. **Documentar valores por defecto.** README con escenario, semilla, fuente o justificación de cada número y pasos exactos para reproducir la demo.
-10. **Agregar pruebas que impidan una demo falsa.** Misma semilla = mismo resultado; semilla distinta puede variar; conservación de población; nadie vacunado si ya está infectado/inmune; igualdad de recursos entre estrategia y azar; estrategia supera baselines en un conjunto de semillas, no solo en una.
+- Node 22.23.4: pruebas y build de producción.
+- 60 pruebas en cuatro archivos, incluidas las 12 originales.
+- Worker independiente en dist/assets.
+- Edge con build servido localmente: ejecución real, tres bandas/curvas, progreso, edición pendiente, semilla repetida, validación, presets/sorpresas, cero stock, cancelación/reintento, errores, JSON, URL, pérdidas, 390 px, teclado e impresión.
+- 40 experimentos registrados en docs/evidencia/sensibilidad.json.
+- Estas pruebas locales no sustituyen la verificación posterior de la URL AWS.
 
-## P1: puntos que pueden ganar la competencia
+## Riesgos y pendientes
 
-### Producto y frontend
+1. Pesos ficticios, observación perfecta y vacuna inmediata; sin calibración clínica.
+2. Igual presupuesto no garantiza idéntico consumo; se informa expresamente.
+3. La aproximación normal binomial puede introducir error en colas de grupos grandes.
+4. Resultados nuevos por correcciones del algoritmo; guardar versión en exportaciones.
+5. Coordinar la revisión con los otros integrantes: esta rama cambia dominio y frontend.
+6. No se verificaron correo actual de Budget ni gasto final. No se cambiaron cuenta, región, plan o alertas.
+7. Tras integrar, probar URL pública y registrar commit desplegado.
+8. Confirmar con organización si puede publicarse nueva release o actualizar entrega.
+9. Los PR #1 y #2 siguen abiertos pero proponen el motor SIRV anterior. No integrarlos automáticamente sobre este SEIR; revisar compatibilidad con sus autores.
 
-- Crear un selector de escenarios: dengue en Manta, variante más contagiosa, escasez de vacunas y brote en mercado/colegio.
-- Añadir un mapa esquemático animado por barrios y lugares; colores Sano, Expuesto, Infeccioso y Recuperado/Inmune.
-- Incluir una tarjeta **Decisión para el alcalde**: qué hacer hoy, dónde, cuántos recursos, costo e impacto esperado con intervalo.
-- Mostrar un panel de rigor: repeticiones, semilla, supuestos, recursos idénticos y tiempo de ejecución.
-- Añadir estados de carga y progreso durante Monte Carlo, mensajes para combinaciones inválidas y diseño móvil.
-- Permitir exportar un informe imprimible o JSON de la configuración y resultados.
+## Siguiente bloque
 
-### Motor y dominio
+Revisión de equipo, comprobación de correo Budget y ensayo del pitch. P2 (backend, nuevas intervenciones o cómputo distribuido) queda fuera hasta aceptar una demo estable.
 
-- Pasar de SIR a SEIR para distinguir exposición/incubación, si el equipo puede explicarlo con seguridad.
-- Modelar eficacia de vacuna, capacidad diaria, entregas de stock y costo por intervención.
-- Combinar dos intervenciones: vacunación/fumigación dirigida y cierre temporal de un lugar de alto riesgo.
-- Incorporar hospital saturado o límite operativo como métrica secundaria, solo si queda tiempo.
-- Validar sensibilidad: mostrar qué parámetros cambian más la recomendación.
+Este documento sustituye el roadmap anterior, que mezclaba tareas ya completadas y propuestas. Método completo en docs/modelo.md y recorrido en docs/demo.md.
 
-### Backend y AWS
+## Repetir la aceptación en navegador
 
-- Mantener el cálculo básico en el navegador para que la demo nunca dependa del backend.
-- Usar Web Workers para paralelizar Monte Carlo en la versión inmediata.
-- Si el tiempo y créditos lo permiten, agregar una ejecución opcional en AWS Lambda con lotes y almacenar resultados resumidos en S3. No bloquear la demo si falla.
-- Añadir CloudWatch solo para logs/errores del servicio opcional; evitar WAF, base de datos y servicios costosos que no aporten a la rúbrica.
-- Versionar cualquier infraestructura nueva con SAM/CDK/Terraform y mínimo privilegio.
+Con una instalación externa de Playwright, sin añadir dependencias al producto, servir el build con **npm run preview -- --host 127.0.0.1 --port 4174 --strictPort** y ejecutar **node scripts/verify-ui.cjs**.
 
-### Rigor y documentación
-
-- Elegir una enfermedad inspiradora concreta y citar fuentes públicas de parámetros; distinguir datos reales, supuestos y valores lúdicos.
-- Explicar por qué la población sintética representa Manta y qué limitaciones tiene.
-- Registrar costo estimado y real después de cada servicio añadido.
-- Preparar un guion de 5 minutos y respuestas sobre modelo, azar, recursos, AWS, seguridad y costos.
-- Crear la presentación PDF/PPTX y ensayar el cambio de escenario en menos de 5 minutos.
-
-## P2: solo si P0 y P1 están estables
-
-- Miles de corridas en AWS con Step Functions Distributed Map o AWS Batch.
-- Calibración automática contra una serie histórica.
-- Informe generado con un modelo de lenguaje.
-- Persistencia de escenarios compartidos y panel histórico.
-
-## Quitar o corregir
-
-- Quitar el nombre `randomIntervention` de la implementación actual hasta que exista azar real y recursos equivalentes.
-- Quitar la afirmación “misma semilla, mismo resultado” mientras la semilla no gobierne el motor.
-- Archivar o eliminar `infra/template.yaml` y `scripts/deploy-aws.ps1` si no se usará S3/CloudFront; hoy contradicen Amplify.
-- Evitar afirmar que se “encuentra la mejor estrategia” hasta implementar y medir una búsqueda/optimización.
-- Unificar `7DaysToSurvive`, `MantaZero` y el nombre presentado al jurado.
-- Fijar versiones de dependencias en `package.json`; no dejar `latest`.
-- No agregar autenticación, base de datos, Bedrock o microservicios solo para decir que se usó AWS.
-
-## Orden recomendado para tres integrantes
-
-1. **Motor y rigor:** PRNG con semilla, red sintética, baselines justas, Monte Carlo, optimizador y pruebas.
-2. **Producto y visualización:** controles de sorpresa, tres curvas, rangos, mapa y recomendación para el alcalde.
-3. **Integración y pitch:** Workers/AWS opcional, documentación, fuentes, costos, QA, presentación y ensayo.
-
-Cada cambio entra por una rama corta, con `npm test` y `npm run build` antes de integrar. La rama `main` debe permanecer siempre desplegable.
+Variables opcionales: PLAYWRIGHT_MODULE (ruta a Playwright), UI_BROWSER_CHANNEL (por ejemplo msedge), UI_BASE_URL y UI_EVIDENCE_DIR. El script comprueba resultados reales del Worker, guarda capturas y un registro de aceptación. El test de errores corrompe únicamente una solicitud de prueba para comprobar la validación real del motor; no fabrica resultados de simulación.
