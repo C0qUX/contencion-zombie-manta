@@ -24,7 +24,7 @@ nav { height: 76px; display: flex; align-items: center; justify-content: space-b
 .section-title { display: flex; align-items: center; gap: 12px; }
 .section-title > span { font-size: 12px; color: #4de0c2; }
 .section-title h2 { font-size: 18px; margin: 0; }
-.field > span, .select-field > span, .number-field > span { display: flex; justify-content: space-between; color: #b8c8d1; font-size: 13px; margin-bottom: 9px; }
+.field > span, .select-field > span, .number-field > span { display: flex; justify-content: space-between; color: #d4e3ec; font-size: 13px; margin-bottom: 9px; }
 .field b { color: #fff; }
 .field input { width: 100%; accent-color: #4de0c2; }
 .select-field select, .number-field input { width: 100%; border: 1px solid #315162; background: #081522; color: #e8f2ff; padding: 10px 11px; border-radius: 9px; }
@@ -36,7 +36,7 @@ nav { height: 76px; display: flex; align-items: center; justify-content: space-b
 .metrics span, .metrics small { display: block; color: #8ba5b5; font-size: 12px; }
 .metrics strong { font-size: 32px; display: block; margin: 8px 0; }
 .metrics .good { color: #4de0c2; }
-.decision { padding: 26px; display: flex; justify-content: space-between; align-items: center; gap: 28px; border-color: #377366; }
+.decision { padding: 26px; display: flex; justify-content: space-between; align-items: center; gap: 28px; border-color: #377366; border-left: 4px solid #4de0c2; }
 .decision h2 { max-width: 760px; margin: 8px 0; font-size: clamp(20px, 2.3vw, 29px); line-height: 1.2; }
 .decision p:last-child { color: #a9bdc9; line-height: 1.55; margin-bottom: 0; }
 .badge { min-width: 170px; border-left: 1px solid #315162; padding-left: 28px; text-align: center; color: #8ba5b5; font-size: 13px; }
@@ -87,6 +87,9 @@ footer { padding: 35px 0 50px; display: flex; justify-content: space-between; co
   .badge { width: 100%; border-left: 0; border-top: 1px solid #315162; padding: 18px 0 0; }
   .method-strip { grid-template-columns: repeat(2, 1fr); }
   .status { display: none; }
+  .table-scroll { position: relative; }
+  .table-scroll::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 24px; background: linear-gradient(to left, rgba(12,27,42,.9), transparent); pointer-events: none; }
+  .primary-button { min-height: 50px; font-size: 16px; padding: 14px 18px; }
   footer { gap: 20px; flex-direction: column; }
 }
 
@@ -117,7 +120,8 @@ input[aria-invalid=true] { border: 2px solid #ff9eaf; }
 .execution-progress button { width: 100%; }
 .execution-progress, .notice { font-size: 13px; line-height: 1.6; color: #bdd1de; }
 .surprise-actions, .report-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-.surprises h3 { font-size: 14px; color: #ffd078; }
+.surprises { background: rgba(255, 208, 120, .08); border: 1px solid rgba(255, 208, 120, .25); border-radius: 10px; padding: 14px; }
+.surprises h3 { font-size: 14px; color: #ffd078; margin: 0 0 10px; }
 .error-banner, .pending-banner { padding: 14px 18px; margin: 0; border-radius: 8px; line-height: 1.6; }
 .error-banner { color: #ffcfdb; background: #391c29; border: 1px solid #a14c64; }
 .pending-banner { color: #fbd7a2; background: #302619; border: 1px solid #77623e; }
@@ -167,11 +171,19 @@ summary { padding: 12px 0; font-size: 13px; }
   nav, .hero, .controls, .report-actions, .skip-link, .pending-banner, .execution-progress { display: none !important; }
   .workspace { display: block; }
   .panel, .metrics article { background: white; color: #111; border: 1px solid #777; break-inside: avoid; }
+  .decision { border-left: 4px solid #333 !important; }
+  .negative { color: #111 !important; font-weight: bold; }
+  .negative::after { content: ' [!]'; font-size: 11px; }
   .results p, .results h2, .results strong, .results small, .results span, td, th, .applied-config, .explanation { color: #111 !important; }
   .chart-wrap text, .places svg text { fill: #111; }
   .place-node { fill: #edf6f3; }
   .table-scroll { overflow: visible; }
+  .table-scroll::after { display: none !important; }
   table { min-width: 0; }
   .chart-wrap details { display: none; }
   footer { color: #111; }
 }
+.policy-search { margin-top: 8px; font-size: 13px; }
+.policy-search table { min-width: 520px; }
+.policy-search tbody th small { display: inline-block; margin: 0 0 0 8px; }
+@media print { .policy-search { display: none; } }

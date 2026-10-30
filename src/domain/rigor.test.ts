@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { compareStrategies, DEFAULT_INPUT, locationPopulations, randomAllocation, simulateOnce, summarizeDifferences, validateInput } from './simulation'
+import { CALIBRATION_OFFSET, CALIBRATION_RUNS, compareStrategies, DEFAULT_INPUT, locationPopulations, POLICY_CANDIDATES, randomAllocation, REFERENCE_POLICY, samePolicy, searchPolicy, simulateOnce, summarizeDifferences, validateInput } from './simulation'
 
 const small = { ...DEFAULT_INPUT, population: 100, initialInfected: 1, days: 15, runs: 3, vaccinesPerDay: 3, totalVaccines: 7 }
 describe('comparison audit', () => {
@@ -54,23 +54,70 @@ describe('comparison audit', () => {
     expect(run.finalZones[2].recovered).toBe(input.initialInfected)
   })
   it('preserves negative paired values and uses interpolated empirical percentiles', () => {
-    expect(summarizeDifferences([-10, 0, 20])).toEqual({ mean: 10 / 3, p10: -8, p90: 16, min: -10, max: 20 })
+    expect(summarizeDifferences([-10, 0, 20])).toEqual({ mean: 10 / 3, median: 0, p10: -8, p90: 16, min: -10, max: 20 })
+    expect(summarizeDifferences([4, 1, 3, 2]).median).toBe(2.5)
   })
   it('reports a real loss without truncating or relabelling it as a benefit', () => {
-    const result = compareStrategies({ ...DEFAULT_INPUT, population: 100, initialInfected: 1, days: 30, runs: 1, totalVaccines: 10, vaccinesPerDay: 2, seed: 14 })
+    const result = compareStrategies({ ...DEFAULT_INPUT, population: 100, initialInfected: 1, days: 30, runs: 1, totalVaccines: 10, vaccinesPerDay: 2, seed: 9 })
     expect(result.targeted.meanAffected).toBeGreaterThan(result.random.meanAffected)
-    expect(result.savedVsRandom).toBe(-1)
-    expect(result.pairedVsRandom.p10).toBe(-1)
+    expect(result.savedVsRandom).toBe(-4)
+    expect(result.pairedVsRandom.p10).toBe(-4)
   })
   it('is cloneable and deterministic including callback execution', () => {
-    const events: number[] = []
-    const result = compareStrategies(small, completed => events.push(completed))
-    expect(events).toEqual([1, 2, 3])
+    const events: [number, number, string][] = []
+    const result = compareStrategies(small, (completed, total, phase) => events.push([completed, total, phase]))
+    const total = POLICY_CANDIDATES.length * CALIBRATION_RUNS + small.runs * 4
+    expect(events).toHaveLength(POLICY_CANDIDATES.length + small.runs)
+    expect(events[0]).toEqual([CALIBRATION_RUNS, total, 'calibracion'])
+    expect(events.at(-1)).toEqual([total, total, 'evaluacion'])
+    expect(events.map(event => event[0])).toEqual(events.map(event => event[0]).sort((a, b) => a - b))
     expect(result).toEqual(compareStrategies(small))
     expect(structuredClone(result)).toEqual(result)
     expect(JSON.parse(JSON.stringify(result))).toEqual(result)
     expect(result.pairedVsRandom.mean).toBeCloseTo(result.random.meanAffected - result.targeted.meanAffected, 10)
     expect(result.targeted.dosesAvailable).toBe(result.random.dosesAvailable)
+  })
+})
+
+describe('policy search', () => {
+  const input = { ...DEFAULT_INPUT, runs: 20 }
+  const mean = (values: number[]) => values.reduce((a, b) => a + b, 0) / values.length
+  it('chooses the lowest calibration mean on futures that never enter the evaluation', () => {
+    const result = compareStrategies(input)
+    const { candidates, chosen, calibrationRuns } = result.policySearch
+    expect(candidates).toHaveLength(POLICY_CANDIDATES.length)
+    expect(calibrationRuns).toBe(CALIBRATION_RUNS)
+    expect(candidates.some(candidate => samePolicy(candidate.policy, REFERENCE_POLICY))).toBe(true)
+    const winner = candidates.find(candidate => samePolicy(candidate.policy, chosen))!
+    expect(winner.meanAffected).toBe(Math.min(...candidates.map(candidate => candidate.meanAffected)))
+    const calibration = Array.from({ length: CALIBRATION_RUNS }, (_, run) => simulateOnce(input, 'targeted', CALIBRATION_OFFSET + run, chosen).totalAffected)
+    expect(winner.meanAffected).toBe(mean(calibration))
+    const evaluation = Array.from({ length: input.runs }, (_, run) => simulateOnce(input, 'targeted', run, chosen).totalAffected)
+    expect(result.targeted.meanAffected).toBe(mean(evaluation))
+    expect(CALIBRATION_OFFSET).toBeGreaterThan(300)
+  })
+  it('leaves both baselines untouched and measures the gain over the fixed reference rule', () => {
+    const result = compareStrategies(input)
+    const random = Array.from({ length: input.runs }, (_, run) => simulateOnce(input, 'random', run).totalAffected)
+    const reference = Array.from({ length: input.runs }, (_, run) => simulateOnce(input, 'targeted', run, REFERENCE_POLICY).totalAffected)
+    expect(result.random.meanAffected).toBe(mean(random))
+    expect(result.pairedVsReference.mean).toBeCloseTo(mean(reference) - result.targeted.meanAffected, 10)
+    expect(result.pairedVsReference.mean).toBeGreaterThan(0)
+  })
+  it.each([{ totalVaccines: 0 }, { vaccinesPerDay: 0 }, { vaccineEfficacy: 0 }])('keeps the reference rule without searching when doses cannot protect: %j', changes => {
+    const search = searchPolicy({ ...input, ...changes })
+    expect(search.chosen).toEqual(REFERENCE_POLICY)
+    expect(search.candidates).toEqual([])
+  })
+  it('reproduces the published seir-places-2.0.0 targeted result with the reference rule', () => {
+    // docs/evidencia/sensibilidad.json at 2.0.0: official scenario, seed 2026, 120 runs.
+    const runs = Array.from({ length: DEFAULT_INPUT.runs }, (_, run) => simulateOnce(DEFAULT_INPUT, 'targeted', run, REFERENCE_POLICY).totalAffected)
+    expect(mean(runs)).toBeCloseTo(2826.6583333333333, 9)
+    expect(simulateOnce(input, 'targeted', 3)).toEqual(simulateOnce(input, 'targeted', 3, REFERENCE_POLICY))
+  })
+  it('rejects malformed rules', () => {
+    expect(() => simulateOnce(input, 'targeted', 0, { ...REFERENCE_POLICY, mode: 'todo' as 'repartir' })).toThrow('Política')
+    expect(() => simulateOnce(input, 'targeted', 0, { ...REFERENCE_POLICY, spread: NaN })).toThrow('Política')
   })
 })
 

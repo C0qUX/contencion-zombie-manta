@@ -38,13 +38,36 @@ La base pasó 12 pruebas y build con Node 22.23.4. La release v0.1.0 conserva el
 4. Resultados nuevos por correcciones del algoritmo; guardar versión en exportaciones.
 5. Coordinar la revisión con los otros integrantes: esta rama cambia dominio y frontend.
 6. No se verificaron correo actual de Budget ni gasto final. No se cambiaron cuenta, región, plan o alertas.
-7. Tras integrar, probar URL pública y registrar commit desplegado.
+7. ~~Tras integrar, probar URL pública y registrar commit desplegado.~~ Hecho el 30/10/2026: `a165890` publicado y 11/11 comprobaciones en la URL de AWS ([evidencia](evidencia/aws/verificacion.json)).
 8. Confirmar con organización si puede publicarse nueva release o actualizar entrega.
-9. Los PR #1 y #2 siguen abiertos pero proponen el motor SIRV anterior. No integrarlos automáticamente sobre este SEIR; revisar compatibilidad con sus autores.
+9. Los PR #1 y #2 se cerraron sin integrar; proponían el motor SIRV anterior. No reincorporarlos sobre este SEIR.
 
-## Siguiente bloque
+## Siguiente bloque — Preparación para pitch del 30 de octubre
 
-Revisión de equipo, comprobación de correo Budget y ensayo del pitch. P2 (backend, nuevas intervenciones o cómputo distribuido) queda fuera hasta aceptar una demo estable.
+Presentación de cinco minutos en la ULEAM seguida de tres minutos de preguntas del jurado.
+
+Rúbrica de la prueba de fuego (40 % de la nota total):
+- Impacto de la estrategia: 30 %
+- Rigor del modelo: 25 %
+- Brote Sorpresa: 25 %
+- Claridad para decidir: 20 %
+
+Pendientes antes del pitch:
+1. Ensayar el Brote Sorpresa con al menos tres variaciones (contagio ×2, mitad stock, cambio de origen).
+2. Verificar que la demo pública responde en la URL: https://main.d3kt9g5gofzhxh.amplifyapp.com/ — verificada el 30/10 con 11/11 comprobaciones; repetir tras integrar 3.0.0.
+3. Comprobar con el titular el correo de Budget y el gasto actualizado.
+4. ~~Tener la presentación PDF/PPTX lista (docs/presentacion.html → imprimir a PDF).~~ Hecho: [presentacion.pdf](presentacion.pdf), 10 páginas de 1920×1080, generado con `scripts/export-presentation.cjs`.
+
+## Cierre del reto — rama mejora/cierre-reto
+
+| Criterio | Estado | Evidencia |
+|---|---|---|
+| Estrategia que optimiza | Cumple | Búsqueda entre 32 reglas en 24 futuros de calibración separados; `seir-places-3.0.0` |
+| Media, mediana y P10–P90 | Cumple | Tabla, métricas y decisión muestran la mediana |
+| Impacto frente al azar, escenario oficial | 451,5 contagios evitados (antes 134,7) | [sensibilidad.json](evidencia/sensibilidad.json): 40/40 experimentos positivos |
+| Demo pública verificada | `a165890` (2.0.0), 11/11 | [verificacion.json](evidencia/aws/verificacion.json) |
+
+Tras integrar en `main`: esperar el despliegue de Amplify, repetir `scripts/verify-ui.cjs` contra la URL pública y actualizar la tabla. Siguen pendientes, por parte del titular de la cuenta AWS: verificar el correo del Budget y registrar el gasto final.
 
 Este documento sustituye el roadmap anterior, que mezclaba tareas ya completadas y propuestas. Método completo en docs/modelo.md y recorrido en docs/demo.md.
 

@@ -25,7 +25,22 @@ export type SimulationInput = {
   totalVaccines?: number
 }
 
-export const ALGORITHM_VERSION = 'seir-places-2.0.0'
+export type PolicyMode = 'repartir' | 'concentrar'
+// Priority of a place: (1 + spread potential)^spread × connectivity^connectivity × (0.35 + prevalence × active cases).
+// 'repartir' multiplies by susceptibles and splits doses proportionally; 'concentrar' fills the top place by batches.
+export type Policy = { mode: PolicyMode; spread: number; prevalence: number; connectivity: number }
+export type PolicyEvaluation = { policy: Policy; meanAffected: number }
+export type PolicySearch = { chosen: Policy; reference: Policy; calibrationRuns: number; candidates: PolicyEvaluation[] }
+
+export const REFERENCE_POLICY: Policy = { mode: 'repartir', spread: 0, prevalence: 12, connectivity: 1 }
+export const POLICY_CANDIDATES: Policy[] = (['repartir', 'concentrar'] as const).flatMap(mode =>
+  [0, 1, 2, 4].flatMap(spread => [0, 12].flatMap(prevalence => [0, 1].map(connectivity => ({ mode, spread, prevalence, connectivity })))))
+export const CALIBRATION_RUNS = 24
+// Calibration futures use run indices far above the 300 evaluated runs, so the
+// rule is chosen on futures that never enter the reported comparison.
+export const CALIBRATION_OFFSET = 1_000_000
+
+export const ALGORITHM_VERSION = 'seir-places-3.0.0'
 export const DEFAULT_INPUT: SimulationInput = {
   population: 15000, initialInfected: 35, days: 90, transmissionRate: .34,
   recoveryRate: .16, incubationRate: .22, vaccinesPerDay: 180,
@@ -62,6 +77,7 @@ export type StrategySummary = {
   label: string
   timeline: AggregateDay[]
   meanAffected: number
+  medianAffected: number
   p10Affected: number
   p90Affected: number
   meanPeak: number
@@ -86,11 +102,13 @@ export type ComparisonResult = {
   algorithmVersion: string
   pairedVsNone: DifferenceSummary
   pairedVsRandom: DifferenceSummary
+  pairedVsReference: DifferenceSummary
+  policySearch: PolicySearch
   warnings: string[]
   example: Record<StrategyId, RunResult>
 }
 
-export type DifferenceSummary = { mean: number; p10: number; p90: number; min: number; max: number }
+export type DifferenceSummary = { mean: number; median: number; p10: number; p90: number; min: number; max: number }
 
 export type ZoneState = { susceptible: number; exposed: number; infected: number; recovered: number; vaccinated: number }
 type Random = () => number
@@ -208,14 +226,66 @@ function totals(zones: ZoneState[], day: number): DayState {
   }), { day, susceptible: 0, exposed: 0, infected: 0, recovered: 0, vaccinated: 0 })
 }
 
-function targetedAllocation(zones: ZoneState[], doses: number) {
+export const samePolicy = (a: Policy, b: Policy) =>
+  a.mode === b.mode && a.spread === b.spread && a.prevalence === b.prevalence && a.connectivity === b.connectivity
+
+export function describePolicy(policy: Policy) {
+  return [policy.mode === 'concentrar' ? 'Concentrar por tandas' : 'Repartir proporcional',
+    policy.spread ? 'propagación ^' + policy.spread : 'sin propagación',
+    policy.prevalence ? 'casos activos ×' + policy.prevalence : 'sin casos activos',
+    policy.connectivity ? 'conectividad' : 'sin conectividad'].join(' · ')
+}
+
+function validatePolicy(policy: Policy) {
+  if (!policy || !['repartir', 'concentrar'].includes(policy.mode)) throw new Error('Política: modo desconocido.')
+  for (const value of [policy.spread, policy.prevalence, policy.connectivity]) {
+    if (!Number.isFinite(value) || value < 0) throw new Error('Política: pesos finitos y no negativos.')
+  }
+}
+
+const zonePopulation = (zone: ZoneState) => zone.susceptible + zone.exposed + zone.infected + zone.recovered + zone.vaccinated
+
+// Exposures that one infectious person in place `index` would cause per day,
+// up to the common factor transmissionRate, using the same 74/26 mixing as the
+// daily step and the susceptibles left after the doses already assigned.
+function spreadPotential(zones: ZoneState[], allocation: number[], index: number) {
+  const connected = zones.reduce((sum, zone, other) => other === index ? sum
+    : sum + (LOCATIONS[index].centrality + LOCATIONS[other].centrality) / 2 * (zone.susceptible - allocation[other]), 0)
+  return (0.74 * (zones[index].susceptible - allocation[index]) + 0.26 * connected / Math.max(1, zones.length - 1))
+    / Math.max(1, zonePopulation(zones[index]))
+}
+
+function priority(zones: ZoneState[], allocation: number[], index: number, policy: Policy) {
+  const zone = zones[index]
+  const susceptible = zone.susceptible - allocation[index]
+  if (susceptible <= 0) return 0
+  const prevalence = (zone.infected + zone.exposed * 0.6) / Math.max(1, zonePopulation(zone))
+  const weight = Math.pow(LOCATIONS[index].centrality, policy.connectivity)
+    * Math.pow(1 + spreadPotential(zones, allocation, index), policy.spread)
+    * (0.35 + prevalence * policy.prevalence)
+  return policy.mode === 'repartir' ? susceptible * weight : weight
+}
+
+function targetedAllocation(zones: ZoneState[], doses: number, policy: Policy) {
   const allocation = zones.map(() => 0)
   let remaining = Math.min(doses, zones.reduce((sum, zone) => sum + zone.susceptible, 0))
-  const scores = zones.map((zone, index) => {
-    const population = zone.susceptible + zone.exposed + zone.infected + zone.recovered + zone.vaccinated
-    const prevalence = (zone.infected + zone.exposed * 0.6) / Math.max(1, population)
-    return zone.susceptible * LOCATIONS[index].centrality * (0.35 + prevalence * 12)
-  })
+  if (policy.mode === 'concentrar') {
+    // Twenty batches a day: after each one the priorities see the remaining susceptibles.
+    const batch = Math.max(1, Math.ceil(remaining / 20))
+    while (remaining > 0) {
+      let best = -1, bestScore = 0
+      zones.forEach((_, index) => {
+        const score = priority(zones, allocation, index, policy)
+        if (score > bestScore) { best = index; bestScore = score }
+      })
+      if (best < 0) break
+      const amount = Math.min(batch, remaining, zones[best].susceptible - allocation[best])
+      allocation[best] += amount
+      remaining -= amount
+    }
+    return allocation
+  }
+  const scores = zones.map((_, index) => priority(zones, allocation, index, policy))
   const scoreTotal = scores.reduce((sum, score) => sum + score, 0)
   const target = remaining
   scores.forEach((score, index) => {
@@ -223,10 +293,10 @@ function targetedAllocation(zones: ZoneState[], doses: number) {
     allocation[index] = amount
     remaining -= amount
   })
-  const priority = scores.map((score, index) => ({ score, index })).sort((a, b) => b.score - a.score)
+  const ranking = scores.map((score, index) => ({ score, index })).sort((a, b) => b.score - a.score)
   while (remaining > 0) {
     let changed = false
-    for (const item of priority) {
+    for (const item of ranking) {
       if (allocation[item.index] >= zones[item.index].susceptible) continue
       allocation[item.index] += 1
       remaining -= 1
@@ -258,8 +328,9 @@ export function randomAllocation(zones: ZoneState[], doses: number, random: Rand
   return complement ? zones.map((zone, index) => zone.susceptible - allocation[index]) : allocation
 }
 
-export function simulateOnce(input: SimulationInput, strategy: StrategyId, runIndex = 0): RunResult {
+export function simulateOnce(input: SimulationInput, strategy: StrategyId, runIndex = 0, policy: Policy = REFERENCE_POLICY): RunResult {
   validateInput(input)
+  validatePolicy(policy)
   if (!['targeted', 'random', 'none'].includes(strategy)) throw new Error('Estrategia desconocida.')
   if (!Number.isSafeInteger(runIndex) || runIndex < 0) throw new Error('Índice de corrida inválido.')
   const safeInput = { ...input }
@@ -277,7 +348,7 @@ export function simulateOnce(input: SimulationInput, strategy: StrategyId, runIn
 
     if (strategy !== 'none' && day >= safeInput.interventionDay) {
       const allocation = strategy === 'targeted'
-        ? targetedAllocation(zones, Math.min(safeInput.vaccinesPerDay, dosesAvailable - dosesUsed))
+        ? targetedAllocation(zones, Math.min(safeInput.vaccinesPerDay, dosesAvailable - dosesUsed), policy)
         : randomAllocation(zones, Math.min(safeInput.vaccinesPerDay, dosesAvailable - dosesUsed), eventRandom(input.seed, runIndex, day, 0, 4))
       if (day === safeInput.interventionDay) firstAllocation = [...allocation]
       allocation.forEach((amount, index) => {
@@ -349,6 +420,7 @@ function aggregate(id: StrategyId, label: string, runs: RunResult[]): StrategySu
       return { day: day.day, mean: mean(infected), p10: quantile(infected, 0.1), p90: quantile(infected, 0.9) }
     }),
     meanAffected: mean(affected),
+    medianAffected: quantile(affected, 0.5),
     p10Affected: quantile(affected, 0.1),
     p90Affected: quantile(affected, 0.9),
     meanPeak: mean(runs.map(run => run.peakInfected)),
@@ -364,25 +436,57 @@ function aggregate(id: StrategyId, label: string, runs: RunResult[]): StrategySu
 
 export function summarizeDifferences(values: number[]): DifferenceSummary {
   if (!values.length || values.some(value => !Number.isFinite(value))) throw new Error('Muestra de diferencias inválida.')
-  return { mean: mean(values), p10: quantile(values, .1), p90: quantile(values, .9), min: Math.min(...values), max: Math.max(...values) }
+  return { mean: mean(values), median: quantile(values, .5), p10: quantile(values, .1), p90: quantile(values, .9), min: Math.min(...values), max: Math.max(...values) }
 }
 
-export function compareStrategies(input: SimulationInput, onProgress?: (completed: number, total: number) => void): ComparisonResult {
+export type ProgressPhase = 'calibracion' | 'evaluacion'
+export type ProgressCallback = (completed: number, total: number, phase: ProgressPhase) => void
+
+const availableDoses = (input: SimulationInput) =>
+  Math.min(input.totalVaccines ?? Infinity, Math.max(0, input.days - input.interventionDay + 1) * input.vaccinesPerDay)
+
+// Bounded search: every candidate rule faces the same calibration futures and
+// the lowest mean of cumulative infections wins; ties keep the reference rule.
+export function searchPolicy(input: SimulationInput, onCandidate?: (completed: number, total: number) => void): PolicySearch {
+  validateInput(input)
+  if (availableDoses(input) === 0 || input.vaccineEfficacy === 0) {
+    return { chosen: REFERENCE_POLICY, reference: REFERENCE_POLICY, calibrationRuns: 0, candidates: [] }
+  }
+  const candidates = POLICY_CANDIDATES.map((policy, index) => {
+    let affected = 0
+    for (let run = 0; run < CALIBRATION_RUNS; run += 1) affected += simulateOnce(input, 'targeted', CALIBRATION_OFFSET + run, policy).totalAffected
+    onCandidate?.(index + 1, POLICY_CANDIDATES.length)
+    return { policy, meanAffected: affected / CALIBRATION_RUNS }
+  })
+  const best = candidates.reduce((current, candidate) => candidate.meanAffected < current.meanAffected ? candidate : current,
+    candidates.find(candidate => samePolicy(candidate.policy, REFERENCE_POLICY))!)
+  return { chosen: best.policy, reference: REFERENCE_POLICY, calibrationRuns: CALIBRATION_RUNS, candidates }
+}
+
+export function compareStrategies(input: SimulationInput, onProgress?: ProgressCallback): ComparisonResult {
   validateInput(input)
   input = { ...input }
   const runCount = input.runs
+  const searching = availableDoses(input) > 0 && input.vaccineEfficacy > 0
+  const calibrationTotal = searching ? POLICY_CANDIDATES.length * CALIBRATION_RUNS : 0
+  const total = calibrationTotal + runCount * 4
+  const policySearch = searchPolicy(input, completed => onProgress?.(completed * CALIBRATION_RUNS, total, 'calibracion'))
+  const reuseReference = samePolicy(policySearch.chosen, REFERENCE_POLICY)
   const strategies: Record<StrategyId, RunResult[]> = { targeted: [], random: [], none: [] }
+  const reference: RunResult[] = []
   for (let run = 0; run < runCount; run += 1) {
-    strategies.targeted.push(simulateOnce(input, 'targeted', run))
+    strategies.targeted.push(simulateOnce(input, 'targeted', run, policySearch.chosen))
     strategies.random.push(simulateOnce(input, 'random', run))
     strategies.none.push(simulateOnce(input, 'none', run))
-    onProgress?.(run + 1, runCount)
+    reference.push(reuseReference ? strategies.targeted[run] : simulateOnce(input, 'targeted', run, REFERENCE_POLICY))
+    onProgress?.(calibrationTotal + (run + 1) * 4, total, 'evaluacion')
   }
   const targeted = aggregate('targeted', '7DaysToSurvive', strategies.targeted)
   const random = aggregate('random', 'Intervención al azar', strategies.random)
   const none = aggregate('none', 'No intervenir', strategies.none)
   const pairedVsNone = summarizeDifferences(strategies.none.map((run, index) => run.totalAffected - strategies.targeted[index].totalAffected))
   const pairedVsRandom = summarizeDifferences(strategies.random.map((run, index) => run.totalAffected - strategies.targeted[index].totalAffected))
+  const pairedVsReference = summarizeDifferences(reference.map((run, index) => run.totalAffected - strategies.targeted[index].totalAffected))
   const savedVsNone = pairedVsNone.mean
   const savedVsRandom = pairedVsRandom.mean
   return {
@@ -392,12 +496,12 @@ export function compareStrategies(input: SimulationInput, onProgress?: (complete
     savedVsNone,
     savedVsRandom,
     impactPercent: none.meanAffected ? savedVsNone / none.meanAffected * 100 : 0,
-    config: { ...input }, algorithmVersion: ALGORITHM_VERSION, pairedVsNone, pairedVsRandom,
+    config: { ...input }, algorithmVersion: ALGORITHM_VERSION, pairedVsNone, pairedVsRandom, pairedVsReference, policySearch,
     example: { targeted: strategies.targeted[0], random: strategies.random[0], none: strategies.none[0] },
     warnings: [
       'Población, lugares y parámetros sintéticos; sin calibración sanitaria de Manta.',
       'P10–P90 describe variabilidad de corridas, no un intervalo de confianza de la media.',
-      'La estrategia dirigida es una heurística; puede perder frente al azar.',
+      'La regla dirigida es la mejor de ' + POLICY_CANDIDATES.length + ' candidatas en futuros de calibración, no un óptimo global; puede perder frente al azar.',
       ...(input.runs < 30 ? ['Menos de 30 corridas: percentiles inestables.'] : []),
       ...(input.interventionDay > input.days ? ['La intervención empieza fuera del horizonte.'] : []),
     ],

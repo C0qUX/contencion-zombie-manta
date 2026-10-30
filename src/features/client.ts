@@ -1,7 +1,7 @@
-import type { ComparisonResult, SimulationInput } from '../domain/simulation'
+import type { ComparisonResult, ProgressPhase, SimulationInput } from '../domain/simulation'
 export type WorkerRequest = { id: number; input: SimulationInput }
 export type WorkerResponse = { id: number } & (
-  | { type: 'progress'; completed: number; total: number }
+  | { type: 'progress'; completed: number; total: number; phase: ProgressPhase }
   | { type: 'result'; result: ComparisonResult }
   | { type: 'error'; message: string }
 )

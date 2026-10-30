@@ -2,7 +2,9 @@
 
 ## Versión y alcance
 
-Algoritmo **seir-places-2.0.0**. Conserva las tasas oficiales, pero corrige calendario, acoplamiento del azar y selección aleatoria; por eso sus números cambian frente a 07877a2. No se ajustaron parámetros para producir una victoria.
+Algoritmo **seir-places-3.0.0**. Añade la búsqueda acotada de la regla dirigida sobre el motor 2.0.0; la dinámica SEIR, el azar común y las líneas base no cambian, y la regla fija de 2.0.0 sigue siendo una candidata que reproduce exactamente sus resultados.
+
+La versión 2.0.0 conservó las tasas oficiales, pero corrige calendario, acoplamiento del azar y selección aleatoria; por eso sus números cambian frente a 07877a2. No se ajustaron parámetros para producir una victoria.
 
 Es un modelo agregado en cinco grupos: hogares, colegio, mercado, bus y barrio. No hay una red de personas ni aristas individuales, coordenadas o datos sanitarios reales de Manta.
 
@@ -55,7 +57,14 @@ Para el lugar j: exposición local = Ij/Nj. La exposición conectada es la media
 
 ## Asignaciones
 
-**Dirigida:** puntaje = S × conectividad × (0,35 + 12×prevalencia), donde prevalencia=(I+0,6E)/N. Pesos heurísticos ficticios. Reparto proporcional sin exceder susceptibles; restos enteros por puntaje. Se recalcula cada día.
+**Dirigida (búsqueda acotada):** prioridad del lugar j = (1 + P_j)^k × c_j^a × (0,35 + w × prevalencia_j), con prevalencia = (I + 0,6E)/N y conectividad c_j. P_j es el potencial de propagación: exposiciones diarias que causaría un infeccioso en j, sin el factor común de contagiosidad, con la misma mezcla 74/26 del paso diario y los susceptibles que quedan tras las dosis ya asignadas:
+
+P_j = [0,74 × S_j + 0,26 × Σ_{m≠j} ((c_j + c_m)/2) × S_m / 4] / N_j
+
+- **Repartir** multiplica la prioridad por S_j y reparte proporcionalmente sin exceder susceptibles; los restos enteros van por prioridad.
+- **Concentrar** asigna el día en 20 tandas al lugar de mayor prioridad y recalcula P_j tras cada tanda.
+
+Candidatas: modo {repartir, concentrar} × k {0, 1, 2, 4} × w {0, 12} × a {0, 1} = 32 reglas. La regla fija de 2.0.0 es repartir, k=0, w=12, a=1. Cada candidata se simula en 24 futuros de calibración (índices de corrida desde 1 000 000, que nunca se evalúan) con los mismos eventos aleatorios; gana la menor media de contagios acumulados y un empate conserva la regla fija. Sin dosis disponibles o con eficacia 0 no se busca. La elegida se evalúa en las corridas 0..n−1, igual que el azar y no intervenir, y también frente a la regla fija en esas mismas corridas. Pesos y familia son decisiones de diseño ficticias, no estimaciones sanitarias.
 
 **Azar:** muestreo uniforme sin reemplazo entre susceptibles del día. Un boleto entre elegibles restantes por dosis. Si las dosis superan la mitad de elegibles, se muestrea el conjunto complementario: distribución equivalente y menos trabajo. Se eliminó el reparto aproximado con relleno por orden de lugar.
 
@@ -83,6 +92,6 @@ Por corrida: diferencia = contagios de referencia − dirigidos. Después se agr
 
 Ejecutar **node scripts/audit-scenarios.mjs**. Batería fijada antes de ver resultados: semillas 2026, 42, 12345, 98765, 314159; ocho escenarios; 120 corridas. Total: 40 experimentos, 4 800 corridas pareadas y 14 400 trayectorias.
 
-Resultados: [sensibilidad.json](evidencia/sensibilidad.json). En estas variantes y semillas la media dirigida frente al azar fue positiva. No prueba superioridad universal. Búsqueda separada de casos límite: población 100, una corrida, semilla 14, stock 10 y capacidad 2; dirigida pierde por un contagio. Se conserva como regresión negativa, no como escenario recomendado.
+Resultados: [sensibilidad.json](evidencia/sensibilidad.json). En las 40 combinaciones la media dirigida frente al azar fue positiva y el P10 pareado más bajo fue +100,9; la ganancia media frente a la regla fija va de 144 a 392 contagios según el escenario. No prueba superioridad universal. Búsqueda separada de casos límite: población 100, una corrida, semilla 9, stock 10 y capacidad 2; dirigida pierde por cuatro contagios. Se conserva como regresión negativa, no como escenario recomendado.
 
-Se conservan las 12 pruebas originales. Las nuevas cubren invariantes, recursos, extremos, muestreo, validación, pareamiento y pérdidas reales.
+Se conservan las 12 pruebas originales. Las nuevas cubren invariantes, recursos, extremos, muestreo, validación, pareamiento, pérdidas reales y la búsqueda: separación entre calibración y evaluación, líneas base intactas y reproducción exacta del resultado publicado de 2.0.0 con la regla fija.

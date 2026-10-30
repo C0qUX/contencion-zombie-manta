@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7DaysToSurvive — Pitch SpookyThon 2026 Track B</title>
+  <style>
+    /* ==========================================================================
+       VARIABLES Y RESET GLOBAL
+       ========================================================================== */
+    :root {
+      --bg-base: #060e18;
+      --bg-surface: #0b1828;
+      --bg-card: rgba(13, 27, 43, 0.92);
+      --bg-card-hover: rgba(19, 39, 61, 0.96);
+      --border-subtle: #1e384c;
+      --border-active: #4de0c2;
+      --teal-primary: #4de0c2;
+      --teal-light: #7be7d0;
+      --teal-dark: #0f3d36;
+      --teal-glow: rgba(77, 224, 194, 0.22);
+      --orange-primary: #ffd078;
+      --orange-light: #ffe5a8;
+      --orange-dark: #47320f;
+      --orange-glow: rgba(255, 208, 120, 0.22);
+      --red-primary: #ff627d;
+      --red-glow: rgba(255, 98, 125, 0.22);
+      --text-main: #f0f6ff;
+      --text-muted: #a4bccb;
+      --text-faint: #6c8699;
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Inter", Arial, sans-serif;
+      --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-stack);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==========================================================================
+       CONTENEDOR Y ESCALADO (1920x1080 PROPORCIONAL)
+       ========================================================================== */
+    #viewport-root {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 15%, #10283c 0%, #060e18 65%, #03070d 100%);
+    }
+
+    #presentation-stage {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      transform-origin: center center;
+      overflow: hidden;
+      background: transparent;
+      box-shadow: 0 0 80px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Grid de fondo decorativo */
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(30, 56, 76, 0.25) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(30, 56, 76, 0.25) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.7;
+    }
+
+    .bg-radial-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 85% 10%, rgba(77, 224, 194, 0.08) 0%, transparent 40%),
+                  radial-gradient(circle at 15% 90%, rgba(255, 208, 120, 0.06) 0%, transparent 45%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* ==========================================================================
+       ESTRUCTURA DE SLIDE
+       ========================================================================== */
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      padding: 72px 96px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      z-index: 5;
+      transition: opacity 0.25s ease-in-out;
+    }
+
+    .slide.active {
+      display: flex;
+      opacity: 1;
+      z-index: 10;
+    }
+
+    /* Encabezado de Slide */
+    .slide-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .slide-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--teal-primary);
+    }
+
+    .slide-eyebrow .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--teal-primary);
+      box-shadow: 0 0 12px var(--teal-primary);
+    }
+
+    .slide-eyebrow .event-badge {
+      font-size: 24px;
+      padding: 4px 16px;
+      border-radius: 8px;
+      background: rgba(255, 208, 120, 0.12);
+      border: 1px solid rgba(255, 208, 120, 0.35);
+      color: var(--orange-primary);
+      letter-spacing: 0.08em;
+    }
+
+    .slide-title {
+      font-size: 56px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+    }
+
+    .slide-title em {
+      color: var(--teal-primary);
+      font-style: normal;
+    }
+
+    .slide-subtitle {
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--text-muted);
+      line-height: 1.4;
+      max-width: 1400px;
+    }
+
+    /* Contenido Principal de Slide */
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 28px;
+      margin: 28px 0;
+    }
+
+    /* Pie de Slide */
+    .slide-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 20px;
+      font-size: 24px;
+      color: var(--text-faint);
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-weight: 600;
+    }
+
+    .footer-left span.brand {
+      color: var(--teal-primary);
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--teal-primary);
+    }
+
+    /* ==========================================================================
+       COMPONENTES VISUALES: CARDS, GRIDS, BADGES
+       ========================================================================== */
+    .grid-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      width: 100%;
+    }
+
+    .grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      width: 100%;
+    }
+
+    .grid-4col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      width: 100%;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 36px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+
+    .card.highlight-teal {
+      border-color: var(--teal-primary);
+      background: linear-gradient(145deg, rgba(15, 61, 54, 0.4) 0%, rgba(11, 24, 40, 0.95) 100%);
+      box-shadow: 0 10px 35px var(--teal-glow);
+    }
+
+    .card.highlight-orange {
+      border-color: var(--orange-primary);
+      background: linear-gradient(145deg, rgba(71, 50, 15, 0.35) 0%, rgba(11, 24, 40, 0.95) 100%);
+      box-shadow: 0 10px 35px var(--orange-glow);
+    }
+
+    .card.highlight-red {
+      border-color: var(--red-primary);
+      background: linear-gradient(145deg, rgba(70, 20, 30, 0.35) 0%, rgba(11, 24, 40, 0.95) 100%);
+      box-shadow: 0 10px 35px var(--red-glow);
+    }
+
+    .card-num {
+      font-family: var(--font-mono);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--teal-primary);
+      letter-spacing: 0.1em;
+    }
+
+    .card-num.orange {
+      color: var(--orange-primary);
+    }
+
+    .card-title {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.25;
+    }
+
+    .card-body {
+      font-size: 26px;
+      line-height: 1.55;
+      color: var(--text-muted);
+    }
+
+    .card-body b, .card-body strong {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .pill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-size: 24px;
+      font-weight: 700;
+      background: rgba(77, 224, 194, 0.12);
+      border: 1px solid var(--teal-primary);
+      color: var(--teal-primary);
+      width: fit-content;
+    }
+
+    .pill-tag.orange {
+      background: rgba(255, 208, 120, 0.12);
+      border-color: var(--orange-primary);
+      color: var(--orange-primary);
+    }
+
+    .pill-tag.red {
+      background: rgba(255, 98, 125, 0.12);
+      border-color: var(--red-primary);
+      color: var(--red-primary);
+    }
+
+    /* Lista estilizada */
+    .item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .item-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      font-size: 26px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    .item-row b, .item-row strong {
+      color: var(--text-main);
+    }
+
+    .item-bullet {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      background: var(--teal-primary);
+      margin-top: 12px;
+      flex-shrink: 0;
+      box-shadow: 0 0 10px var(--teal-primary);
+    }
+
+    .item-bullet.orange {
+      background: var(--orange-primary);
+      box-shadow: 0 0 10px var(--orange-primary);
+    }
+
+    /* ==========================================================================
+       DISEÑO ESPECÍFICO SLIDE 1 (PORTADA)
+       ========================================================================== */
+    .slide-title-hero {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 36px;
+    }
+
+    .hero-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .hero-badge {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      border-radius: 12px;
+    }
+
+    .hero-badge.track {
+      background: rgba(255, 208, 120, 0.14);
+      border: 2px solid var(--orange-primary);
+      color: var(--orange-primary);
+    }
+
+    .hero-badge.spooky {
+      background: rgba(77, 224, 194, 0.14);
+      border: 2px solid var(--teal-primary);
+      color: var(--teal-primary);
+    }
+
+    .hero-main-title {
+      font-size: 110px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      background: linear-gradient(135deg, #ffffff 0%, #b2f5ea 40%, #4de0c2 80%, #2bb89c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 50px rgba(77, 224, 194, 0.3);
+    }
+
+    .hero-subtitle-box {
+      max-width: 1300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero-sub-header {
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .hero-description {
+      font-size: 28px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      max-width: 1150px;
+    }
+
+    .hero-team-badge {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      background: rgba(14, 27, 42, 0.9);
+      border: 2px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 16px 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-team-label {
+      font-size: 26px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .hero-team-name {
+      font-size: 44px;
+      font-weight: 900;
+      font-family: var(--font-mono);
+      color: var(--orange-primary);
+      letter-spacing: 0.05em;
+    }
+
+    .hero-features-bar {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .hero-feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      color: var(--text-muted);
+    }
+
+    .hero-feature-item svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--teal-primary);
+    }
+
+    /* ==========================================================================
+       DISEÑO DE DIAGRAMA SEIR (SLIDE 4)
+       ========================================================================== */
+    .seir-flow-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 36px 44px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .seir-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      min-width: 200px;
+    }
+
+    .seir-box {
+      width: 110px;
+      height: 110px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      font-weight: 900;
+      font-family: var(--font-mono);
+      border: 2px solid var(--border-subtle);
+      background: #091524;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .seir-box.node-s { border-color: #3b82f6; color: #60a5fa; background: rgba(59, 130, 246, 0.12); }
+    .seir-box.node-e { border-color: var(--orange-primary); color: var(--orange-primary); background: rgba(255, 208, 120, 0.12); }
+    .seir-box.node-i { border-color: var(--red-primary); color: var(--red-primary); background: rgba(255, 98, 125, 0.12); }
+    .seir-box.node-r { border-color: #a855f7; color: #c084fc; background: rgba(168, 85, 247, 0.12); }
+    .seir-box.node-v { border-color: var(--teal-primary); color: var(--teal-primary); background: rgba(77, 224, 194, 0.16); }
+
+    .seir-label {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-main);
+      text-align: center;
+    }
+
+    .seir-desc {
+      font-size: 24px;
+      color: var(--text-faint);
+      text-align: center;
+    }
+
+    .seir-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--teal-primary);
+    }
+
+    .seir-arrow svg {
+      width: 44px;
+      height: 44px;
+    }
+
+    .seir-rate {
+      font-size: 24px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Red de 5 lugares */
+    .places-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+
+    .place-chip {
+      background: #0d1e31;
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+    }
+
+    .place-name {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--teal-primary);
+    }
+
+    .place-role {
+      font-size: 24px;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    /* ==========================================================================
+       TABLA DE COMPARACIÓN JUSTA (SLIDE 5)
+       ========================================================================== */
+    .fair-table-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .fair-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .fair-table th {
+      background: #0c1c2e;
+      color: var(--text-main);
+      font-size: 26px;
+      font-weight: 800;
+      padding: 24px 30px;
+      border-bottom: 2px solid var(--border-subtle);
+    }
+
+    .fair-table td {
+      padding: 22px 30px;
+      font-size: 24px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-subtle);
+      line-height: 1.4;
+    }
+
+    .fair-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .fair-table tr.highlight-row {
+      background: rgba(77, 224, 194, 0.05);
+    }
+
+    .fair-table td.dim-header {
+      font-weight: 700;
+      color: var(--text-main);
+      width: 25%;
+    }
+
+    .tag-success {
+      color: var(--teal-primary);
+      font-weight: 700;
+    }
+
+    .tag-neutral {
+      color: var(--orange-primary);
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       DEMO Y BROTE SORPRESA (SLIDES 6 & 7)
+       ========================================================================== */
+    .demo-url-box {
+      background: linear-gradient(135deg, rgba(77, 224, 194, 0.12) 0%, rgba(13, 27, 43, 0.95) 100%);
+      border: 2px solid var(--teal-primary);
+      border-radius: 20px;
+      padding: 24px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .demo-url-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .demo-url-text {
+      font-family: var(--font-mono);
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--teal-light);
+      letter-spacing: -0.01em;
+    }
+
+    .demo-url-badge {
+      background: var(--teal-dark);
+      color: var(--teal-primary);
+      font-size: 24px;
+      font-weight: 800;
+      padding: 6px 18px;
+      border-radius: 10px;
+      border: 1px solid var(--teal-primary);
+    }
+
+    .surprise-btn-mock {
+      background: #10263c;
+      border: 2px solid var(--orange-primary);
+      border-radius: 16px;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 8px 24px var(--orange-glow);
+    }
+
+    .surprise-btn-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 30px;
+      font-weight: 900;
+      color: var(--orange-primary);
+    }
+
+    .surprise-btn-desc {
+      font-size: 24px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* ==========================================================================
+       ARQUITECTURA AWS (SLIDE 8)
+       ========================================================================== */
+    .arch-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 24px;
+      padding: 40px 48px;
+      gap: 16px;
+    }
+
+    .arch-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: #091726;
+      border: 2px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 28px 20px;
+      gap: 12px;
+    }
+
+    .arch-stage.highlight {
+      border-color: var(--teal-primary);
+      background: rgba(77, 224, 194, 0.08);
+    }
+
+    .arch-icon {
+      width: 56px;
+      height: 56px;
+      color: var(--teal-primary);
+    }
+
+    .arch-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .arch-subtitle {
+      font-size: 24px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    .arch-arrow {
+      color: var(--teal-primary);
+      flex-shrink: 0;
+    }
+
+    .arch-arrow svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    /* ==========================================================================
+       CONTROLES DE PRESENTACIÓN HUD
+       ========================================================================== */
+    #hud-controls {
+      position: fixed;
+      bottom: 24px;
+      right: 32px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      z-index: 1000;
+      background: rgba(6, 14, 24, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 8px 18px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+
+    .hud-btn {
+      background: #112538;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 10px 18px;
+      font-size: 18px;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .hud-btn:hover {
+      background: var(--teal-dark);
+      border-color: var(--teal-primary);
+      color: #fff;
+    }
+
+    .hud-indicator {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--teal-primary);
+      padding: 0 12px;
+    }
+
+    #progress-line {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--teal-primary), var(--orange-primary));
+      width: 10%;
+      z-index: 1001;
+      transition: width 0.3s ease;
+    }
+
+    /* ==========================================================================
+       ESTILOS PARA IMPRESIÓN A PDF
+       ========================================================================== */
+    @page {
+      size: 1920px 1080px;
+      margin: 0;
+    }
+
+    @media print {
+      html, body {
+        width: 1920px !important;
+        height: auto !important;
+        background-color: #060e18 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        overflow: visible !important;
+      }
+
+      #viewport-root {
+        position: static !important;
+        display: block !important;
+        background: none !important;
+        width: 1920px !important;
+        height: auto !important;
+      }
+
+      #presentation-stage {
+        position: static !important;
+        transform: none !important;
+        width: 1920px !important;
+        height: auto !important;
+        box-shadow: none !important;
+      }
+
+      .slide {
+        display: flex !important;
+        opacity: 1 !important;
+        position: relative !important;
+        width: 1920px !important;
+        height: 1080px !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+      }
+
+      #hud-controls, #progress-line {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="viewport-root">
+    <div id="presentation-stage">
+      <div class="bg-grid"></div>
+      <div class="bg-radial-glow"></div>
+
+      <!-- ====================================================================
+           SLIDE 1: PORTADA
+           ==================================================================== -->
+      <section class="slide active" id="slide-1">
+        <div class="slide-title-hero">
+          <div class="hero-badge-row">
+            <span class="hero-badge track">Comité de Contención · Track B: La Plaga Zombie</span>
+            <span class="hero-badge spooky">SpookyThon 2026</span>
+          </div>
+
+          <h1 class="hero-main-title">7DaysToSurvive</h1>
+
+          <div class="hero-subtitle-box">
+            <h2 class="hero-sub-header">Herramienta de Simulación SEIR para Apoyo a Decisiones</h2>
+            <p class="hero-description">
+              Optimización estocástica de contención epidemiológica sobre red sintética de lugares de Manta bajo restricción severa de vacunas.
+            </p>
+          </div>
+
+          <div class="hero-team-badge">
+            <span class="hero-team-label">Equipo de Desarrollo</span>
+            <span class="hero-team-name">C0qUX</span>
+          </div>
+
+          <div class="hero-features-bar">
+            <div class="hero-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5 10 5 10-5-5-2.5-5 2.5z"/></svg>
+              <span>Modelo SEIR + V (5 Estados)</span>
+            </div>
+            <div class="hero-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14h2v2h-2zm0-10h2v8h-2z"/></svg>
+              <span>120 Corridas Monte Carlo</span>
+            </div>
+            <div class="hero-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              <span>100% Client-Side Web Worker</span>
+            </div>
+            <div class="hero-feature-item">
+              <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+              <span>AWS Amplify Hosting</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="footer-left">
+            <span class="brand">7DaysToSurvive</span> · SpookyThon 2026 · Track B: La Plaga Zombie
+          </div>
+          <div class="footer-right">SLIDE 01 / 10</div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 2: EL PROBLEMA
+           ==================================================================== -->
+      <section class="slide" id="slide-2">
+        <div class="slide-header">
+          <div class="slide-eyebrow"><span class="dot"></span> Contexto y Reto Operativo <span class="event-badge">Manta, Ecuador</span></div>
+          <h2 class="slide-title">El <em>problema</em>: Decidir bajo incertidumbre y escasez</h2>
+          <p class="slide-subtitle">Una plaga zombie amenaza la ciudad y el tiempo de respuesta es milimétrico.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2x2">
+            <div class="card highlight-teal">
+              <div class="card-num">01 / DINÁMICA DEL BROTE</div>
+              <h3 class="card-title">Manta: un brote empieza con un caso</h3>
+              <p class="card-body">
+                Cada mordido contagia rápidamente a quienes tiene cerca. En una comunidad conectada, la transmisión exponencial no espera confirmaciones de laboratorio ni deliberaciones lentas.
+              </p>
+            </div>
+
+            <div class="card highlight-orange">
+              <div class="card-num orange">02 / RESTRICCIÓN SEVERA</div>
+              <h3 class="card-title">No hay vacunas para todos</h3>
+              <p class="card-body">
+                No se puede vacunar a toda la población ni cerrar toda la ciudad indefinidamente sin provocar el colapso social y económico de Manta. Los recursos sanitarios son estrictamente finitos.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-num">03 / EL DILEMA DEL COMITÉ</div>
+              <h3 class="card-title">¿A quién vacunar primero, dónde y cuándo?</h3>
+              <p class="card-body">
+                Las autoridades sanitarias enfrentan un triaje espacial y temporal continuo: ¿Priorizar hogares, colegios, mercados de abastos, paradas de buses o barrios periféricos?
+              </p>
+            </div>
+
+            <div class="card highlight-teal">
+              <div class="card-num">04 / LA PREGUNTA CRÍTICA</div>
+              <h3 class="card-title">¿Cómo decidir con datos, no con suerte?</h3>
+              <p class="card-body">
+                La intuición y la buena fortuna fallan en sistemas no lineales. Manta requiere una herramienta analítica transparente que evalúe escenarios antes de que el brote se salga de control.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="footer-left"><span class="brand">7DaysToSurvive</span> · Planteamiento del Problema</div>
+          <div class="footer-right">SLIDE 02 / 10</div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 3: NUESTRA SOLUCIÓN
+           ==================================================================== -->
+      <section class="slide" id="slide-3">
+        <div class="slide-header">
+          <div class="slide-eyebrow"><span class="dot"></span> Propuesta de Valor <span class="event-badge">7DaysToSurvive</span></div>
+          <h2 class="slide-title">Nuestra <em>solución</em>: Simulación SEIR y políticas comparadas</h2>
+          <p class="slide-subtitle">Evaluación objetiva y transparente de estrategias de contención en tiempo real.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-3col">
+            <div class="card highlight-teal">
+              <div class="pill-tag">Estrategia Recomendada</div>
+              <h3 class="card-title">Dirigida (7DaysToSurvive)</h3>
+              <p class="card-body">
+                Elige la mejor de <b>32 reglas</b> en 24 futuros de calibración y la evalúa en 120 futuros nuevos. Pondera <b>potencial de propagación</b>, <b>casos activos</b> (E+I) y <b>conectividad</b>. Oficial: <b>451 contagios evitados frente al azar</b> (regla fija: 135).
+              </p>
+            </div>
+
+            <div class="card highlight-orange">
+              <div class="pill-tag orange">Línea Base Neutral</div>
+              <h3 class="card-title">Distribución al Azar</h3>
+              <p class="card-body">
+                Reparto uniforme sin reemplazo entre la población susceptible. Utiliza exactamente el mismo inventario y calendario para medir el valor agregado de la regla elegida.
+              </p>
+            </div>
+
+            <div class="card highlight-red">
+              <div class="pill-tag red">Línea de Inacción</div>
+              <h3 class="card-title">No Intervenir</h3>
+              <p class="card-body">
+                Progresión libre de la plaga zombie sin inmunización. Cuantifica el costo epidemiológico y de vidas de no actuar oportunamente.
+              </p>
+            </div>
+          </div>
+
+          <div class="card" style="background: rgba(14, 30, 48, 0.95); border-color: var(--teal-primary);">
+            <div class="grid-2x2" style="gap: 20px;">
+              <div style="font-size: 26px; line-height: 1.5; color: var(--text-main);">
+                ⚖️ <b>Mismo presupuesto, mismas condiciones:</b> Comparación justa y pareada donde cada estrategia opera bajo idéntico stock y restricciones.
+              </div>
+              <div style="font-size: 26px; line-height: 1.5; color: var(--text-main);">
+                ⚡ <b>Cálculo 100% en el navegador:</b> Web Worker independiente que procesa la simulación sin saturar servidores; AWS Amplify sirve la app con máxima disponibilidad.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="footer-left"><span class="brand">7DaysToSurvive</span> · Arquitectura de Decisión</div>
+          <div class="footer-right">SLIDE 03 / 10</div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 4: EL MODELO SEIR
+           ==================================================================== -->
+      <section class="slide" id="slide-4">
+        <div class="slide-header">
+          <div class="slide-eyebrow"><span class="dot"></span> Fundamento Matemático <span class="event-badge">Algoritmo seir-places-3.0.0</span></div>
+          <h2 class="slide-title">El <em>modelo SEIR</em>: Red sintética y estocástica</h2>
+          <p class="slide-subtitle">Dinámica de compartimentos estocásticos sobre una topología urbana sintética de Manta.</p>
+        </div>
+
+        <div class="slide-content">
+          <!-- Flujo Compartimental SEIR + V -->
+          <div class="seir-flow-container">
+            <div class="seir-node">
+              <div class="seir-box node-s">S</div>
+              <div class="seir-label">Sano / Susceptible</div>
+              <div class="seir-desc">Población expuesta</div>
+            </div>
+
+            <div class="seir-arrow">
+              <span class="seir-rate">Mordisco (β)</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="seir-node">
+              <div class="seir-box node-e">E</div>
+              <div class="seir-label">Mordido / Expuesto</div>
+              <div class="seir-desc">Período de latencia</div>
+            </div>
+
+            <div class="seir-arrow">
+              <span class="seir-rate">σ = 0.22/d</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="seir-node">
+              <div class="seir-box node-i">I</div>
+              <div class="seir-label">Zombie / Infeccioso</div>
+              <div class="seir-desc">Transmisión activa</div>
+            </div>
+
+            <div class="seir-arrow">
+              <span class="seir-rate">γ = 0.16/d</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+
+            <div class="seir-node">
+              <div class="seir-box node-r">R</div>
+              <div class="seir-label">Exorcizado</div>
+              <div class="seir-desc">Recuperado / Inmune</div>
+            </div>
+
+            <div style="width: 2px; height: 90px; background: var(--border-subtle); margin: 0 10px;"></div>
+
+            <div class="seir-node">
+              <div class="seir-box node-v">V</div>
+              <div class="seir-label">Protegido por Vacuna</div>
+              <div class="seir-desc">Eficacia 82% (Inmediata)</div>
+            </div>
+          </div>
+
+          <!-- Lugares y Parámetros -->
+          <div class="places-grid">
+            <div class="place-chip">
+              <div class="place-name">Hogares</div>
+              <div class="place-role">Contacto íntimo y continuo</div>
+            </div>
+            <div class="place-chip">
+              <div class="place-name">Colegio</div>
+              <div class="place-role">Alta densidad e interacción</div>
+            </div>
+            <div class="place-chip">
+              <div class="place-name">Mercado</div>
+              <div class="place-role">Foco comercial y afluencia masiva</div>
+            </div>
+            <div class="place-chip">
+              <div class="place-name">Bus</div>
+              <div class="place-role">Vector de dispersión móvil</div>
+            </div>
+            <div class="place-chip">
+              <div class="place-name">Barrio</div>
+              <div class="place-role">Conector comunitario abierto</div>
+            </div>
+          </div>
+
+          <div class="grid-2x2">
+            <div class="card" style="padding: 24px 32px;">
+              <div class="card-title" style="font-size: 28px; color: var(--teal-primary);">Matriz de Transmisión</div>
+              <p class="card-body" style="font-size: 24px;">
+                <b>74% transmisión local</b> dentro del propio recinto + <b>26% transmisión cruzada</b> a través de las conexiones de la red urbana.
+              </p>
+            </div>
+            <div class="card" style="padding: 24px 32px;">
+              <div class="card-title" style="font-size: 28px; color: var(--orange-primary);">Simulación Monte Carlo</div>
+              <p class="card-body" style="font-size: 24px;">
+                <b>120 corridas estocásticas</b> con semilla reproducible (semilla oficial 2026). Conservación estricta: S + E + I + R + V = N.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="footer-left"><span class="brand">7DaysToSurvive</span> · Especificación del Modelo</div>
+          <div class="footer-right">SLIDE 04 / 10</div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 5: COMPARACIÓN JUSTA
+           ==================================================================== -->
+      <section class="slide" id="slide-5">
+        <div class="slide-header">
+          <div class="slide-eyebrow"><span class="dot"></span> Metodología Científica <span class="event-badge">Equivalencia Estricta</span></div>
+          <h2 class="slide-title">Comparación <em>justa</em> y rigor estadístico</h2>
+          <p class="slide-subtitle">Condiciones idénticas entre estrategias para evitar sesgos en la evaluación.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="fair-table-card">
+            <table class="fair-table">
+              <thead>
+                <tr>
+                  <th>Dimensión</th>
+                  <th>Dirigida (7DaysToSurvive)</th>
+                  <th>Azar (Línea Base)</th>
+                  <th>No Intervenir</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="dim-header">Stock de Vacunas</td>
+                  <td class="tag-success">Idéntico presupuesto (ej. 15.120 dosis)</td>
+                  <td class="tag-neutral">Idéntico presupuesto (ej. 15.120 dosis)</td>
+                  <td>0 dosis aplicadas</td>
+                </tr>
+                <tr>
+                  <td class="dim-header">Capacidad / Día</td>
+                  <td>180 dosis / día</td>
+                  <td>180 dosis / día</td>
+                  <td>No aplica</td>
+                </tr>
+                <tr>
+                  <td class="dim-header">Día de Inicio y Eficacia</td>
+                  <td>Día 6 · Eficacia 82%</td>
+                  <td>Día 6 · Eficacia 82%</td>
+                  <td>No aplica</td>
+                </tr>
+                <tr class="highlight-row">
+                  <td class="dim-header">Lógica de Asignación</td>
+                  <td style="color: var(--teal-primary); font-weight: 700;">Mejor de 32 reglas: propagación × casos activos × conectividad</td>
+                  <td style="color: var(--orange-primary); font-weight: 700;">Uniforme sin reemplazo entre susceptibles</td>
+                  <td>Sin intervención médica</td>
+                </tr>
+                <tr>
+                  <td class="dim-header">Consumos Reales</td>
+                  <td colspan="3">
+                    <b>Los consumos reales pueden diferir</b> si se agotan los susceptibles elegibles en un lugar. El sistema reporta con honestidad las dosis efectivamente inyectadas.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card highlight-teal" style="padding: 24px 36px;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <span style="font-size: 34px;">📊</span>
+              <div style="font-size: 25px; line-height: 1.5; color: var(--text-main);">
+                <b>Interpretación de bandas P10–P90:</b> Corresponden a la <b>variabilidad empírica entre las 120 corridas</b> de Monte Carlo (percentiles de la muestra), <b>NO a un intervalo de confianza</b> paramétrico de la media.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="footer-left"><span class="brand">7DaysToSurvive</span> · Rigor Metodológico</div>
+          <div class="footer-right">SLIDE 05 / 10</div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 6: DEMO EN VIVO
+           ==================================================================== -->
+      <section class="slide" id="slide-6">
+        <div class="slide-header">
+          <div class="slide-eyebrow"><span class="dot"></span> Despliegue en Producción <span class="event-badge">Amplify Cloud</span></div>
+          <h2 class="slide-title"><em>Demo en vivo</em>: Plataforma accesible y auditable</h2>
+          <p class="slide-subtitle">Una interfaz reactiva e interactiva lista para su inspección por el jurado.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="demo-url-box">
+            <div class="demo-url-left">
+              <span style="font-size: 40px;">🌐</span>
+              <div>
+                <div style="font-size: 20px; color: var(--teal-primary); font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;">URL Pública de Acceso</div>
+                <div class="demo-url-text">https://main.d3kt9g5gofzhxh.amplifyapp.com/</div>
+              </div>
+            </div>
+            <div class="demo-url-badge">ONLINE · HTTPS</div>
+          </div>
+
+          <div class="grid-2x2">
+            <div class="card">
+              <div class="card-num">CONFIGURACIÓN OFICIAL</div>
+              <h3 class="card-title">Escenario Oficial Reproducible</h3>
+              <ul class="item-list" style="margin-top: 8px;">
+                <li class="item-row"><span class="item-bullet"></span><span><b>Semilla 2026:</b> Reproduce exactamente la misma secuencia pseudoaleatoria.</span></li>
+                <li class="item-row"><span class="item-bullet"></span><span><b>15.000 habitantes sintéticos:</b> Horizonte de simulación de 90 días.</span></li>
+                <li class="item-row"><span class="item-bullet"></span><span><b>Foco inicial:</b> 35 personas expuestas en el Mercado de Manta.</span></li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <div class="card-num orange">CONTROLES EDITABLES</div>
+              <h3 class="card-title">Interactividad en Tiempo Real</h3>
+              <ul class="item-list" style="margin-top: 8px;">
+                <li class="item-row"><span class="item-bullet orange"></span><span>Sliders dinámicos: Contagiosidad, capacidad/día, stock total y eficacia.</span></li>
+                <li class="item-row"><span class="item-bullet orange"></span><span><b>6 escenarios predefinidos:</b> Desde brote escolar hasta variante resistente.</span></li>
+                <li class="item-row"><span class="item-bullet orange"></span><span><b>Exportación e informes:</b> Descarga JSON verificable e informe imprimible.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="footer-left"><span class="brand">7DaysToSurvive</span> · Demostración en Vivo</div>
+          <div class="footer-right">SLIDE 06 / 10</div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 7: BROTE SORPRESA
+           ==================================================================== -->
+      <section class="slide" id="slide-7">
+        <div class="slide-header">
+          <div class="slide-eyebrow"><span class="dot"></span> Prueba de Estrés <span class="event-badge">Interacción con el Jurado</span></div>
+          <h2 class="slide-title"><em>Brote Sorpresa</em>: El jurado desafía al modelo</h2>
+          <p class="slide-subtitle">Cambios dinámicos de parámetros en vivo para verificar la robustez de la herramienta.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-2x2">
+            <div class="surprise-btn-mock">
+              <div class="surprise-btn-header">
+                <span>⚡</span> Botón "Contagio ×2"
+              </div>
+              <p class="surprise-btn-desc">
+                Duplica instantáneamente la tasa de contagio (β) para simular una mutación agresiva o superpropagadores en el transporte público.
+              </p>
+            </div>
+
+            <div class="surprise-btn-mock">
+              <div class="surprise-btn-header">
+                <span>📉</span> Botón "Mitad del Stock"
+              </div>
+              <p class="surprise-btn-desc">
+                Reduce el inventario de vacunas a la mitad (50%) simulando desabastecimiento crítico o fallos logísticos de suministro.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-num">VARIACIONES DINÁMICAS</div>
+              <h3 class="card-title">Cualquier parámetro editable</h3>
+              <p class="card-body">
+                El jurado puede cambiar el <b>lugar de origen</b> (Colegio, Bus, Hogares), la <b>eficacia de la vacuna</b> o retrasar el <b>día de inicio</b>.
+              </p>
+            </div>
+
+            <div class="card highlight-teal">
+              <div class="card-num">RESULTADOS EN SEGUNDOS</div>
+              <h3 class="card-title">Cálculo instantáneo y honesto</h3>
+              <p class="card-body">
+                El Web Worker vuelve a elegir la regla y recalcula las 120 corridas en ~2–3 segundos. <b>Si la estrategia dirigida pierde frente al azar, se muestra honestamente</b> con delta negativo.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="footer-left"><span class="brand">7DaysToSurvive</span> · Modo Brote Sorpresa</div>
+          <div class="footer-right">SLIDE 07 / 10</div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 8: ARQUITECTURA AWS
+           ==================================================================== -->
+      <section class="slide" id="slide-8">
+        <div class="slide-header">
+          <div class="slide-eyebrow"><span class="dot"></span> Nube y Eficiencia <span class="event-badge">Región Ohio us-east-2</span></div>
+          <h2 class="slide-title">Arquitectura <em>AWS</em>: Serverless y control presupuestario</h2>
+          <p class="slide-subtitle">Diseño estático desacoplado sin servidores con costo mínimo garantizado.</p>
+        </div>
+
+        <div class="slide-content">
+          <!-- Diagrama de Arquitectura -->
+          <div class="arch-flow">
+            <div class="arch-stage">
+              <div class="arch-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></div>
+              <div class="arch-title">GitHub Repo</div>
+              <div class="arch-subtitle">Branch main · Push automático con lockfile y CI</div>
+            </div>
+
+            <div class="arch-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+
+            <div class="arch-stage highlight">
+              <div class="arch-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3z"/></svg></div>
+              <div class="arch-title">AWS Amplify</div>
+              <div class="arch-subtitle">Build en Ohio (us-east-2) · Node 22 · Distribución estática</div>
+            </div>
+
+            <div class="arch-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+
+            <div class="arch-stage">
+              <div class="arch-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
+              <div class="arch-title">HTTPS CDN</div>
+              <div class="arch-subtitle">CloudFront global · Certificado SSL gestionado</div>
+            </div>
+
+            <div class="arch-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+
+            <div class="arch-stage highlight">
+              <div class="arch-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></div>
+              <div class="arch-title">Navegador Cliente</div>
+              <div class="arch-subtitle">Web Worker dedicado · Monte Carlo sin saturar servidor</div>
+            </div>
+          </div>
+
+          <!-- Métricas de Costos y Gobernanza -->
+          <div class="grid-3col">
+            <div class="card">
+              <div class="card-num">SIN COMPLEJIDAD</div>
+              <h3 class="card-title">Cero Backend y APIs</h3>
+              <p class="card-body">
+                Sin base de datos, sin microservicios, sin riesgo de fuga de credenciales en el cliente. Mínima superficie de ataque.
+              </p>
+            </div>
+
+            <div class="card highlight-teal">
+              <div class="card-num">AWS BUDGETS</div>
+              <h3 class="card-title">5 USD/mes con Alertas</h3>
+              <p class="card-body">
+                Presupuesto preventivo activo con avisos escalonados por costo real a <b>1 USD (20%)</b>, <b>4 USD (80%)</b> y <b>5 USD (100%)</b>.
+              </p>
+            </div>
+
+            <div class="card highlight-orange">
+              <div class="card-num orange">ESTIMACIÓN MENSUAL</div>
+              <h3 class="card-title">~2.76 USD / mes</h3>
+              <p class="card-body">
+                Cálculo basado en 40 builds de compilación y transferencia CDN, cubierto íntegramente antes de créditos o capa gratuita de AWS.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="footer-left"><span class="brand">7DaysToSurvive</span> · Infraestructura y Finanzas Cloud</div>
+          <div class="footer-right">SLIDE 08 / 10</div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 9: HONESTIDAD Y LÍMITES
+           ==================================================================== -->
+      <section class="slide" id="slide-9">
+        <div class="slide-header">
+          <div class="slide-eyebrow"><span class="dot"></span> Ética y Rigor <span class="event-badge">Transparencia Radical</span></div>
+          <h2 class="slide-title"><em>Honestidad</em> y límites del modelo</h2>
+          <p class="slide-subtitle">Declaración explícita de supuestos, limitaciones y alcance de la herramienta.</p>
+        </div>
+
+        <div class="slide-content">
+          <div class="grid-3col">
+            <div class="card">
+              <div class="card-num">SUPUESTO 01</div>
+              <h3 class="card-title">Población Sintética</h3>
+              <p class="card-body">
+                Red agregada de 5 tipos de lugares y 15.000 personas sintéticas. <b>No representa personas reales ni el callejero físico de Manta</b>.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-num">SUPUESTO 02</div>
+              <h3 class="card-title">Sin Calibración Clínica</h3>
+              <p class="card-body">
+                Los parámetros son matemáticos y educativos para comparar políticas; <b>no constituyen predicciones clínicas ni diagnósticos médicos</b>.
+              </p>
+            </div>
+
+            <div class="card highlight-orange">
+              <div class="card-num orange">RESULTADO 03</div>
+              <h3 class="card-title">La Regla Elegida Puede Perder</h3>
+              <p class="card-body">
+                En ciertos escenarios extremos o brotes saturados, <b>el azar puede superar a la estrategia dirigida</b>, y el sistema lo muestra abiertamente.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-num">RECURSOS 04</div>
+              <h3 class="card-title">Presupuesto vs Consumo</h3>
+              <p class="card-body">
+                Se garantiza <b>idéntico presupuesto disponible</b>, pero los consumos finales pueden variar según la elegibilidad de susceptibles remanentes.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-num">ESTADÍSTICA 05</div>
+              <h3 class="card-title">Percentiles Muestrales</h3>
+              <p class="card-body">
+                Las bandas <b>P10–P90 reflejan dispersión entre corridas de Monte Carlo</b>, no intervalos de confianza poblacionales sobre la media.
+              </p>
+            </div>
+
+            <div class="card">
+              <div class="card-num">LITERATURA 06</div>
+              <h3 class="card-title">Inspiración, no Calibración</h3>
+              <p class="card-body">
+                Inspiración conceptual en dinámicas observadas en COVID-19, pero <b>sin calibración biológica directa de esa enfermedad</b>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="footer-left"><span class="brand">7DaysToSurvive</span> · Declaración de Límites</div>
+          <div class="footer-right">SLIDE 09 / 10</div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           SLIDE 10: CIERRE
+           ==================================================================== -->
+      <section class="slide" id="slide-10">
+        <div class="slide-title-hero">
+          <div class="hero-badge-row">
+            <span class="hero-badge track">Track B: La Plaga Zombie</span>
+            <span class="hero-badge spooky">SpookyThon 2026</span>
+          </div>
+
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+            <div style="font-size: 32px; color: var(--teal-primary); font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;">Conclusión y Mensaje Clave</div>
+            <h2 class="hero-main-title" style="font-size: 88px; max-width: 1500px; line-height: 1.1;">
+              "Decidir antes de que el brote decida."
+            </h2>
+          </div>
+
+          <div class="card" style="width: 100%; max-width: 1400px; padding: 32px 48px; background: rgba(13, 27, 43, 0.95); border-color: var(--teal-primary);">
+            <div class="grid-3col" style="gap: 32px;">
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <span style="font-size: 24px; color: var(--text-faint); text-transform: uppercase; font-weight: 700;">Reproducibilidad</span>
+                <span style="font-size: 30px; font-weight: 800; color: var(--teal-primary);">Semilla 2026 · 120 Corridas</span>
+                <span style="font-size: 24px; color: var(--text-muted); font-family: var(--font-mono);">seir-places-3.0.0</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <span style="font-size: 24px; color: var(--text-faint); text-transform: uppercase; font-weight: 700;">Repositorio Oficial</span>
+                <span style="font-size: 30px; font-weight: 800; color: var(--orange-primary);">github.com/C0qUX/</span>
+                <span style="font-size: 24px; color: var(--text-muted); font-family: var(--font-mono);">contencion-zombie-manta</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <span style="font-size: 24px; color: var(--text-faint); text-transform: uppercase; font-weight: 700;">Aplicación en Producción</span>
+                <span style="font-size: 30px; font-weight: 800; color: var(--teal-light);">Amplify Hosting</span>
+                <span style="font-size: 24px; color: var(--text-muted); font-family: var(--font-mono);">main.d3kt9g5gofzhxh...</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-team-badge" style="margin-top: 10px;">
+            <span class="hero-team-label">Equipo</span>
+            <span class="hero-team-name">C0qUX</span>
+            <span style="color: var(--border-subtle); font-size: 32px;">|</span>
+            <span style="font-size: 26px; color: var(--teal-primary); font-weight: 700;">Manta, Octubre 2026</span>
+          </div>
+        </div>
+
+        <div class="slide-footer">
+          <div class="footer-left"><span class="brand">7DaysToSurvive</span> · Cierre de la Presentación</div>
+          <div class="footer-right">SLIDE 10 / 10</div>
+        </div>
+      </section>
+
+    </div><!-- #presentation-stage -->
+  </div><!-- #viewport-root -->
+
+  <!-- HUD INTERACTIVO DE NAVEGACIÓN -->
+  <div id="hud-controls">
+    <button class="hud-btn" id="btn-prev" title="Diapositiva anterior (Flecha Izquierda)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+      <span>Anterior</span>
+    </button>
+
+    <div class="hud-indicator" id="slide-indicator">01 / 10</div>
+
+    <button class="hud-btn" id="btn-next" title="Siguiente diapositiva (Flecha Derecha / Espacio)">
+      <span>Siguiente</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+
+    <div style="width: 1px; height: 24px; background: var(--border-subtle); margin: 0 4px;"></div>
+
+    <button class="hud-btn" id="btn-fullscreen" title="Pantalla completa (F)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/></svg>
+      <span>Pantalla</span>
+    </button>
+
+    <button class="hud-btn" id="btn-print" title="Imprimir o Exportar PDF (Ctrl+P)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+      <span>PDF</span>
+    </button>
+  </div>
+
+  <div id="progress-line"></div>
+
+  <!-- SCRIPT DE NAVEGACIÓN Y ESCALADO PROPORCIONAL -->
+  <script>
+    (function() {
+      const slides = document.querySelectorAll('.slide');
+      const totalSlides = slides.length;
+      let currentIndex = 0;
+
+      const indicator = document.getElementById('slide-indicator');
+      const progressLine = document.getElementById('progress-line');
+      const stage = document.getElementById('presentation-stage');
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+      const btnFullscreen = document.getElementById('btn-fullscreen');
+      const btnPrint = document.getElementById('btn-print');
+
+      // Escalado automático proporcional a 1920x1080
+      function scaleStage() {
+        const targetWidth = 1920;
+        const targetHeight = 1080;
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+
+        const scale = Math.min(windowWidth / targetWidth, windowHeight / targetHeight);
+        stage.style.transform = `scale(${scale})`;
+      }
+
+      window.addEventListener('resize', scaleStage);
+      window.addEventListener('DOMContentLoaded', scaleStage);
+      scaleStage();
+
+      // Actualizar slide activo
+      function showSlide(index) {
+        if (index < 0) index = 0;
+        if (index >= totalSlides) index = totalSlides - 1;
+
+        slides.forEach((slide, i) => {
+          if (i === index) {
+            slide.classList.add('active');
+          } else {
+            slide.classList.remove('active');
+          }
+        });
+
+        currentIndex = index;
+
+        // Actualizar indicador
+        const slideNumStr = String(currentIndex + 1).padStart(2, '0');
+        const totalNumStr = String(totalSlides).padStart(2, '0');
+        indicator.textContent = `${slideNumStr} / ${totalNumStr}`;
+
+        // Actualizar barra de progreso
+        const progressPct = ((currentIndex + 1) / totalSlides) * 100;
+        progressLine.style.width = `${progressPct}%`;
+      }
+
+      function nextSlide() {
+        if (currentIndex < totalSlides - 1) {
+          showSlide(currentIndex + 1);
+        }
+      }
+
+      function prevSlide() {
+        if (currentIndex > 0) {
+          showSlide(currentIndex - 1);
+        }
+      }
+
+      // Eventos de teclado
+      window.addEventListener('keydown', (e) => {
+        // Ignorar si se enfoca un campo de entrada
+        if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+
+        switch(e.key) {
+          case 'ArrowRight':
+          case 'ArrowDown':
+          case ' ':
+          case 'PageDown':
+          case 'n':
+          case 'N':
+            e.preventDefault();
+            nextSlide();
+            break;
+          case 'ArrowLeft':
+          case 'ArrowUp':
+          case 'PageUp':
+          case 'Backspace':
+          case 'p':
+          case 'P':
+            e.preventDefault();
+            prevSlide();
+            break;
+          case 'Home':
+            e.preventDefault();
+            showSlide(0);
+            break;
+          case 'End':
+            e.preventDefault();
+            showSlide(totalSlides - 1);
+            break;
+          case 'f':
+          case 'F':
+            toggleFullScreen();
+            break;
+        }
+      });
+
+      // Controles HUD
+      btnPrev.addEventListener('click', prevSlide);
+      btnNext.addEventListener('click', nextSlide);
+
+      function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(err => {
+            console.warn('Error intentando entrar en pantalla completa:', err);
+          });
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          }
+        }
+      }
+
+      btnFullscreen.addEventListener('click', toggleFullScreen);
+      btnPrint.addEventListener('click', () => {
+        window.print();
+      });
+
+      // Swipe táctil básico
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      window.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      window.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+      }, { passive: true });
+
+      function handleSwipe() {
+        const threshold = 60;
+        if (touchEndX < touchStartX - threshold) {
+          nextSlide();
+        } else if (touchEndX > touchStartX + threshold) {
+          prevSlide();
+        }
+      }
+
+      // Inicializar
+      showSlide(0);
+    })();
+  </script>
+</body>
+</html>

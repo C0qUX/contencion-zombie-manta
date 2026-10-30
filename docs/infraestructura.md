@@ -28,6 +28,26 @@
 
 La configuración del repositorio `amplify.yml` tiene prioridad sobre la configuración de consola. Node 22 debe quedar versionado allí. Fuente: https://docs.aws.amazon.com/amplify/latest/userguide/build-settings.html
 
+## Último despliegue verificado
+
+| Dato | Valor |
+|---|---|
+| Fecha | 30/10/2026, 15:50 UTC |
+| Commit publicado | `a165890` (fusión del PR #3) |
+| Algoritmo | `seir-places-2.0.0` |
+| Método | `index.html` y nombres con hash de `dist/assets` idénticos al build local; `node scripts/verify-ui.cjs` con `UI_BASE_URL` apuntando a la demo |
+| Resultado | 11/11 comprobaciones, sin errores de página |
+| Evidencia | [verificacion.json](evidencia/aws/verificacion.json), [escritorio](evidencia/aws/escritorio.jpg), [móvil](evidencia/aws/movil.jpg) |
+
+Repetir tras cada integración en `main`, una vez que Amplify termine:
+
+```bash
+npm run build
+PLAYWRIGHT_MODULE=/ruta/a/node_modules/playwright \
+UI_BASE_URL=https://main.d3kt9g5gofzhxh.amplifyapp.com/ \
+UI_EVIDENCE_DIR=docs/evidencia/aws node scripts/verify-ui.cjs
+```
+
 ## Acceso del equipo
 
 Los colaboradores necesitan acceso al repositorio, Node 22 y npm. No compartir contraseñas, tokens, llaves de AWS ni la sesión del propietario. El responsable de infraestructura administra Amplify y facturación. Limitar la aplicación GitHub de Amplify al repositorio del proyecto. No introducir secretos en código, capturas o variables VITE.
@@ -38,8 +58,9 @@ Conservar la URL pública. Para deshacer un cambio defectuoso, revertir el commi
 
 ## Pendientes que requieren comprobación humana
 
-- Verificar el destinatario de AWS Budgets; última consulta: Inactive.
+- Verificar el destinatario de AWS Budgets; última consulta: Inactive. **Debe verificarse antes del pitch.**
 - Las capturas del Budget ya están en el repositorio; mantenerlas sin datos personales si se actualizan.
 - Revisar MFA y recuperación del perfil del propietario; no se ha acreditado su configuración.
 - Registrar el costo final del evento cuando AWS actualice la facturación.
-- Mantener la demo hasta el pitch; no eliminar la aplicación antes.
+- Mantener la demo hasta el pitch del 30 de octubre; no eliminar la aplicación antes.
+- Probar la URL pública inmediatamente antes de la presentación.
