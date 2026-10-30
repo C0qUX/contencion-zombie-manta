@@ -187,3 +187,35 @@ summary { padding: 12px 0; font-size: 13px; }
 .policy-search table { min-width: 520px; }
 .policy-search tbody th small { display: inline-block; margin: 0 0 0 8px; }
 @media print { .policy-search { display: none; } }
+
+/* Geographic playback of one real simulated trajectory, independent of tile availability. */
+.live-map .map-controls { display: grid; grid-template-columns: 1.3fr 1fr auto auto; align-items: end; gap: 10px; }
+.live-map .map-controls label { max-width: none; }
+.live-map .map-controls button { font-size: 12px; }
+.map-day { max-width: none !important; margin: 18px 0 10px; color: #d5e7f1; }
+.map-day input { width: 100%; min-height: 38px; accent-color: #65e3c8; }
+.map-canvas { position: relative; overflow: hidden; border: 1px solid #45677b; border-radius: 12px; }
+.live-map .map-canvas svg { margin: 0; width: 100%; }
+.live-map .map-canvas svg text { fill: #e7f6ff; font-size: 12px; }
+.map-area-name { font-weight: 800; letter-spacing: .14em; }
+.live-map .map-canvas svg .map-infected { font-size: 11px; font-weight: 800; }
+.map-links { stroke: #83ddf3; stroke-opacity: .35; stroke-dasharray: 5 6; stroke-width: 1.4; }
+.map-canvas g[role=button] { cursor: pointer; }
+.map-canvas g[role=button]:focus { outline: none; }
+.map-canvas g[role=button]:focus > circle { stroke: #ffd078; stroke-width: 4; }
+.map-attribution { position: absolute; bottom: 0; right: 0; padding: 3px 8px; background: #fff; color: #142938; font-size: 11px; }
+.map-attribution a { color: #142938; }
+.map-cartography { display: flex; flex-wrap: wrap; align-items: center; gap: 15px; margin-top: 10px; font-size: 12px; }
+.map-cartography a { color: #99e8da; }
+.map-legend { display: flex; flex-wrap: wrap; gap: 9px 16px; margin: 18px 0; font-size: 12px; }
+.map-legend i { display: inline-block; width: 10px; height: 10px; margin-right: 5px; border-radius: 2px; }
+.map-day-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 14px; background: #102c3c; border-radius: 8px; }
+.map-day-metrics b { display: block; color: #73ead1; font-size: 23px; }
+.map-evidence { border-left: 3px solid #65e3c8; padding: 4px 16px; margin-top: 20px; background: #0c2732; }
+@media(max-width: 1100px) { .live-map .map-controls { grid-template-columns: 1fr 1fr; } }
+@media(max-width: 600px) { .map-day-metrics { grid-template-columns: 1fr; } }
+@media print { .map-controls, .map-day, .map-cartography { display: none !important; } .map-day-metrics, .map-evidence { background: white; } }
+.seed-validation { padding: 24px; }
+.seed-validation h2 { font-size: 20px; }
+.seed-validation p { font-size: 13px; line-height: 1.8; color: #bdd0dc; }
+@media(max-width:600px) { .seed-validation { padding: 18px 12px; } }
