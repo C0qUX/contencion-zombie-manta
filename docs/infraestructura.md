@@ -28,6 +28,26 @@
 
 La configuración del repositorio `amplify.yml` tiene prioridad sobre la configuración de consola. Node 22 debe quedar versionado allí. Fuente: https://docs.aws.amazon.com/amplify/latest/userguide/build-settings.html
 
+## Último despliegue verificado
+
+| Dato | Valor |
+|---|---|
+| Fecha | 30/10/2026, 15:50 UTC |
+| Commit publicado | `a165890` (fusión del PR #3) |
+| Algoritmo | `seir-places-2.0.0` |
+| Método | `index.html` y nombres con hash de `dist/assets` idénticos al build local; `node scripts/verify-ui.cjs` con `UI_BASE_URL` apuntando a la demo |
+| Resultado | 11/11 comprobaciones, sin errores de página |
+| Evidencia | [verificacion.json](evidencia/aws/verificacion.json), [escritorio](evidencia/aws/escritorio.jpg), [móvil](evidencia/aws/movil.jpg) |
+
+Repetir tras cada integración en `main`, una vez que Amplify termine:
+
+```bash
+npm run build
+PLAYWRIGHT_MODULE=/ruta/a/node_modules/playwright \
+UI_BASE_URL=https://main.d3kt9g5gofzhxh.amplifyapp.com/ \
+UI_EVIDENCE_DIR=docs/evidencia/aws node scripts/verify-ui.cjs
+```
+
 ## Acceso del equipo
 
 Los colaboradores necesitan acceso al repositorio, Node 22 y npm. No compartir contraseñas, tokens, llaves de AWS ni la sesión del propietario. El responsable de infraestructura administra Amplify y facturación. Limitar la aplicación GitHub de Amplify al repositorio del proyecto. No introducir secretos en código, capturas o variables VITE.

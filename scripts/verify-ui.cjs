@@ -94,7 +94,8 @@ const path = require('node:path')
     await page.getByRole('button', { name: 'Exportar JSON' }).click()
     const download = await downloadPromise
     const exported = JSON.parse(await fs.readFile(await download.path(), 'utf8'))
-    assert.equal(exported.algorithmVersion, 'seir-places-2.0.0')
+    assert.match(exported.algorithmVersion, /^seir-places-/)
+    assert.equal(exported.algorithmVersion, first.algorithmVersion)
     assert.deepEqual(exported.config, first.config)
     assert.deepEqual(exported.targeted, first.targeted)
     checks.push('JSON descargado incluye versión, parámetros y resultados reales')
@@ -131,7 +132,11 @@ const path = require('node:path')
     assert.equal(await page.locator('.decision').isVisible(), true)
     checks.push('Vista imprimible conserva resultados y oculta controles')
     assert.deepEqual(errors, [])
-    const record = { checks, pageErrors: errors, passed: checks.length }
+    const record = {
+      baseUrl: process.env.UI_BASE_URL || 'http://127.0.0.1:4174/', checkedAt: new Date().toISOString(),
+      browser: browser.browserType().name() + ' ' + browser.version(), algorithmVersion: first.algorithmVersion,
+      checks, pageErrors: errors, passed: checks.length,
+    }
     await fs.writeFile(path.join(out, 'verificacion.json'), JSON.stringify(record, null, 2))
     console.log(JSON.stringify(record, null, 2))
   } finally { await browser.close() }

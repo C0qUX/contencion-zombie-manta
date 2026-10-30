@@ -76,7 +76,7 @@ El stack S3/CloudFront y el script PowerShell del repositorio son una alternativ
 | Semilla | 2026 | Valor público para reproducir el resultado |
 | Monte Carlo | 120 corridas | Balance entre estabilidad y respuesta inmediata en el navegador |
 
-Para reproducir esta versión: pulsar **Restablecer escenario oficial**, confirmar semilla `2026` y pulsar **Ejecutar simulación**. Los controles editados no cambian resultados anteriores. Exportar JSON conserva configuración, resultado y versión `seir-places-2.0.0`; la duración queda fuera del resultado reproducible. La demo pública seguirá con su versión anterior hasta integrar y desplegar estos cambios.
+Para reproducir esta versión: pulsar **Restablecer escenario oficial**, confirmar semilla `2026` y pulsar **Ejecutar simulación**. Los controles editados no cambian resultados anteriores. Exportar JSON conserva configuración, resultado y versión `seir-places-2.0.0`; la duración queda fuera del resultado reproducible. La demo pública quedó verificada con esta versión el 30/10/2026: Amplify sirve los mismos archivos que el build local de `a165890` y la batería de navegador pasó 11/11 comprobaciones contra la URL de AWS ([evidencia](docs/evidencia/aws/verificacion.json)).
 
 Los números son parámetros educativos, no predicciones clínicas. La inspiración narrativa es COVID-19; sus tasas no calibran este modelo. [Método y fuentes](docs/modelo.md).
 

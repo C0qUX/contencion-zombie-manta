@@ -38,7 +38,7 @@ La base pasó 12 pruebas y build con Node 22.23.4. La release v0.1.0 conserva el
 4. Resultados nuevos por correcciones del algoritmo; guardar versión en exportaciones.
 5. Coordinar la revisión con los otros integrantes: esta rama cambia dominio y frontend.
 6. No se verificaron correo actual de Budget ni gasto final. No se cambiaron cuenta, región, plan o alertas.
-7. Tras integrar, probar URL pública y registrar commit desplegado.
+7. ~~Tras integrar, probar URL pública y registrar commit desplegado.~~ Hecho el 30/10/2026: `a165890` publicado y 11/11 comprobaciones en la URL de AWS ([evidencia](evidencia/aws/verificacion.json)).
 8. Confirmar con organización si puede publicarse nueva release o actualizar entrega.
 9. Los PR #1 y #2 se cerraron sin integrar; proponían el motor SIRV anterior. No reincorporarlos sobre este SEIR.
 
