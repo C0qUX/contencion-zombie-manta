@@ -6,6 +6,8 @@ import { createClient } from './features/client'
 import { initialScenario, parseDraft, SCENARIOS, toDraft, type Draft } from './features/scenarios'
 
 const number = (value: number) => new Intl.NumberFormat('es-EC', { maximumFractionDigits: 1 }).format(value)
+const usd = (value: number) => new Intl.NumberFormat('es-EC', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(value)
+const perAvoided = (cost: number, avoided: number) => avoided > 0 ? usd(cost / avoided) + ' por contagio evitado' : 'sin contagios evitados'
 const fields: { key: Exclude<keyof SimulationInput, 'outbreakLocation'>; label: string; min: number; max: number; step?: number; help?: string }[] = [
   { key: 'population', label: 'Población sintética', min: 100, max: 50000 },
   { key: 'initialInfected', label: 'Infectados iniciales', min: 0, max: 50000 },
@@ -19,6 +21,7 @@ const fields: { key: Exclude<keyof SimulationInput, 'outbreakLocation'>; label: 
   { key: 'days', label: 'Horizonte en días', min: 1, max: 180 },
   { key: 'incubationRate', label: 'Progresión E → I por día', min: 0, max: 1, step: .01, help: 'Latencia hasta ser infeccioso; no es inicio de síntomas.' },
   { key: 'recoveryRate', label: 'Recuperación diaria', min: 0, max: 1, step: .01 },
+  { key: 'costPerDose', label: 'Costo por dosis (USD)', min: 0, max: 100000, step: .01, help: 'Supuesto ficticio editable; no es un precio real.' },
 ]
 const summaries = (result: ComparisonResult) => [result.targeted, result.random, result.none]
 const signedClass = (value: number) => value < 0 ? 'negative' : 'good'
@@ -28,7 +31,7 @@ function StrategyRow({ strategy, result }: { strategy: StrategySummary; result: 
   return <tr><th scope="row">{strategy.label}</th>
     <td>{number(strategy.meanAffected)}<small>Mediana: {number(strategy.medianAffected)}</small><small>P10–P90: {number(strategy.p10Affected)}–{number(strategy.p90Affected)}</small><small>Mín.–máx.: {number(strategy.minAffected)}–{number(strategy.maxAffected)}</small></td>
     <td>{number(strategy.meanPeak)}<small>Día medio {number(strategy.meanPeakDay)}</small></td>
-    <td>{number(strategy.meanDosesUsed)}<small>Disponibles: {number(strategy.dosesAvailable)}</small></td>
+    <td>{number(strategy.meanDosesUsed)}<small>Disponibles: {number(strategy.dosesAvailable)}</small><small>Costo: {usd(strategy.meanDosesUsed * (result.config.costPerDose ?? 0))}</small></td>
     <td className={signedClass(avoided)}>{number(avoided)}<small>{number(result.none.meanAffected ? avoided / result.none.meanAffected * 100 : 0)} % frente a no actuar</small></td></tr>
 }
 
@@ -134,7 +137,7 @@ export default function App() {
             <h2>Resultado simulado · semilla {result.config.seed}</h2>
             <p>{result.config.runs} corridas · {result.config.days} días · {number(result.config.population)} personas sintéticas · {number(elapsed / 1000)} s de cálculo</p>
             <p>Origen: {LOCATIONS.find(item => item.id === result.config.outbreakLocation)?.label} · I inicial: {result.config.initialInfected} · contagiosidad: {result.config.transmissionRate} · eficacia: {number(result.config.vaccineEfficacy * 100)} % · inicio: día {result.config.interventionDay}</p>
-            <p>Capacidad: {result.config.vaccinesPerDay} dosis/día · stock: {result.config.totalVaccines} · E→I: {result.config.incubationRate}/día · recuperación: {result.config.recoveryRate}/día</p>
+            <p>Capacidad: {result.config.vaccinesPerDay} dosis/día · stock: {result.config.totalVaccines} · E→I: {result.config.incubationRate}/día · recuperación: {result.config.recoveryRate}/día · costo por dosis: {usd(result.config.costPerDose ?? 0)}</p>
             <div className="report-actions"><button onClick={exportJSON}>Exportar JSON</button><button onClick={() => window.print()}>Imprimir informe</button></div>
           </section>
           <section className="metrics" aria-label="Diferencias de contagios">
@@ -147,6 +150,7 @@ export default function App() {
           <section className="panel decision"><div><p className="eyebrow">DECISIÓN PARA MANTA</p><h2>{!hasAction ? 'No hay vacunación efectiva dentro de este plan.' : best.id === 'targeted' && result.savedVsRandom > 0 ? 'La estrategia dirigida obtiene menos contagios en promedio.' : best.id === 'random' ? 'El reparto al azar obtiene menos contagios en este escenario.' : best.id === 'none' ? 'No intervenir obtiene la menor media en este experimento.' : 'Las estrategias empatan en promedio.'}</h2>
             {hasAction && <p>Plan dirigido evaluado: empezar el día <b>{result.config.interventionDay}</b>, hasta <b>{number(result.config.vaccinesPerDay)} dosis/día</b> y <b>{number(result.targeted.dosesAvailable)} disponibles</b>. Mayor asignación inicial: <b>{priority.toLowerCase()}</b>; el reparto se vuelve a calcular cada día según el riesgo.</p>}
             <p><b>Recursos equivalentes evaluados:</b> la estrategia dirigida y el reparto al azar compiten con idéntica capacidad máxima (<b>{number(result.config.vaccinesPerDay)} dosis/día</b>) y el mismo stock disponible (<b>{number(result.config.totalVaccines ?? 0)} dosis</b>), iniciando ambas en el día <b>{result.config.interventionDay}</b>.</p>
+            {hasAction && <p><b>Costo estimado del plan dirigido:</b> {usd(result.targeted.meanDosesUsed * (result.config.costPerDose ?? 0))} ({number(result.targeted.meanDosesUsed)} dosis usadas × {usd(result.config.costPerDose ?? 0)}), es decir <b>{perAvoided(result.targeted.meanDosesUsed * (result.config.costPerDose ?? 0), result.pairedVsNone.mean)}</b> frente a no intervenir. El azar gasta {usd(result.random.meanDosesUsed * (result.config.costPerDose ?? 0))}: {perAvoided(result.random.meanDosesUsed * (result.config.costPerDose ?? 0), result.none.meanAffected - result.random.meanAffected)}.</p>}
             <p>Dirigida frente al azar: <b>{number(result.savedVsRandom)} contagios evitados en promedio</b>, mediana {number(result.pairedVsRandom.median)} y diferencias pareadas P10–P90 de {number(result.pairedVsRandom.p10)} a {number(result.pairedVsRandom.p90)}. {result.pairedVsRandom.min < 0 ? 'Hubo corridas donde la dirigida perdió.' : 'El resultado no garantiza ganar en otros escenarios.'}</p>
             {hasAction && <p>Regla elegida: <b>{describePolicy(result.policySearch.chosen)}</b>{result.policySearch.calibrationRuns ? <>, la mejor de {result.policySearch.candidates.length} reglas en {result.policySearch.calibrationRuns} futuros de calibración distintos de los {result.config.runs} evaluados. Frente a la regla fija original: <b className={signedClass(result.pairedVsReference.mean)}>{number(result.pairedVsReference.mean)} contagios evitados en promedio</b>, P10–P90 de {number(result.pairedVsReference.p10)} a {number(result.pairedVsReference.p90)}.</> : '.'}</p>}
             <p>La regla se elige antes de evaluar y se compara en futuros nuevos: es la mejor de una familia acotada, no un óptimo global ni una garantía causal.</p>
