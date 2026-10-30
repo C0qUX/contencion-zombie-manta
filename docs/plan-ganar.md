@@ -54,9 +54,9 @@ Rúbrica de la prueba de fuego (40 % de la nota total):
 
 Pendientes antes del pitch:
 1. Ensayar el Brote Sorpresa con al menos tres variaciones (contagio ×2, mitad stock, cambio de origen).
-2. Verificar que la demo pública responde en la URL: https://main.d3kt9g5gofzhxh.amplifyapp.com/
+2. Verificar que la demo pública responde en la URL: https://main.d3kt9g5gofzhxh.amplifyapp.com/ — verificada el 30/10 con 11/11 comprobaciones; repetir tras integrar 3.0.0.
 3. Comprobar con el titular el correo de Budget y el gasto actualizado.
-4. Tener la presentación PDF/PPTX lista (docs/presentacion.html → imprimir a PDF).
+4. ~~Tener la presentación PDF/PPTX lista (docs/presentacion.html → imprimir a PDF).~~ Hecho: [presentacion.pdf](presentacion.pdf), 10 páginas de 1920×1080, generado con `scripts/export-presentation.cjs`.
 
 ## Cierre del reto — rama mejora/cierre-reto
 

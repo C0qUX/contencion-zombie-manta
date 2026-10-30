@@ -129,7 +129,7 @@ scripts/            automatización operativa
 - [Plan de implementación para la prueba de fuego](docs/plan-ganar.md)
 - [Modelo, parámetros y evidencia](docs/modelo.md)
 - [Recorrido de cinco minutos y respuestas](docs/demo.md)
-- [Presentación del pitch](docs/presentacion.html) — abrir en navegador, imprimir a PDF para entrega
+- [Presentación del pitch](docs/presentacion.html) · [PDF para entrega](docs/presentacion.pdf) — regenerar con `PLAYWRIGHT_MODULE=/ruta/a/playwright node scripts/export-presentation.cjs`
 
 ## Equipo
 
