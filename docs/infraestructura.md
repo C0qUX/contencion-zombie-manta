@@ -32,11 +32,12 @@ La configuración del repositorio `amplify.yml` tiene prioridad sobre la configu
 
 | Dato | Valor |
 |---|---|
-| Fecha | 30/10/2026, 15:50 UTC |
-| Commit publicado | `a165890` (fusión del PR #3) |
-| Algoritmo | `seir-places-2.0.0` |
-| Método | `index.html` y nombres con hash de `dist/assets` idénticos al build local; `node scripts/verify-ui.cjs` con `UI_BASE_URL` apuntando a la demo |
-| Resultado | 11/11 comprobaciones, sin errores de página |
+| Fecha | 30/10/2026, 16:09 UTC (Amplify publicó a las 16:08:29 UTC, dos minutos después de fusionar) |
+| Commit publicado | `d4aea38` (fusión del PR #4) |
+| Algoritmo | `seir-places-3.0.0` |
+| Método | `index.html` y nombres con hash de `dist/assets` idénticos al build local; `node scripts/verify-ui.cjs` con `UI_BASE_URL` apuntando a la demo; lectura del resultado oficial desde el Worker de producción |
+| Resultado | 11/11 comprobaciones, sin errores de página; 451,49 evitados frente al azar, 9.749,19 frente a no intervenir y 316,76 frente a la regla fija, idénticos al cálculo local; 2,5–2,7 s de cálculo |
+| Verificación anterior | `a165890` (`seir-places-2.0.0`), 15:50 UTC, 11/11 |
 | Evidencia | [verificacion.json](evidencia/aws/verificacion.json), [escritorio](evidencia/aws/escritorio.jpg), [móvil](evidencia/aws/movil.jpg) |
 
 Repetir tras cada integración en `main`, una vez que Amplify termine:
