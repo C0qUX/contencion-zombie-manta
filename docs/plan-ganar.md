@@ -53,7 +53,7 @@ Rúbrica de la prueba de fuego (40 % de la nota total):
 - Claridad para decidir: 20 %
 
 Pendientes antes del pitch:
-1. Ensayar el Brote Sorpresa con al menos tres variaciones (contagio ×2, mitad stock, cambio de origen).
+1. ~~Ensayar el Brote Sorpresa con al menos tres variaciones (contagio ×2, mitad stock, cambio de origen).~~ Hecho en la URL pública con ocho variaciones; la dirigida gana al azar en todas ([resultados](demo.md#preparación-del-brote-sorpresa)).
 2. Verificar que la demo pública responde en la URL: https://main.d3kt9g5gofzhxh.amplifyapp.com/ — verificada con 3.0.0 tras el PR #4: 11/11 comprobaciones.
 3. Comprobar con el titular el correo de Budget y el gasto actualizado.
 4. ~~Tener la presentación PDF/PPTX lista (docs/presentacion.html → imprimir a PDF).~~ Hecho: [presentacion.pdf](presentacion.pdf), 10 páginas de 1920×1080, generado con `scripts/export-presentation.cjs`.
