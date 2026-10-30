@@ -11,6 +11,7 @@ Herramienta de apoyo a decisiones que simula una plaga estocástica sobre una re
 - Estrategia que optimiza: elige su regla entre 32 candidatas en 24 futuros de calibración que nunca entran en la evaluación, y reporta la ganancia frente a la regla fija original.
 - Worker con progreso y cancelación, seis escenarios, exportación JSON, enlace compartible e informe imprimible.
 - Diferencias pareadas firmadas, tres bandas P10–P90 y consumos reales visibles, incluidos escenarios donde la dirigida pierde.
+- Costo del plan y costo por contagio evitado a partir de un costo por dosis editable; mapa de lugares animado día a día con barras S/E/I/R/V.
 - Pruebas de reproducibilidad, conservación, elegibilidad, recursos equivalentes y casos negativos.
 - Despliegue estático en AWS Amplify Hosting; configuración de build versionada.
 
@@ -75,6 +76,7 @@ El stack S3/CloudFront y el script PowerShell del repositorio son una alternativ
 | Stock total | 15.120 dosis | Presupuesto 180×(90−6) implícito en la versión anterior, ahora editable y explícito |
 | Eficacia | 82 % | Supuesto editable para la prueba de variante |
 | Semilla | 2026 | Valor público para reproducir el resultado |
+| Costo por dosis | 10 USD | Supuesto ficticio editable para estimar el costo del plan; no es un precio real ni altera la epidemia |
 | Monte Carlo | 120 corridas | Balance entre estabilidad y respuesta inmediata en el navegador |
 
 Para reproducir esta versión: pulsar **Restablecer escenario oficial**, confirmar semilla `2026` y pulsar **Ejecutar simulación**. Los controles editados no cambian resultados anteriores. Exportar JSON conserva configuración, resultado, regla elegida y versión `seir-places-3.0.0`; la duración queda fuera del resultado reproducible. La demo pública sirve `seir-places-3.0.0` desde el 30/10/2026, 16:08 UTC (fusión `d4aea38`, PR #4). Amplify entrega los mismos archivos que el build local, la URL da las mismas cifras oficiales (451,5 evitados frente al azar) y la batería de navegador pasó 11/11 comprobaciones contra ella ([evidencia](docs/evidencia/aws/verificacion.json)).
@@ -128,6 +130,7 @@ scripts/            automatización operativa
 - [Estimación de costos](docs/costos.md)
 - [Plan de implementación para la prueba de fuego](docs/plan-ganar.md)
 - [Modelo, parámetros y evidencia](docs/modelo.md)
+- [Mapa automático de Manta, navegación y prueba de semillas](docs/mapa-manta.md)
 - [Recorrido de cinco minutos y respuestas](docs/demo.md)
 - [Presentación del pitch](docs/presentacion.html) · [PDF para entrega](docs/presentacion.pdf) — regenerar con `PLAYWRIGHT_MODULE=/ruta/a/playwright node scripts/export-presentation.cjs`
 

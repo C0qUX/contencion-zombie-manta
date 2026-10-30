@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-10-30T16:28:10.975Z",
+  "checks": [
+    "Auto-start on visibility, automatic street request, pause without recalculation",
+    "Cartography failure retains all playback and counts; provider traffic intercepted",
+    "Day 0/final and strategy use the actual stored trajectory and cumulative doses",
+    "Zoom/pan/recenter/place inspection without restarting Monte Carlo",
+    "Playback reaches the complete horizon and stops at the last day",
+    "Reduced motion disables autoplay while retaining manual controls",
+    "Five-seed real Worker batch repeats exactly and exports JSON",
+    "390px mobile viewport without horizontal page overflow"
+  ],
+  "errors": [],
+  "passed": 8,
+  "cartography": "Requests aborted; no actual provider imagery verified"
+}

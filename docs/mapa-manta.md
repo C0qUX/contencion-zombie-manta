@@ -4,7 +4,9 @@
 
 El mapa reproduce el historial de los cinco grupos agregados de la corrida 0 para dirigida, azar y ninguna intervención. Se puede seleccionar día y estrategia, reproducir, pausar y reiniciar. Los anillos muestran proporciones S/E/I/R/V y el porcentaje central representa infecciosos. La tabla muestra los conteos exactos del día seleccionado y las dosis acumuladas.
 
-La cartografía de calles de OpenStreetMap se activa con el botón Mostrar calles de Manta. No requiere API keys. Se cargan únicamente las teselas del encuadre actual; no hay descarga de mapas para uso offline, precarga de zoom ni sondeo constante. Se conserva la caché normal del navegador y el Referer. La atribución queda visible sobre la cartografía. Política: https://operations.osmfoundation.org/policies/tiles/.
+La cartografía de calles de OpenStreetMap se activa automáticamente al entrar el mapa en pantalla. No requiere API keys. Se puede arrastrar, acercar y alejar entre zoom 12 y 16, volver a centrar Manta y seleccionar grupos desde el mapa o sus botones. Se cargan únicamente las teselas del encuadre actual; no hay descarga de mapas para uso offline, precarga de zoom ni sondeo constante. Se conserva la caché normal del navegador y el Referer. La atribución queda visible sobre la cartografía. Política: https://operations.osmfoundation.org/policies/tiles/.
+
+La reproducción comienza automáticamente al mostrar el mapa, se suspende fuera de pantalla y termina al alcanzar el horizonte completo. Pausa, velocidad y día siguen siendo manuales; con movimiento reducido no hay reproducción automática. El marcador del día informa nuevas exposiciones y si ya comenzó la intervención. Las líneas animadas ilustran mezcla sintética entre grupos: no son desplazamientos detectados por las calles.
 
 Si falla el proveedor o no se activa, permanece un fondo esquemático. El motor, la animación, la tabla y la batería funcionan sin el servicio cartográfico. La animación cambia datos locales, no vuelve a descargar calles por día. Las pruebas automatizadas interceptan esas solicitudes para evitar tráfico de bots al proveedor.
 
@@ -32,11 +34,11 @@ Este criterio es evidencia de un escenario, no una prueba universal ni validaci�
 
 Resultado registrado desde el Worker del navegador con 120 corridas por semilla: las cinco semillas completadas mejoraron ambas referencias en media. Frente al azar, las diferencias fueron 451,5 (2026), 453,3 (42), 447,9 (12345), 469,7 (98765) y 437,7 (314159). Evidencia completa: [mapa-semillas.json](evidencia/mapa-semillas.json). No implica superioridad fuera de ese escenario.
 
-La validación final pasó 70 pruebas y build con Node 22.23.4, las 11 comprobaciones de regresión de interfaz y seis comprobaciones nuevas de mapa/batería, sin errores JavaScript. Se interceptaron las peticiones de teselas durante automatización; la disponibilidad real del proveedor depende de la conexión y no se presenta como garantizada.
+La versión anterior pasó 70 pruebas y build con Node 22.23.4, las 11 comprobaciones de regresión de interfaz y seis comprobaciones de mapa/batería. La ampliación automática e integración de costos pasa 75 pruebas y build. El script scripts/verify-map.cjs comprueba la reproducción automática, navegación, fallback y batería. Se interceptan las peticiones de teselas durante automatización; la disponibilidad real del proveedor depende de la conexión y no se presenta como garantizada.
 
 - Pruebas de historial: conservación de totales por día, última imagen igual al estado final, dosis iniciales cero, snapshots sin alias y reproducción sin cambiar métricas.
 - Pruebas de proyección: anclas dentro del encuadre y número acotado de teselas.
 - Edge: día 0/final, cambio de estrategia, reproducción/pausa, movimiento reducido, fallo de cartografía, batería reproducible, descarga JSON y móvil de 390 px.
 - Regresión: ejecutar el script existente scripts/verify-ui.cjs contra el build servido.
 
-El mapa se desarrolló sobre mejora/cierre-reto para conservar el trabajo reciente del equipo. Esa base ya fue integrada por el equipo en main y la rama del mapa se actualizó con main 2e94420, incluido el PDF. El PR del mapa apunta ahora a main; no se despliega automáticamente hasta integrarlo y no modifica AWS ni la release entregada.
+El mapa se desarrolló sobre mejora/cierre-reto y main 2e94420, incluido el PDF. Se integró también mejora/p1-mapa-costos en c18c949, conservando costos por dosis, validaciones y ensayo del Brote Sorpresa del compañero. Se unificó el historial como zonesTimeline y dosesTimeline, evitando mantener dos mapas o snapshots duplicados. El PR apunta a main; no se despliega automáticamente hasta integrarlo y no modifica AWS ni la release entregada.

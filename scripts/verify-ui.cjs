@@ -7,6 +7,7 @@ const path = require('node:path')
   await fs.mkdir(out, { recursive: true })
   const browser = await chromium.launch({ headless: true, channel: process.env.UI_BROWSER_CHANNEL || undefined })
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, permissions: ['clipboard-read', 'clipboard-write'], reducedMotion: 'reduce' })
+  await context.route('https://tile.openstreetmap.org/**', route => route.abort())
   const page = await context.newPage()
   const errors = [], checks = []
   page.on('pageerror', error => errors.push(error.message))

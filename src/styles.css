@@ -195,6 +195,19 @@ summary { padding: 12px 0; font-size: 13px; }
 .map-day { max-width: none !important; margin: 18px 0 10px; color: #d5e7f1; }
 .map-day input { width: 100%; min-height: 38px; accent-color: #65e3c8; }
 .map-canvas { position: relative; overflow: hidden; border: 1px solid #45677b; border-radius: 12px; }
+.map-canvas svg { touch-action: none; cursor: grab; user-select: none; }
+.map-canvas svg:active { cursor: grabbing; }
+.map-live-status, .map-viewport-tools, .map-location-tabs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 12px 0; }
+.map-live-status { background: #102c3c; padding: 12px; border-left: 3px solid #65e3c8; font-size: 13px; }
+.map-live-status b { color: #79ead1; font-size: 20px; }
+.map-viewport-tools button, .map-location-tabs button { font-size: 12px; }
+.map-location-tabs button[aria-pressed=true] { border-color: #65e3c8; background: #1b554e; }
+.live-indicator { width: 9px; height: 9px; border-radius: 50%; background: #78909e; }
+.live-indicator.active { background: #57dfbf; box-shadow: 0 0 10px #57dfbf; }
+.map-flowing { animation: map-flow 2s linear infinite; }
+.map-outbreak-pulse { animation: map-pulse 1.6s ease-in-out infinite; }
+@keyframes map-flow { to { stroke-dashoffset: -22; } }
+@keyframes map-pulse { 50% { stroke: #ff6e88; stroke-width: 8px; } }
 .live-map .map-canvas svg { margin: 0; width: 100%; }
 .live-map .map-canvas svg text { fill: #e7f6ff; font-size: 12px; }
 .map-area-name { font-weight: 800; letter-spacing: .14em; }

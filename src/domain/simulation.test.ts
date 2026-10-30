@@ -38,6 +38,20 @@ describe('seeded epidemic simulation', () => {
     }
   })
 
+  it('records daily place states only on request and they add up to the daily totals', () => {
+    const plain = simulateOnce(scenario, 'targeted', 2)
+    const recorded = simulateOnce(scenario, 'targeted', 2, undefined, true)
+    expect(plain.zonesTimeline).toBeUndefined()
+    expect({ ...recorded, zonesTimeline: undefined, dosesTimeline: undefined }).toEqual({ ...plain, zonesTimeline: undefined, dosesTimeline: undefined })
+    expect(recorded.zonesTimeline).toHaveLength(scenario.days + 1)
+    recorded.zonesTimeline!.forEach((zones, day) => {
+      const sum = (key: 'susceptible' | 'exposed' | 'infected' | 'recovered' | 'vaccinated') => zones.reduce((total, zone) => total + zone[key], 0)
+      expect([sum('susceptible'), sum('exposed'), sum('infected'), sum('recovered'), sum('vaccinated')])
+        .toEqual([recorded.timeline[day].susceptible, recorded.timeline[day].exposed, recorded.timeline[day].infected, recorded.timeline[day].recovered, recorded.timeline[day].vaccinated])
+    })
+    expect(recorded.zonesTimeline!.at(-1)).toEqual(recorded.finalZones)
+  })
+
   it('never protects more people than doses used', () => {
     const result = simulateOnce(scenario, 'targeted')
     expect(result.protectedPeople).toBeLessThanOrEqual(result.dosesUsed)
@@ -57,6 +71,7 @@ describe('seeded epidemic simulation', () => {
       expect(strategy.medianAffected).toBeLessThanOrEqual(strategy.p90Affected)
       expect(strategy.timeline).toHaveLength(scenario.days + 1)
     }
+    for (const run of Object.values(result.example)) expect(run.zonesTimeline).toHaveLength(scenario.days + 1)
   })
 
   it('beats both baselines in the documented default scenario', () => {
