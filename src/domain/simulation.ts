@@ -23,6 +23,7 @@ export type SimulationInput = {
   runs: number
   outbreakLocation: LocationId
   totalVaccines?: number
+  costPerDose?: number
 }
 
 export type PolicyMode = 'repartir' | 'concentrar'
@@ -45,7 +46,7 @@ export const DEFAULT_INPUT: SimulationInput = {
   population: 15000, initialInfected: 35, days: 90, transmissionRate: .34,
   recoveryRate: .16, incubationRate: .22, vaccinesPerDay: 180,
   interventionDay: 6, vaccineEfficacy: .82, seed: 2026, runs: 120,
-  outbreakLocation: 'mercado', totalVaccines: 15120,
+  outbreakLocation: 'mercado', totalVaccines: 15120, costPerDose: 10,
 }
 
 export type DayState = {
@@ -135,6 +136,9 @@ export function validateInput(input: SimulationInput): void {
   }
   if (input.totalVaccines !== undefined && (!Number.isSafeInteger(input.totalVaccines) || input.totalVaccines < 0 || input.totalVaccines > 1000000)) {
     throw new Error('totalVaccines: entero entre 0 y 1000000.')
+  }
+  if (input.costPerDose !== undefined && (!Number.isFinite(input.costPerDose) || input.costPerDose < 0 || input.costPerDose > 100000)) {
+    throw new Error('costPerDose: valor finito entre 0 y 100000.')
   }
   if (!LOCATIONS.some(location => location.id === input.outbreakLocation)) throw new Error('outbreakLocation: lugar desconocido.')
   const capacity = locationPopulations(input.population)[locationIndex(input.outbreakLocation)]
