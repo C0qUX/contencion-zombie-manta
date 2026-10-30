@@ -86,6 +86,7 @@ Por corrida: diferencia = contagios de referencia − dirigidos. Después se agr
 - Pico y día del pico por corrida, después promedio. El día medio puede ser fraccionario.
 - Tres curvas de infecciosos y sus bandas.
 - Costo del plan = dosis usadas medias × costo por dosis. Costo por contagio evitado = costo ÷ contagios evitados frente a no intervenir; no se calcula si no evita contagios. En el escenario oficial: 150.094 USD y 15,40 USD por contagio evitado para la dirigida, frente a 146.386 USD y 15,74 USD para el azar.
+- Mapa por lugar: estado S/E/I/R/V de cada día de la corrida 1, guardado solo para esa corrida ilustrada.
 - P10–P90 es variabilidad entre ejecuciones, no intervalo de confianza de la media.
 - Esquema individual: siempre corrida 0, sin selección favorable.
 - Duración fuera del resultado determinista, dependiente del dispositivo.

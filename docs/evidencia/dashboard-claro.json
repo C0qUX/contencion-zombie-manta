@@ -1,0 +1,22 @@
+{
+  "baseUrl": "http://127.0.0.1:4176/",
+  "checkedAt": "2026-10-30T17:03:42.508Z",
+  "browser": "chromium 156.0.4314.56",
+  "algorithmVersion": "seir-places-3.0.0",
+  "checks": [
+    "Default real, Worker de producción, progreso, tres curvas y bandas, marcador de intervención",
+    "Dashboard prioriza decisión y mapa; parámetros adicionales desplegables y navegación con destinos reales",
+    "Edición no recalcula ni cambia etiquetas; semilla 87 reproduce el resultado completo",
+    "Campo vacío se rechaza sin corregir la semilla a cero",
+    "Presets, sorpresas acumulativas, restablecer y stock cero con tres trayectorias idénticas",
+    "Cálculo pesado mantiene controles, captura configuración, permite cancelar y reejecutar",
+    "Error real del motor desde Worker conserva el resultado previo",
+    "JSON descargado incluye versión, parámetros y resultados reales",
+    "Enlace compartido valida y reproduce la configuración",
+    "Caso real donde dirigida pierde: diferencia negativa y decisión honesta visibles",
+    "390 px sin desbordamiento de página y navegación por teclado",
+    "Vista imprimible conserva resultados y oculta controles"
+  ],
+  "pageErrors": [],
+  "passed": 12
+}

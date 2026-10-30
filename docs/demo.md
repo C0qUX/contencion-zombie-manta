@@ -32,6 +32,7 @@
 - Decisión para Manta: qué política obtiene menor media.
 - Regla elegida y ganancia frente a la regla fija original; desplegar las 32 reglas evaluadas.
 - Costo del plan y costo por contagio evitado (supuesto editable de 10 USD por dosis).
+- Mapa de lugares: pulsar «Reproducir brote» para ver el avance día a día en cada lugar.
 - Reparto inicial por lugar, corrida 1 de N como ejemplo individual.
 - Exportación JSON con versión del algoritmo.
 - Enlace reproducible con la configuración.
@@ -57,7 +58,7 @@
 - **¿Cuánto cuesta el plan?** Con el supuesto ficticio de 10 USD por dosis, la dirigida gasta 150.094 USD: 15,40 USD por contagio evitado frente a no intervenir. El azar gasta 146.386 USD y paga 15,74 USD por contagio evitado. El costo por dosis se puede cambiar en vivo.
 - **¿Qué estados usan?** S sano (susceptible), E mordido (expuesto), I zombie (infeccioso), R exorcizado (recuperado), V vacunado.
 - **¿Por qué no datos reales?** No se nos entregaron datos. El reto dice que cada equipo diseña su escenario. Nuestra red es sintética y lo declaramos.
-- **¿Cuántas corridas necesitan?** 120 dan percentiles estables. Con menos de 30 el sistema advierte que los percentiles son inestables.
+- **¿Cuántas corridas necesitan?** Usamos 120 como balance de tiempo y variabilidad visible, sin afirmar que eso demuestra convergencia. Los percentiles son estimaciones empíricas; con menos de 30 el sistema advierte sobre su inestabilidad.
 
 ## Preparación del Brote Sorpresa
 

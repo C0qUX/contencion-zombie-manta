@@ -11,7 +11,7 @@ Herramienta de apoyo a decisiones que simula una plaga estocástica sobre una re
 - Estrategia que optimiza: elige su regla entre 32 candidatas en 24 futuros de calibración que nunca entran en la evaluación, y reporta la ganancia frente a la regla fija original.
 - Worker con progreso y cancelación, seis escenarios, exportación JSON, enlace compartible e informe imprimible.
 - Diferencias pareadas firmadas, tres bandas P10–P90 y consumos reales visibles, incluidos escenarios donde la dirigida pierde.
-- Costo del plan y costo por contagio evitado a partir de un costo por dosis editable.
+- Costo del plan y costo por contagio evitado a partir de un costo por dosis editable; mapa animado día a día con indicadores de contagio y protección.
 - Pruebas de reproducibilidad, conservación, elegibilidad, recursos equivalentes y casos negativos.
 - Despliegue estático en AWS Amplify Hosting; configuración de build versionada.
 
@@ -130,6 +130,7 @@ scripts/            automatización operativa
 - [Estimación de costos](docs/costos.md)
 - [Plan de implementación para la prueba de fuego](docs/plan-ganar.md)
 - [Modelo, parámetros y evidencia](docs/modelo.md)
+- [Mapa automático de Manta, navegación y prueba de semillas](docs/mapa-manta.md)
 - [Recorrido de cinco minutos y respuestas](docs/demo.md)
 - [Presentación del pitch](docs/presentacion.html) · [PDF para entrega](docs/presentacion.pdf) — regenerar con `PLAYWRIGHT_MODULE=/ruta/a/playwright node scripts/export-presentation.cjs`
 
