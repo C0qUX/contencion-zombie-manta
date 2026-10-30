@@ -1,0 +1,68 @@
+{
+  "algorithmVersion": "seir-places-3.0.0",
+  "config": {
+    "population": 15000,
+    "initialInfected": 35,
+    "days": 90,
+    "transmissionRate": 0.34,
+    "recoveryRate": 0.16,
+    "incubationRate": 0.22,
+    "vaccinesPerDay": 180,
+    "interventionDay": 6,
+    "vaccineEfficacy": 0.82,
+    "seed": 2026,
+    "runs": 120,
+    "outbreakLocation": "mercado",
+    "totalVaccines": 15120
+  },
+  "requestedSeeds": [
+    2026,
+    42,
+    12345,
+    98765,
+    314159
+  ],
+  "completed": 5,
+  "rows": [
+    {
+      "seed": 2026,
+      "affected": 2509.9,
+      "savedVsNone": 9749.191666666668,
+      "savedVsRandom": 451.4916666666667,
+      "p10": 326.6,
+      "p90": 595.6000000000001
+    },
+    {
+      "seed": 42,
+      "affected": 2497.7,
+      "savedVsNone": 9747.933333333332,
+      "savedVsRandom": 453.2583333333333,
+      "p10": 324.5,
+      "p90": 617.7
+    },
+    {
+      "seed": 12345,
+      "affected": 2459.508333333333,
+      "savedVsNone": 9781.683333333332,
+      "savedVsRandom": 447.875,
+      "p10": 297.7,
+      "p90": 604.1
+    },
+    {
+      "seed": 98765,
+      "affected": 2487.3333333333335,
+      "savedVsNone": 9768.558333333332,
+      "savedVsRandom": 469.68333333333334,
+      "p10": 319.7,
+      "p90": 624.6000000000001
+    },
+    {
+      "seed": 314159,
+      "affected": 2484.733333333333,
+      "savedVsNone": 9749.508333333333,
+      "savedVsRandom": 437.725,
+      "p10": 295.2,
+      "p90": 582
+    }
+  ]
+}
