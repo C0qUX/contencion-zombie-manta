@@ -9,7 +9,7 @@ it('terminates a cancelled Worker and ignores its late messages', () => {
   client.run(DEFAULT_INPUT)
   const stale = first.onmessage!
   client.cancel(); client.run(DEFAULT_INPUT)
-  stale({ data: { id: 1, type: 'progress', completed: 1, total: 120 } } as MessageEvent<WorkerResponse>)
+  stale({ data: { id: 1, type: 'progress', completed: 1, total: 120, phase: 'evaluacion' } } as MessageEvent<WorkerResponse>)
   expect(first.terminate).toHaveBeenCalledOnce()
   expect(receive).not.toHaveBeenCalled()
   second.onmessage!({ data: { id: 2, type: 'error', message: 'real' } } as MessageEvent<WorkerResponse>)

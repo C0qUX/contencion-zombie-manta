@@ -183,3 +183,7 @@ summary { padding: 12px 0; font-size: 13px; }
   .chart-wrap details { display: none; }
   footer { color: #111; }
 }
+.policy-search { margin-top: 8px; font-size: 13px; }
+.policy-search table { min-width: 520px; }
+.policy-search tbody th small { display: inline-block; margin: 0 0 0 8px; }
+@media print { .policy-search { display: none; } }

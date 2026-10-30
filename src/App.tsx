@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { CurveChart } from './components/CurveChart'
 import { PlaceNetwork } from './components/PlaceNetwork'
-import { DEFAULT_INPUT, LOCATIONS, type ComparisonResult, type SimulationInput, type StrategySummary } from './domain/simulation'
+import { DEFAULT_INPUT, describePolicy, LOCATIONS, REFERENCE_POLICY, samePolicy, type ComparisonResult, type ProgressPhase, type SimulationInput, type StrategySummary } from './domain/simulation'
 import { createClient } from './features/client'
 import { initialScenario, parseDraft, SCENARIOS, toDraft, type Draft } from './features/scenarios'
 
@@ -38,7 +38,7 @@ export default function App() {
   const [result, setResult] = useState<ComparisonResult | null>(null)
   const [runningInput, setRunningInput] = useState<SimulationInput | null>(null)
   const [running, setRunning] = useState(false)
-  const [progress, setProgress] = useState({ completed: 0, total: start.input.runs })
+  const [progress, setProgress] = useState<{ completed: number; total: number; phase?: ProgressPhase }>({ completed: 0, total: 1 })
   const [error, setError] = useState('')
   const [notice, setNotice] = useState(start.notice)
   const [presetId, setPresetId] = useState(start.notice ? 'personalizado' : 'oficial')
@@ -47,7 +47,7 @@ export default function App() {
   const client = useRef<ReturnType<typeof createClient> | null>(null)
   const startRun = (input: SimulationInput) => {
     began.current = performance.now()
-    setRunning(true); setRunningInput(input); setProgress({ completed: 0, total: input.runs }); setError('')
+    setRunning(true); setRunningInput(input); setProgress({ completed: 0, total: 1 }); setError('')
     client.current?.run(input)
   }
   useEffect(() => {
@@ -111,7 +111,7 @@ export default function App() {
           <div className="field-grid">{fields.map(field => <label className="number-field" key={field.key}><span>{field.label}</span><input name={field.key} aria-label={field.label} aria-describedby={field.help ? field.key + '-help' : undefined} aria-invalid={error.startsWith(field.key + ':') || undefined} type="number" min={field.min} max={field.max} step={field.step ?? 1} value={draft[field.key] ?? ''} onChange={event => update(field.key, event.target.value)} />{field.help && <small id={field.key + '-help'}>{field.help}</small>}</label>)}</div>
           <button className="primary-button" type="submit" disabled={running}>{running ? 'Calculando…' : 'Ejecutar simulación'}</button>
         </form>
-        {running && <div className="execution-progress" role="status"><label htmlFor="run-progress">{progress.completed} de {progress.total} corridas completas</label><progress id="run-progress" value={progress.completed} max={progress.total} /><button onClick={cancel}>Cancelar ejecución</button></div>}
+        {running && <div className="execution-progress" role="status"><label htmlFor="run-progress">{progress.phase === 'calibracion' ? 'Buscando la mejor regla' : 'Comparando estrategias'} · {Math.floor(progress.completed / Math.max(1, progress.total) * 100)} %</label><progress id="run-progress" value={progress.completed} max={progress.total} /><button onClick={cancel}>Cancelar ejecución</button></div>}
         <div className="surprises"><h3>Brote sorpresa <small style={{ display: 'block', fontWeight: 'normal', color: '#c3d5e2', fontSize: '11px', marginTop: '2px' }}>Ajuste de parámetros en vivo</small></h3><div className="surprise-actions"><button type="button" title="Duplica la tasa de contagiosidad" onClick={() => {
           const value = Number(draft.transmissionRate)
           if (!draft.transmissionRate.trim() || !Number.isFinite(value) || value < 0 || value > 1) { setError('transmissionRate: corrige la contagiosidad.'); return }
@@ -148,7 +148,9 @@ export default function App() {
             {hasAction && <p>Plan dirigido evaluado: empezar el día <b>{result.config.interventionDay}</b>, hasta <b>{number(result.config.vaccinesPerDay)} dosis/día</b> y <b>{number(result.targeted.dosesAvailable)} disponibles</b>. Mayor asignación inicial: <b>{priority.toLowerCase()}</b>; el reparto se vuelve a calcular cada día según el riesgo.</p>}
             <p><b>Recursos equivalentes evaluados:</b> la estrategia dirigida y el reparto al azar compiten con idéntica capacidad máxima (<b>{number(result.config.vaccinesPerDay)} dosis/día</b>) y el mismo stock disponible (<b>{number(result.config.totalVaccines ?? 0)} dosis</b>), iniciando ambas en el día <b>{result.config.interventionDay}</b>.</p>
             <p>Dirigida frente al azar: <b>{number(result.savedVsRandom)} contagios evitados en promedio</b>, mediana {number(result.pairedVsRandom.median)} y diferencias pareadas P10–P90 de {number(result.pairedVsRandom.p10)} a {number(result.pairedVsRandom.p90)}. {result.pairedVsRandom.min < 0 ? 'Hubo corridas donde la dirigida perdió.' : 'El resultado no garantiza ganar en otros escenarios.'}</p>
-            <p>La menor media es una comparación del escenario, no una garantía causal ni una búsqueda del óptimo global.</p>
+            {hasAction && <p>Regla elegida: <b>{describePolicy(result.policySearch.chosen)}</b>{result.policySearch.calibrationRuns ? <>, la mejor de {result.policySearch.candidates.length} reglas en {result.policySearch.calibrationRuns} futuros de calibración distintos de los {result.config.runs} evaluados. Frente a la regla fija original: <b className={signedClass(result.pairedVsReference.mean)}>{number(result.pairedVsReference.mean)} contagios evitados en promedio</b>, P10–P90 de {number(result.pairedVsReference.p10)} a {number(result.pairedVsReference.p90)}.</> : '.'}</p>}
+            <p>La regla se elige antes de evaluar y se compara en futuros nuevos: es la mejor de una familia acotada, no un óptimo global ni una garantía causal.</p>
+            {result.policySearch.candidates.length > 0 && <details className="policy-search"><summary>Ver las {result.policySearch.candidates.length} reglas evaluadas en calibración</summary><div className="table-scroll"><table><caption>Media de contagios acumulados en {result.policySearch.calibrationRuns} futuros de calibración; gana la menor</caption><thead><tr><th scope="col">Regla</th><th scope="col">Contagios en calibración</th></tr></thead><tbody>{[...result.policySearch.candidates].sort((a, b) => a.meanAffected - b.meanAffected).map(candidate => <tr key={describePolicy(candidate.policy)} className={samePolicy(candidate.policy, result.policySearch.chosen) ? 'winner' : undefined}><th scope="row">{describePolicy(candidate.policy)}{samePolicy(candidate.policy, result.policySearch.chosen) && <small>ELEGIDA</small>}{samePolicy(candidate.policy, REFERENCE_POLICY) && <small>REGLA FIJA ORIGINAL</small>}</th><td>{number(candidate.meanAffected)}</td></tr>)}</tbody></table></div></details>}
           </div></section>
           <section className="panel chart-panel"><div className="section-title"><span>02</span><h2>Curva de infecciosos</h2></div><CurveChart targeted={result.targeted} random={result.random} none={result.none} interventionDay={result.config.interventionDay} /></section>
           <section className="panel comparison"><div className="section-title"><span>03</span><h2>Comparación con recursos equivalentes</h2></div><p className="table-intro">Dirigida y azar comparten stock, capacidad, inicio, eficacia y horizonte. Las dosis realmente usadas pueden diferir al agotarse sus susceptibles. Cada intento fallido consume una dosis.</p><div className="table-scroll" tabIndex={0} role="region" aria-label="Tabla de estrategias"><table><caption>Medias de {result.config.runs} corridas; diferencia firmada frente a no intervenir</caption><thead><tr><th scope="col">Estrategia</th><th scope="col">Contagios acumulados</th><th scope="col">Pico infeccioso</th><th scope="col">Dosis usadas</th><th scope="col">Contagios evitados</th></tr></thead><tbody>{summaries(result).map(strategy => <StrategyRow key={strategy.id} strategy={strategy} result={result} />)}</tbody></table></div></section>
