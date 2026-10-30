@@ -8,7 +8,9 @@ Herramienta de apoyo a decisiones que simula una plaga estocástica sobre una re
 - Semilla real y 120 repeticiones Monte Carlo por defecto, con media y rango percentil 10–90.
 - Interfaz para el Brote Sorpresa: origen, contagiosidad, vacunas, eficacia, inicio y semilla.
 - Comparación justa entre 7DaysToSurvive, reparto aleatorio y no intervenir.
-- Pruebas de reproducibilidad, conservación, elegibilidad, recursos equivalentes y superioridad en el escenario documentado.
+- Worker con progreso y cancelación, seis escenarios, exportación JSON, enlace compartible e informe imprimible.
+- Diferencias pareadas firmadas, tres bandas P10–P90 y consumos reales visibles, incluidos escenarios donde la dirigida pierde.
+- Pruebas de reproducibilidad, conservación, elegibilidad, recursos equivalentes y casos negativos.
 - Despliegue estático en AWS Amplify Hosting; configuración de build versionada.
 
 ## Ejecución local
@@ -16,7 +18,7 @@ Herramienta de apoyo a decisiones que simula una plaga estocástica sobre una re
 Requisitos: Node.js 22 y npm.
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -51,11 +53,11 @@ El stack S3/CloudFront y el script PowerShell del repositorio son una alternativ
 
 - Población cerrada durante el horizonte simulado.
 - Red sintética agregada en cinco tipos de lugar: hogares, colegio, mercado, bus y barrio. No representa personas reales.
-- Estados SEIR: susceptible, expuesto, infeccioso y recuperado; vacunado se registra como protección independiente.
+- Grupos excluyentes S/E/I/R/V: susceptible, expuesto, infeccioso, recuperado y protegido por vacuna. La suma de los cinco conserva la población.
 - La contagiosidad combina 74 % de exposición dentro del lugar y 26 % entre lugares conectados.
-- Una dosis solo se ofrece a personas susceptibles. La eficacia decide qué fracción queda protegida; una dosis fallida consume recurso, pero no cambia el estado.
+- Una dosis solo se ofrece a susceptibles. Un fallo consume recurso y conserva S; puede haber otro intento en un día posterior. Se supone protección inmediata y observación perfecta del estado.
 - La estrategia dirigida pondera susceptibles, prevalencia y conectividad. La línea aleatoria recibe el mismo inventario y calendario.
-- Los contagios, progresiones, recuperaciones y eficacia se muestrean con un generador pseudoaleatorio gobernado por la semilla.
+- Eventos pseudoaleatorios con claves de semilla/corrida/día/lugar/tipo, comunes entre estrategias; el reparto usa un flujo separado.
 - No se modelan nacimientos, fallecimientos, reinfección ni pérdida de inmunidad en esta fase.
 
 ### Escenario predeterminado reproducible
@@ -69,15 +71,24 @@ El stack S3/CloudFront y el script PowerShell del repositorio son una alternativ
 | Progresión expuesto → infeccioso | 0,22/día | Supuesto equivalente a aproximadamente 4,5 días |
 | Recuperación | 0,16/día | Supuesto equivalente a aproximadamente 6,25 días |
 | Vacunas | 180/día desde el día 6 | Restricción ficticia de recursos |
+| Stock total | 15.120 dosis | Presupuesto 180×(90−6) implícito en la versión anterior, ahora editable y explícito |
 | Eficacia | 82 % | Supuesto editable para la prueba de variante |
 | Semilla | 2026 | Valor público para reproducir el resultado |
 | Monte Carlo | 120 corridas | Balance entre estabilidad y respuesta inmediata en el navegador |
 
-Para reproducir: abrir la demo, pulsar **Restablecer escenario** y confirmar semilla `2026`. Los números son parámetros educativos, no predicciones clínicas. Antes de una decisión sanitaria deben calibrarse y validarse con datos oficiales.
+Para reproducir esta versión: pulsar **Restablecer escenario oficial**, confirmar semilla `2026` y pulsar **Ejecutar simulación**. Los controles editados no cambian resultados anteriores. Exportar JSON conserva configuración, resultado y versión `seir-places-2.0.0`; la duración queda fuera del resultado reproducible. La demo pública seguirá con su versión anterior hasta integrar y desplegar estos cambios.
+
+Los números son parámetros educativos, no predicciones clínicas. La inspiración narrativa es COVID-19; sus tasas no calibran este modelo. [Método y fuentes](docs/modelo.md).
 
 ## Cómo funciona la estrategia
 
-Cada día calcula un puntaje por lugar usando susceptibles disponibles, casos expuestos/infecciosos y conectividad. Distribuye primero las dosis hacia mayor riesgo esperado. La línea aleatoria usa el mismo inventario diario y la misma fecha de inicio, pero reparte sin ese puntaje. La interfaz reporta promedios y percentiles para evitar presentar una trayectoria afortunada como evidencia.
+Cada día calcula un puntaje por lugar usando susceptibles, casos E/I y conectividad ficticia. Reparte proporcionalmente a ese puntaje. El azar muestrea uniformemente sin reemplazo entre susceptibles del día con el mismo stock, capacidad, inicio y eficacia. Los consumos realizados pueden diferir al agotarse la elegibilidad: se reportan explícitamente. No se promete igual número de dosis consumidas ni una estrategia óptima global.
+
+La decisión utiliza resultados reales, incluidos negativos; la prioridad inicial proviene de las dosis asignadas, no del lugar donde empezó el brote. Los percentiles se interpolan linealmente y P10–P90 describe ejecuciones, no un intervalo de confianza de la media.
+
+### Batería registrada
+
+`node scripts/audit-scenarios.mjs` ejecuta 40 experimentos predefinidos con cinco semillas y 120 corridas cada uno. [Resultados completos](docs/evidencia/sensibilidad.json). La variante de algoritmo corrige el día de comienzo (día 0 sin acciones), el reparto al azar y la alineación de eventos. Cambian los números respecto a `07877a2`; se conservaron las tasas oficiales, sin ajustarlas para favorecer una victoria.
 
 ## Limitaciones conocidas
 
@@ -103,6 +114,8 @@ scripts/            automatización operativa
 - [Arquitectura](docs/arquitectura.md)
 - [Estimación de costos](docs/costos.md)
 - [Plan de implementación para la prueba de fuego](docs/plan-ganar.md)
+- [Modelo, parámetros y evidencia](docs/modelo.md)
+- [Recorrido de cinco minutos y respuestas](docs/demo.md)
 
 ## Equipo
 

@@ -1,0 +1,2609 @@
+{
+  "algorithmVersion": "seir-places-2.0.0",
+  "design": {
+    "seeds": [
+      2026,
+      42,
+      12345,
+      98765,
+      314159
+    ],
+    "scenarios": [
+      "oficial",
+      "colegio",
+      "variante",
+      "escasez",
+      "eficacia",
+      "tardia",
+      "capacidad-mitad",
+      "transporte"
+    ],
+    "runs": 120,
+    "chosenBeforeExecution": true
+  },
+  "measurement": {
+    "node": "v22.23.4",
+    "platform": "win32",
+    "elapsedMs": 12156.0089
+  },
+  "experiments": [
+    {
+      "scenario": "oficial",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 2026,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 2826.6583333333333,
+          "p10": 2434.3,
+          "p90": 3208.4,
+          "meanPeak": 384.9166666666667,
+          "meanPeakDay": 49.55833333333333,
+          "dosesUsed": 14773.266666666666,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 2961.391666666667,
+          "p10": 2554.4,
+          "p90": 3358.1,
+          "meanPeak": 408.25,
+          "meanPeakDay": 49.208333333333336,
+          "dosesUsed": 14638.566666666668,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12259.091666666667,
+          "p10": 12067.5,
+          "p90": 12467.2,
+          "meanPeak": 1715.3416666666667,
+          "meanPeakDay": 63.141666666666666,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9432.433333333332,
+        "p10": 9117.9,
+        "p90": 9706.6,
+        "min": 8857,
+        "max": 9983
+      },
+      "pairedVsRandom": {
+        "mean": 134.73333333333332,
+        "p10": 68.9,
+        "p90": 208.20000000000002,
+        "min": 11,
+        "max": 271
+      }
+    },
+    {
+      "scenario": "oficial",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 42,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 2822.9083333333333,
+          "p10": 2472.9,
+          "p90": 3244.1000000000004,
+          "meanPeak": 381.31666666666666,
+          "meanPeakDay": 49.50833333333333,
+          "dosesUsed": 14802.633333333333,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 2950.9583333333335,
+          "p10": 2545.2,
+          "p90": 3338.0000000000005,
+          "meanPeak": 403.0833333333333,
+          "meanPeakDay": 49.46666666666667,
+          "dosesUsed": 14672,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12245.633333333333,
+          "p10": 12061.6,
+          "p90": 12454,
+          "meanPeak": 1712.825,
+          "meanPeakDay": 63.21666666666667,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9422.725,
+        "p10": 9147.8,
+        "p90": 9679.1,
+        "min": 8672,
+        "max": 10051
+      },
+      "pairedVsRandom": {
+        "mean": 128.05,
+        "p10": 68.5,
+        "p90": 192.20000000000002,
+        "min": 21,
+        "max": 259
+      }
+    },
+    {
+      "scenario": "oficial",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 12345,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 2777.95,
+          "p10": 2335.9,
+          "p90": 3183.3,
+          "meanPeak": 374.85833333333335,
+          "meanPeakDay": 49.291666666666664,
+          "dosesUsed": 14814.308333333332,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 2907.383333333333,
+          "p10": 2443.8,
+          "p90": 3315.8,
+          "meanPeak": 397.0833333333333,
+          "meanPeakDay": 49.19166666666667,
+          "dosesUsed": 14696.183333333332,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12241.191666666668,
+          "p10": 12036.6,
+          "p90": 12447,
+          "meanPeak": 1714.9416666666666,
+          "meanPeakDay": 63.34166666666667,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9463.241666666667,
+        "p10": 9176.1,
+        "p90": 9763.1,
+        "min": 8800,
+        "max": 10108
+      },
+      "pairedVsRandom": {
+        "mean": 129.43333333333334,
+        "p10": 59,
+        "p90": 204.40000000000003,
+        "min": 3,
+        "max": 305
+      }
+    },
+    {
+      "scenario": "oficial",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 98765,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 2816.6,
+          "p10": 2321.4,
+          "p90": 3280.8000000000006,
+          "meanPeak": 383.2583333333333,
+          "meanPeakDay": 49.55,
+          "dosesUsed": 14777.85,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 2957.016666666667,
+          "p10": 2444.3,
+          "p90": 3408.3,
+          "meanPeak": 409.075,
+          "meanPeakDay": 49.45,
+          "dosesUsed": 14642.841666666667,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12255.891666666666,
+          "p10": 12007.9,
+          "p90": 12488.2,
+          "meanPeak": 1714.1083333333333,
+          "meanPeakDay": 63.333333333333336,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9439.291666666666,
+        "p10": 9150.2,
+        "p90": 9711.2,
+        "min": 8935,
+        "max": 10012
+      },
+      "pairedVsRandom": {
+        "mean": 140.41666666666666,
+        "p10": 73,
+        "p90": 202.10000000000002,
+        "min": 4,
+        "max": 337
+      }
+    },
+    {
+      "scenario": "oficial",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 314159,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 2790.608333333333,
+          "p10": 2296,
+          "p90": 3300.3,
+          "meanPeak": 377.725,
+          "meanPeakDay": 49.65833333333333,
+          "dosesUsed": 14788.208333333334,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 2922.4583333333335,
+          "p10": 2386.7,
+          "p90": 3440.6,
+          "meanPeak": 401.35,
+          "meanPeakDay": 49.775,
+          "dosesUsed": 14656.691666666668,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12234.241666666667,
+          "p10": 11999.7,
+          "p90": 12456.4,
+          "meanPeak": 1713.7666666666667,
+          "meanPeakDay": 63.43333333333333,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9443.633333333333,
+        "p10": 9076.2,
+        "p90": 9752.1,
+        "min": 8764,
+        "max": 10017
+      },
+      "pairedVsRandom": {
+        "mean": 131.85,
+        "p10": 67.5,
+        "p90": 186,
+        "min": 1,
+        "max": 300
+      }
+    },
+    {
+      "scenario": "colegio",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 2026,
+        "runs": 120,
+        "outbreakLocation": "colegio",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 2506.175,
+          "p10": 2034.4,
+          "p90": 2911,
+          "meanPeak": 332.98333333333335,
+          "meanPeakDay": 50.4,
+          "dosesUsed": 15002.616666666667,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 2601.141666666667,
+          "p10": 2114.9,
+          "p90": 3015.7000000000003,
+          "meanPeak": 349.26666666666665,
+          "meanPeakDay": 50.40833333333333,
+          "dosesUsed": 14942.15,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12128.65,
+          "p10": 11838.7,
+          "p90": 12398.1,
+          "meanPeak": 1702.8916666666667,
+          "meanPeakDay": 66.13333333333334,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9622.475,
+        "p10": 9347,
+        "p90": 9852.8,
+        "min": 8984,
+        "max": 10145
+      },
+      "pairedVsRandom": {
+        "mean": 94.96666666666667,
+        "p10": 32.9,
+        "p90": 170.50000000000006,
+        "min": -69,
+        "max": 254
+      }
+    },
+    {
+      "scenario": "colegio",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 42,
+        "runs": 120,
+        "outbreakLocation": "colegio",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 2481.116666666667,
+          "p10": 2029.9,
+          "p90": 2880.8,
+          "meanPeak": 325.7916666666667,
+          "meanPeakDay": 50.825,
+          "dosesUsed": 15014.908333333333,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 2586.141666666667,
+          "p10": 2138.1,
+          "p90": 2995.8,
+          "meanPeak": 343.15,
+          "meanPeakDay": 50.516666666666666,
+          "dosesUsed": 14964.141666666666,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12094.975,
+          "p10": 11816.7,
+          "p90": 12311.1,
+          "meanPeak": 1697.7416666666666,
+          "meanPeakDay": 66.225,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9613.858333333334,
+        "p10": 9341.8,
+        "p90": 9863,
+        "min": 9087,
+        "max": 10131
+      },
+      "pairedVsRandom": {
+        "mean": 105.025,
+        "p10": 37.7,
+        "p90": 171.20000000000002,
+        "min": -26,
+        "max": 217
+      }
+    },
+    {
+      "scenario": "colegio",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 12345,
+        "runs": 120,
+        "outbreakLocation": "colegio",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 2480.866666666667,
+          "p10": 2002,
+          "p90": 2945.8,
+          "meanPeak": 328.03333333333336,
+          "meanPeakDay": 50.96666666666667,
+          "dosesUsed": 15008.95,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 2584.733333333333,
+          "p10": 2145.3,
+          "p90": 3025.3,
+          "meanPeak": 345.78333333333336,
+          "meanPeakDay": 50.875,
+          "dosesUsed": 14962.983333333334,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12105.733333333334,
+          "p10": 11790.8,
+          "p90": 12363.2,
+          "meanPeak": 1701.875,
+          "meanPeakDay": 66.375,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9624.866666666667,
+        "p10": 9311.3,
+        "p90": 9875.7,
+        "min": 9132,
+        "max": 10168
+      },
+      "pairedVsRandom": {
+        "mean": 103.86666666666666,
+        "p10": 45,
+        "p90": 165.3,
+        "min": -21,
+        "max": 245
+      }
+    },
+    {
+      "scenario": "colegio",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 98765,
+        "runs": 120,
+        "outbreakLocation": "colegio",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 2454.9583333333335,
+          "p10": 2022.2,
+          "p90": 2900.3,
+          "meanPeak": 326.05833333333334,
+          "meanPeakDay": 51.35,
+          "dosesUsed": 15016.191666666668,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 2555.525,
+          "p10": 2083.8,
+          "p90": 3018.1,
+          "meanPeak": 342.4583333333333,
+          "meanPeakDay": 51.416666666666664,
+          "dosesUsed": 14959.783333333333,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12104.525,
+          "p10": 11805.1,
+          "p90": 12362.2,
+          "meanPeak": 1699.75,
+          "meanPeakDay": 66.40833333333333,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9649.566666666668,
+        "p10": 9396.6,
+        "p90": 9887.3,
+        "min": 9108,
+        "max": 10244
+      },
+      "pairedVsRandom": {
+        "mean": 100.56666666666666,
+        "p10": 26.9,
+        "p90": 175.70000000000005,
+        "min": -17,
+        "max": 229
+      }
+    },
+    {
+      "scenario": "colegio",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 314159,
+        "runs": 120,
+        "outbreakLocation": "colegio",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 2483.4166666666665,
+          "p10": 2045.9,
+          "p90": 2857.5,
+          "meanPeak": 327.35,
+          "meanPeakDay": 50.78333333333333,
+          "dosesUsed": 15034.333333333334,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 2575.25,
+          "p10": 2132,
+          "p90": 2965.2,
+          "meanPeak": 342.60833333333335,
+          "meanPeakDay": 51.06666666666667,
+          "dosesUsed": 14978.983333333334,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12107.908333333333,
+          "p10": 11843.4,
+          "p90": 12333.4,
+          "meanPeak": 1702.375,
+          "meanPeakDay": 66.16666666666667,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9624.491666666667,
+        "p10": 9413.3,
+        "p90": 9828.8,
+        "min": 9141,
+        "max": 10089
+      },
+      "pairedVsRandom": {
+        "mean": 91.83333333333333,
+        "p10": 33,
+        "p90": 149.30000000000013,
+        "min": -18,
+        "max": 231
+      }
+    },
+    {
+      "scenario": "variante",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.68,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 2026,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 9244.666666666666,
+          "p10": 9005.7,
+          "p90": 9463.5,
+          "meanPeak": 2351.0333333333333,
+          "meanPeakDay": 34.358333333333334,
+          "dosesUsed": 7019.608333333334,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 9295.366666666667,
+          "p10": 9077.7,
+          "p90": 9526,
+          "meanPeak": 2377.875,
+          "meanPeakDay": 34.11666666666667,
+          "dosesUsed": 6956.416666666667,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 14819.566666666668,
+          "p10": 14802,
+          "p90": 14838.1,
+          "meanPeak": 3758.6666666666665,
+          "meanPeakDay": 35.13333333333333,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5574.9,
+        "p10": 5345.9,
+        "p90": 5810.3,
+        "min": 5212,
+        "max": 5970
+      },
+      "pairedVsRandom": {
+        "mean": 50.7,
+        "p10": 19,
+        "p90": 80.30000000000003,
+        "min": 1,
+        "max": 110
+      }
+    },
+    {
+      "scenario": "variante",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.68,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 42,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 9246.991666666667,
+          "p10": 9018.8,
+          "p90": 9428.2,
+          "meanPeak": 2348.2,
+          "meanPeakDay": 34.3,
+          "dosesUsed": 7018.8,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 9299.333333333334,
+          "p10": 9079.6,
+          "p90": 9479.6,
+          "meanPeak": 2376.3416666666667,
+          "meanPeakDay": 34.03333333333333,
+          "dosesUsed": 6955.558333333333,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 14818.266666666666,
+          "p10": 14799.9,
+          "p90": 14837,
+          "meanPeak": 3752.016666666667,
+          "meanPeakDay": 35.00833333333333,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5571.275,
+        "p10": 5393.7,
+        "p90": 5793.7,
+        "min": 5106,
+        "max": 5894
+      },
+      "pairedVsRandom": {
+        "mean": 52.34166666666667,
+        "p10": 23.8,
+        "p90": 89,
+        "min": -48,
+        "max": 122
+      }
+    },
+    {
+      "scenario": "variante",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.68,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 12345,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 9221.091666666667,
+          "p10": 8965.4,
+          "p90": 9452.3,
+          "meanPeak": 2336.375,
+          "meanPeakDay": 34.516666666666666,
+          "dosesUsed": 7044.566666666667,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 9275.916666666666,
+          "p10": 9027.1,
+          "p90": 9509.7,
+          "meanPeak": 2364.475,
+          "meanPeakDay": 34.291666666666664,
+          "dosesUsed": 6978.616666666667,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 14816.158333333333,
+          "p10": 14795.8,
+          "p90": 14837.1,
+          "meanPeak": 3748.0416666666665,
+          "meanPeakDay": 35.15,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5595.066666666667,
+        "p10": 5366.7,
+        "p90": 5854.7,
+        "min": 5217,
+        "max": 6042
+      },
+      "pairedVsRandom": {
+        "mean": 54.825,
+        "p10": 18,
+        "p90": 88.10000000000001,
+        "min": -10,
+        "max": 115
+      }
+    },
+    {
+      "scenario": "variante",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.68,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 98765,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 9225.933333333332,
+          "p10": 9036,
+          "p90": 9387,
+          "meanPeak": 2345.0583333333334,
+          "meanPeakDay": 34.45,
+          "dosesUsed": 7041.675,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 9279.525,
+          "p10": 9088.7,
+          "p90": 9439.4,
+          "meanPeak": 2373.2166666666667,
+          "meanPeakDay": 34.208333333333336,
+          "dosesUsed": 6977.091666666666,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 14818.55,
+          "p10": 14797,
+          "p90": 14833.1,
+          "meanPeak": 3758.525,
+          "meanPeakDay": 35.108333333333334,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5592.616666666667,
+        "p10": 5438.9,
+        "p90": 5766.3,
+        "min": 5258,
+        "max": 5967
+      },
+      "pairedVsRandom": {
+        "mean": 53.59166666666667,
+        "p10": 16,
+        "p90": 96.10000000000001,
+        "min": -20,
+        "max": 118
+      }
+    },
+    {
+      "scenario": "variante",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.68,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 314159,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 9230.491666666667,
+          "p10": 9032.8,
+          "p90": 9449.3,
+          "meanPeak": 2346.233333333333,
+          "meanPeakDay": 34.55833333333333,
+          "dosesUsed": 7035.975,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 9279.35,
+          "p10": 9088.5,
+          "p90": 9484.2,
+          "meanPeak": 2371.1666666666665,
+          "meanPeakDay": 34.391666666666666,
+          "dosesUsed": 6974.166666666667,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 14821.016666666666,
+          "p10": 14803,
+          "p90": 14839,
+          "meanPeak": 3758.4583333333335,
+          "meanPeakDay": 35.175,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5590.525,
+        "p10": 5370.6,
+        "p90": 5775.6,
+        "min": 5281,
+        "max": 6181
+      },
+      "pairedVsRandom": {
+        "mean": 48.858333333333334,
+        "p10": 17.8,
+        "p90": 80,
+        "min": -27,
+        "max": 106
+      }
+    },
+    {
+      "scenario": "escasez",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 90,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 2026,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 7560
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 6444.016666666666,
+          "p10": 5956.1,
+          "p90": 6887.1,
+          "meanPeak": 831.6666666666666,
+          "meanPeakDay": 59.50833333333333,
+          "dosesUsed": 7560,
+          "dosesAvailable": 7560
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 6558.633333333333,
+          "p10": 6064,
+          "p90": 6977.2,
+          "meanPeak": 852.95,
+          "meanPeakDay": 59.425,
+          "dosesUsed": 7560,
+          "dosesAvailable": 7560
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12259.091666666667,
+          "p10": 12067.5,
+          "p90": 12467.2,
+          "meanPeak": 1715.3416666666667,
+          "meanPeakDay": 63.141666666666666,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5815.075,
+        "p10": 5551.7,
+        "p90": 6073,
+        "min": 5294,
+        "max": 6679
+      },
+      "pairedVsRandom": {
+        "mean": 114.61666666666666,
+        "p10": 49.7,
+        "p90": 184.60000000000005,
+        "min": -95,
+        "max": 238
+      }
+    },
+    {
+      "scenario": "escasez",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 90,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 42,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 7560
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 6418.658333333334,
+          "p10": 6010.4,
+          "p90": 6886.5,
+          "meanPeak": 824.2083333333334,
+          "meanPeakDay": 60.175,
+          "dosesUsed": 7560,
+          "dosesAvailable": 7560
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 6534.266666666666,
+          "p10": 6141.7,
+          "p90": 6979.8,
+          "meanPeak": 847.0083333333333,
+          "meanPeakDay": 59.958333333333336,
+          "dosesUsed": 7560,
+          "dosesAvailable": 7560
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12245.633333333333,
+          "p10": 12061.6,
+          "p90": 12454,
+          "meanPeak": 1712.825,
+          "meanPeakDay": 63.21666666666667,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5826.975,
+        "p10": 5535.8,
+        "p90": 6096.3,
+        "min": 5171,
+        "max": 6446
+      },
+      "pairedVsRandom": {
+        "mean": 115.60833333333333,
+        "p10": 40.6,
+        "p90": 201.40000000000003,
+        "min": 2,
+        "max": 290
+      }
+    },
+    {
+      "scenario": "escasez",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 90,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 12345,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 7560
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 6379.758333333333,
+          "p10": 5923.8,
+          "p90": 6837,
+          "meanPeak": 820.3166666666667,
+          "meanPeakDay": 60.675,
+          "dosesUsed": 7560,
+          "dosesAvailable": 7560
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 6501.508333333333,
+          "p10": 6053.3,
+          "p90": 6927.3,
+          "meanPeak": 843.3666666666667,
+          "meanPeakDay": 60.083333333333336,
+          "dosesUsed": 7560,
+          "dosesAvailable": 7560
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12241.191666666668,
+          "p10": 12036.6,
+          "p90": 12447,
+          "meanPeak": 1714.9416666666666,
+          "meanPeakDay": 63.34166666666667,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5861.433333333333,
+        "p10": 5605.9,
+        "p90": 6145.3,
+        "min": 5212,
+        "max": 6569
+      },
+      "pairedVsRandom": {
+        "mean": 121.75,
+        "p10": 45.6,
+        "p90": 203.3,
+        "min": -40,
+        "max": 298
+      }
+    },
+    {
+      "scenario": "escasez",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 90,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 98765,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 7560
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 6423.175,
+          "p10": 5855.1,
+          "p90": 6895.1,
+          "meanPeak": 826.675,
+          "meanPeakDay": 60.125,
+          "dosesUsed": 7560,
+          "dosesAvailable": 7560
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 6541.4,
+          "p10": 6003.6,
+          "p90": 7019.5,
+          "meanPeak": 849.7333333333333,
+          "meanPeakDay": 60,
+          "dosesUsed": 7560,
+          "dosesAvailable": 7560
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12255.891666666666,
+          "p10": 12007.9,
+          "p90": 12488.2,
+          "meanPeak": 1714.1083333333333,
+          "meanPeakDay": 63.333333333333336,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5832.716666666666,
+        "p10": 5536.8,
+        "p90": 6181.1,
+        "min": 5356,
+        "max": 6429
+      },
+      "pairedVsRandom": {
+        "mean": 118.225,
+        "p10": 49.8,
+        "p90": 187.90000000000026,
+        "min": -11,
+        "max": 371
+      }
+    },
+    {
+      "scenario": "escasez",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 90,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 314159,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 7560
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 6385.266666666666,
+          "p10": 5845.9,
+          "p90": 6897.6,
+          "meanPeak": 820.3333333333334,
+          "meanPeakDay": 60.358333333333334,
+          "dosesUsed": 7560,
+          "dosesAvailable": 7560
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 6498.083333333333,
+          "p10": 5968.3,
+          "p90": 6988.5,
+          "meanPeak": 841.75,
+          "meanPeakDay": 60.05833333333333,
+          "dosesUsed": 7560,
+          "dosesAvailable": 7560
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12234.241666666667,
+          "p10": 11999.7,
+          "p90": 12456.4,
+          "meanPeak": 1713.7666666666667,
+          "meanPeakDay": 63.43333333333333,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5848.975,
+        "p10": 5508.6,
+        "p90": 6150.8,
+        "min": 5249,
+        "max": 6811
+      },
+      "pairedVsRandom": {
+        "mean": 112.81666666666666,
+        "p10": 53.9,
+        "p90": 180,
+        "min": -15,
+        "max": 306
+      }
+    },
+    {
+      "scenario": "eficacia",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.5,
+        "seed": 2026,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 5400.708333333333,
+          "p10": 4889.7,
+          "p90": 5868.1,
+          "meanPeak": 693.7333333333333,
+          "meanPeakDay": 57.983333333333334,
+          "dosesUsed": 15120,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 5536.45,
+          "p10": 5023.1,
+          "p90": 6006.3,
+          "meanPeak": 719.5083333333333,
+          "meanPeakDay": 57.75,
+          "dosesUsed": 15120,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12259.091666666667,
+          "p10": 12067.5,
+          "p90": 12467.2,
+          "meanPeak": 1715.3416666666667,
+          "meanPeakDay": 63.141666666666666,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 6858.383333333333,
+        "p10": 6544.9,
+        "p90": 7172.9,
+        "min": 6227,
+        "max": 7598
+      },
+      "pairedVsRandom": {
+        "mean": 135.74166666666667,
+        "p10": 56.1,
+        "p90": 208.70000000000005,
+        "min": -22,
+        "max": 419
+      }
+    },
+    {
+      "scenario": "eficacia",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.5,
+        "seed": 42,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 5378.716666666666,
+          "p10": 4931.7,
+          "p90": 5860.7,
+          "meanPeak": 687.7,
+          "meanPeakDay": 58.2,
+          "dosesUsed": 15120,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 5509.533333333334,
+          "p10": 5070.2,
+          "p90": 5990.1,
+          "meanPeak": 710.3083333333333,
+          "meanPeakDay": 58.208333333333336,
+          "dosesUsed": 15120,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12245.633333333333,
+          "p10": 12061.6,
+          "p90": 12454,
+          "meanPeak": 1712.825,
+          "meanPeakDay": 63.21666666666667,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 6866.916666666667,
+        "p10": 6562.1,
+        "p90": 7203.4,
+        "min": 6209,
+        "max": 7508
+      },
+      "pairedVsRandom": {
+        "mean": 130.81666666666666,
+        "p10": 49.5,
+        "p90": 214.20000000000002,
+        "min": -55,
+        "max": 408
+      }
+    },
+    {
+      "scenario": "eficacia",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.5,
+        "seed": 12345,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 5340.116666666667,
+          "p10": 4824.8,
+          "p90": 5814.1,
+          "meanPeak": 681.625,
+          "meanPeakDay": 58.99166666666667,
+          "dosesUsed": 15120,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 5482.675,
+          "p10": 5009.5,
+          "p90": 5931.500000000001,
+          "meanPeak": 707.875,
+          "meanPeakDay": 58.575,
+          "dosesUsed": 15120,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12241.191666666668,
+          "p10": 12036.6,
+          "p90": 12447,
+          "meanPeak": 1714.9416666666666,
+          "meanPeakDay": 63.34166666666667,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 6901.075,
+        "p10": 6591.6,
+        "p90": 7255.3,
+        "min": 6127,
+        "max": 7645
+      },
+      "pairedVsRandom": {
+        "mean": 142.55833333333334,
+        "p10": 63.8,
+        "p90": 226.50000000000006,
+        "min": 11,
+        "max": 420
+      }
+    },
+    {
+      "scenario": "eficacia",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.5,
+        "seed": 98765,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 5385.783333333334,
+          "p10": 4814.8,
+          "p90": 5896.1,
+          "meanPeak": 692.4083333333333,
+          "meanPeakDay": 58.09166666666667,
+          "dosesUsed": 15120,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 5519.525,
+          "p10": 4945.4,
+          "p90": 6045.6,
+          "meanPeak": 715.9583333333334,
+          "meanPeakDay": 57.975,
+          "dosesUsed": 15120,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12255.891666666666,
+          "p10": 12007.9,
+          "p90": 12488.2,
+          "meanPeak": 1714.1083333333333,
+          "meanPeakDay": 63.333333333333336,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 6870.108333333334,
+        "p10": 6527.6,
+        "p90": 7197.2,
+        "min": 6298,
+        "max": 7518
+      },
+      "pairedVsRandom": {
+        "mean": 133.74166666666667,
+        "p10": 50.9,
+        "p90": 220.3,
+        "min": -22,
+        "max": 460
+      }
+    },
+    {
+      "scenario": "eficacia",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.5,
+        "seed": 314159,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 5354.175,
+          "p10": 4789.9,
+          "p90": 5869,
+          "meanPeak": 685.4916666666667,
+          "meanPeakDay": 58.475,
+          "dosesUsed": 15120,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 5487.016666666666,
+          "p10": 4949.4,
+          "p90": 6034.2,
+          "meanPeak": 709.4083333333333,
+          "meanPeakDay": 58.083333333333336,
+          "dosesUsed": 15120,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12234.241666666667,
+          "p10": 11999.7,
+          "p90": 12456.4,
+          "meanPeak": 1713.7666666666667,
+          "meanPeakDay": 63.43333333333333,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 6880.066666666667,
+        "p10": 6543.9,
+        "p90": 7277.3,
+        "min": 6203,
+        "max": 7932
+      },
+      "pairedVsRandom": {
+        "mean": 132.84166666666667,
+        "p10": 40.300000000000004,
+        "p90": 234.3,
+        "min": -40,
+        "max": 394
+      }
+    },
+    {
+      "scenario": "tardia",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 25,
+        "vaccineEfficacy": 0.82,
+        "seed": 2026,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 5863.716666666666,
+          "p10": 5357.6,
+          "p90": 6347.400000000001,
+          "meanPeak": 889.2083333333334,
+          "meanPeakDay": 53.925,
+          "dosesUsed": 11112.75,
+          "dosesAvailable": 11880
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 5916.783333333334,
+          "p10": 5399.8,
+          "p90": 6418.7,
+          "meanPeak": 901.275,
+          "meanPeakDay": 54.03333333333333,
+          "dosesUsed": 11054.058333333332,
+          "dosesAvailable": 11880
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12259.091666666667,
+          "p10": 12067.5,
+          "p90": 12467.2,
+          "meanPeak": 1715.3416666666667,
+          "meanPeakDay": 63.141666666666666,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 6395.375,
+        "p10": 6023.7,
+        "p90": 6752.6,
+        "min": 5738,
+        "max": 7155
+      },
+      "pairedVsRandom": {
+        "mean": 53.06666666666667,
+        "p10": 12.9,
+        "p90": 94,
+        "min": -21,
+        "max": 155
+      }
+    },
+    {
+      "scenario": "tardia",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 25,
+        "vaccineEfficacy": 0.82,
+        "seed": 42,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 5852.041666666667,
+          "p10": 5355.6,
+          "p90": 6335.3,
+          "meanPeak": 881.7583333333333,
+          "meanPeakDay": 54.083333333333336,
+          "dosesUsed": 11142.775,
+          "dosesAvailable": 11880
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 5902.783333333334,
+          "p10": 5423,
+          "p90": 6424,
+          "meanPeak": 893.1833333333333,
+          "meanPeakDay": 53.86666666666667,
+          "dosesUsed": 11085.4,
+          "dosesAvailable": 11880
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12245.633333333333,
+          "p10": 12061.6,
+          "p90": 12454,
+          "meanPeak": 1712.825,
+          "meanPeakDay": 63.21666666666667,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 6393.591666666666,
+        "p10": 6002.5,
+        "p90": 6713.5,
+        "min": 5608,
+        "max": 7236
+      },
+      "pairedVsRandom": {
+        "mean": 50.74166666666667,
+        "p10": 14.600000000000001,
+        "p90": 92,
+        "min": -21,
+        "max": 163
+      }
+    },
+    {
+      "scenario": "tardia",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 25,
+        "vaccineEfficacy": 0.82,
+        "seed": 12345,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 5812.5,
+          "p10": 5250.8,
+          "p90": 6357.2,
+          "meanPeak": 873.3583333333333,
+          "meanPeakDay": 53.84166666666667,
+          "dosesUsed": 11170.416666666666,
+          "dosesAvailable": 11880
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 5866.591666666666,
+          "p10": 5318.4,
+          "p90": 6395.4,
+          "meanPeak": 885.0166666666667,
+          "meanPeakDay": 54.06666666666667,
+          "dosesUsed": 11112.858333333334,
+          "dosesAvailable": 11880
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12241.191666666668,
+          "p10": 12036.6,
+          "p90": 12447,
+          "meanPeak": 1714.9416666666666,
+          "meanPeakDay": 63.34166666666667,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 6428.691666666667,
+        "p10": 6085.9,
+        "p90": 6789.6,
+        "min": 5690,
+        "max": 7342
+      },
+      "pairedVsRandom": {
+        "mean": 54.09166666666667,
+        "p10": 19,
+        "p90": 89.10000000000001,
+        "min": -56,
+        "max": 137
+      }
+    },
+    {
+      "scenario": "tardia",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 25,
+        "vaccineEfficacy": 0.82,
+        "seed": 98765,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 5844.283333333334,
+          "p10": 5303.3,
+          "p90": 6428.5,
+          "meanPeak": 884.5833333333334,
+          "meanPeakDay": 53.983333333333334,
+          "dosesUsed": 11130.625,
+          "dosesAvailable": 11880
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 5894.341666666666,
+          "p10": 5319.6,
+          "p90": 6454.900000000001,
+          "meanPeak": 895.5166666666667,
+          "meanPeakDay": 53.916666666666664,
+          "dosesUsed": 11071.725,
+          "dosesAvailable": 11880
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12255.891666666666,
+          "p10": 12007.9,
+          "p90": 12488.2,
+          "meanPeak": 1714.1083333333333,
+          "meanPeakDay": 63.333333333333336,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 6411.608333333334,
+        "p10": 6067.5,
+        "p90": 6799.9,
+        "min": 5767,
+        "max": 7099
+      },
+      "pairedVsRandom": {
+        "mean": 50.05833333333333,
+        "p10": 13.8,
+        "p90": 87.10000000000001,
+        "min": -27,
+        "max": 119
+      }
+    },
+    {
+      "scenario": "tardia",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 25,
+        "vaccineEfficacy": 0.82,
+        "seed": 314159,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 5808.508333333333,
+          "p10": 5206.7,
+          "p90": 6386,
+          "meanPeak": 876.1833333333333,
+          "meanPeakDay": 54.03333333333333,
+          "dosesUsed": 11160.258333333333,
+          "dosesAvailable": 11880
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 5855.15,
+          "p10": 5253.9,
+          "p90": 6440.900000000001,
+          "meanPeak": 886.1166666666667,
+          "meanPeakDay": 54.06666666666667,
+          "dosesUsed": 11106.541666666666,
+          "dosesAvailable": 11880
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12234.241666666667,
+          "p10": 11999.7,
+          "p90": 12456.4,
+          "meanPeak": 1713.7666666666667,
+          "meanPeakDay": 63.43333333333333,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 6425.733333333334,
+        "p10": 6011.8,
+        "p90": 6823.1,
+        "min": 5665,
+        "max": 7535
+      },
+      "pairedVsRandom": {
+        "mean": 46.641666666666666,
+        "p10": 13,
+        "p90": 80.40000000000003,
+        "min": -25,
+        "max": 151
+      }
+    },
+    {
+      "scenario": "capacidad-mitad",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 90,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 2026,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 6443.533333333334,
+          "p10": 5955.2,
+          "p90": 6887.1,
+          "meanPeak": 831.6666666666666,
+          "meanPeakDay": 59.50833333333333,
+          "dosesUsed": 7650,
+          "dosesAvailable": 7650
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 6558.041666666667,
+          "p10": 6064,
+          "p90": 6976.3,
+          "meanPeak": 852.95,
+          "meanPeakDay": 59.425,
+          "dosesUsed": 7650,
+          "dosesAvailable": 7650
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12259.091666666667,
+          "p10": 12067.5,
+          "p90": 12467.2,
+          "meanPeak": 1715.3416666666667,
+          "meanPeakDay": 63.141666666666666,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5815.558333333333,
+        "p10": 5551.7,
+        "p90": 6074.8,
+        "min": 5294,
+        "max": 6681
+      },
+      "pairedVsRandom": {
+        "mean": 114.50833333333334,
+        "p10": 49.5,
+        "p90": 184.50000000000006,
+        "min": -95,
+        "max": 239
+      }
+    },
+    {
+      "scenario": "capacidad-mitad",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 90,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 42,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 6418.183333333333,
+          "p10": 6010.3,
+          "p90": 6886.5,
+          "meanPeak": 824.2083333333334,
+          "meanPeakDay": 60.175,
+          "dosesUsed": 7650,
+          "dosesAvailable": 7650
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 6533.791666666667,
+          "p10": 6140.5,
+          "p90": 6979.8,
+          "meanPeak": 847.0083333333333,
+          "meanPeakDay": 59.958333333333336,
+          "dosesUsed": 7650,
+          "dosesAvailable": 7650
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12245.633333333333,
+          "p10": 12061.6,
+          "p90": 12454,
+          "meanPeak": 1712.825,
+          "meanPeakDay": 63.21666666666667,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5827.45,
+        "p10": 5535.9,
+        "p90": 6097.2,
+        "min": 5171,
+        "max": 6447
+      },
+      "pairedVsRandom": {
+        "mean": 115.60833333333333,
+        "p10": 40.5,
+        "p90": 201.40000000000003,
+        "min": 3,
+        "max": 289
+      }
+    },
+    {
+      "scenario": "capacidad-mitad",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 90,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 12345,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 6379.25,
+          "p10": 5922.8,
+          "p90": 6837,
+          "meanPeak": 820.3166666666667,
+          "meanPeakDay": 60.675,
+          "dosesUsed": 7650,
+          "dosesAvailable": 7650
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 6500.916666666667,
+          "p10": 6053.3,
+          "p90": 6926.400000000001,
+          "meanPeak": 843.3666666666667,
+          "meanPeakDay": 60.083333333333336,
+          "dosesUsed": 7650,
+          "dosesAvailable": 7650
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12241.191666666668,
+          "p10": 12036.6,
+          "p90": 12447,
+          "meanPeak": 1714.9416666666666,
+          "meanPeakDay": 63.34166666666667,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5861.941666666667,
+        "p10": 5606.8,
+        "p90": 6145.4,
+        "min": 5212,
+        "max": 6569
+      },
+      "pairedVsRandom": {
+        "mean": 121.66666666666667,
+        "p10": 45.6,
+        "p90": 204.10000000000002,
+        "min": -40,
+        "max": 299
+      }
+    },
+    {
+      "scenario": "capacidad-mitad",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 90,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 98765,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 6422.616666666667,
+          "p10": 5855.1,
+          "p90": 6894.200000000001,
+          "meanPeak": 826.675,
+          "meanPeakDay": 60.125,
+          "dosesUsed": 7650,
+          "dosesAvailable": 7650
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 6540.883333333333,
+          "p10": 6003.6,
+          "p90": 7019.5,
+          "meanPeak": 849.7333333333333,
+          "meanPeakDay": 60,
+          "dosesUsed": 7650,
+          "dosesAvailable": 7650
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12255.891666666666,
+          "p10": 12007.9,
+          "p90": 12488.2,
+          "meanPeak": 1714.1083333333333,
+          "meanPeakDay": 63.333333333333336,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5833.275,
+        "p10": 5537,
+        "p90": 6181.1,
+        "min": 5356,
+        "max": 6429
+      },
+      "pairedVsRandom": {
+        "mean": 118.26666666666667,
+        "p10": 50.8,
+        "p90": 187.90000000000026,
+        "min": -12,
+        "max": 371
+      }
+    },
+    {
+      "scenario": "capacidad-mitad",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 90,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 314159,
+        "runs": 120,
+        "outbreakLocation": "mercado",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 6384.841666666666,
+          "p10": 5845.7,
+          "p90": 6897.6,
+          "meanPeak": 820.3333333333334,
+          "meanPeakDay": 60.358333333333334,
+          "dosesUsed": 7650,
+          "dosesAvailable": 7650
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 6497.625,
+          "p10": 5968.3,
+          "p90": 6987.400000000001,
+          "meanPeak": 841.75,
+          "meanPeakDay": 60.05833333333333,
+          "dosesUsed": 7650,
+          "dosesAvailable": 7650
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12234.241666666667,
+          "p10": 11999.7,
+          "p90": 12456.4,
+          "meanPeak": 1713.7666666666667,
+          "meanPeakDay": 63.43333333333333,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 5849.4,
+        "p10": 5508.7,
+        "p90": 6150.8,
+        "min": 5250,
+        "max": 6812
+      },
+      "pairedVsRandom": {
+        "mean": 112.78333333333333,
+        "p10": 53.9,
+        "p90": 179.20000000000002,
+        "min": -15,
+        "max": 307
+      }
+    },
+    {
+      "scenario": "transporte",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 2026,
+        "runs": 120,
+        "outbreakLocation": "bus",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 3072.616666666667,
+          "p10": 2652.7,
+          "p90": 3524.6,
+          "meanPeak": 424.725,
+          "meanPeakDay": 48.1,
+          "dosesUsed": 14516.366666666667,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 3224.125,
+          "p10": 2790.9,
+          "p90": 3658.8,
+          "meanPeak": 453.23333333333335,
+          "meanPeakDay": 48.06666666666667,
+          "dosesUsed": 14341.708333333334,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12333.425,
+          "p10": 12146.6,
+          "p90": 12500.2,
+          "meanPeak": 1721.9583333333333,
+          "meanPeakDay": 61.06666666666667,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9260.808333333332,
+        "p10": 8934.9,
+        "p90": 9578.300000000001,
+        "min": 8720,
+        "max": 10136
+      },
+      "pairedVsRandom": {
+        "mean": 151.50833333333333,
+        "p10": 83,
+        "p90": 229,
+        "min": -16,
+        "max": 364
+      }
+    },
+    {
+      "scenario": "transporte",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 42,
+        "runs": 120,
+        "outbreakLocation": "bus",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 3048.4,
+          "p10": 2667,
+          "p90": 3453,
+          "meanPeak": 418.525,
+          "meanPeakDay": 48.233333333333334,
+          "dosesUsed": 14566.2,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 3205.0416666666665,
+          "p10": 2784.9,
+          "p90": 3629.4,
+          "meanPeak": 446.875,
+          "meanPeakDay": 48.19166666666667,
+          "dosesUsed": 14384.6,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12319.95,
+          "p10": 12132.9,
+          "p90": 12479.2,
+          "meanPeak": 1719.95,
+          "meanPeakDay": 61.641666666666666,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9271.55,
+        "p10": 8918.4,
+        "p90": 9594.5,
+        "min": 8645,
+        "max": 9873
+      },
+      "pairedVsRandom": {
+        "mean": 156.64166666666668,
+        "p10": 83.6,
+        "p90": 234.20000000000002,
+        "min": 14,
+        "max": 324
+      }
+    },
+    {
+      "scenario": "transporte",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 12345,
+        "runs": 120,
+        "outbreakLocation": "bus",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 3031.891666666667,
+          "p10": 2521.9,
+          "p90": 3534.4,
+          "meanPeak": 417,
+          "meanPeakDay": 48.00833333333333,
+          "dosesUsed": 14562.1,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 3193.8,
+          "p10": 2714.2,
+          "p90": 3680.5000000000005,
+          "meanPeak": 446.43333333333334,
+          "meanPeakDay": 48.40833333333333,
+          "dosesUsed": 14386.55,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12315.666666666666,
+          "p10": 12118.8,
+          "p90": 12516.5,
+          "meanPeak": 1721.7333333333333,
+          "meanPeakDay": 61.333333333333336,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9283.775,
+        "p10": 8968.9,
+        "p90": 9654.7,
+        "min": 8659,
+        "max": 9887
+      },
+      "pairedVsRandom": {
+        "mean": 161.90833333333333,
+        "p10": 93,
+        "p90": 229,
+        "min": 18,
+        "max": 343
+      }
+    },
+    {
+      "scenario": "transporte",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 98765,
+        "runs": 120,
+        "outbreakLocation": "bus",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 3053.116666666667,
+          "p10": 2558.9,
+          "p90": 3488.8,
+          "meanPeak": 421.6333333333333,
+          "meanPeakDay": 48.43333333333333,
+          "dosesUsed": 14541.491666666667,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 3212.625,
+          "p10": 2626.8,
+          "p90": 3636.5,
+          "meanPeak": 451.64166666666665,
+          "meanPeakDay": 48.333333333333336,
+          "dosesUsed": 14365.65,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12332.65,
+          "p10": 12121.4,
+          "p90": 12526.3,
+          "meanPeak": 1719.975,
+          "meanPeakDay": 61.46666666666667,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9279.533333333333,
+        "p10": 8968.6,
+        "p90": 9606.4,
+        "min": 8675,
+        "max": 9788
+      },
+      "pairedVsRandom": {
+        "mean": 159.50833333333333,
+        "p10": 83,
+        "p90": 236.20000000000002,
+        "min": 25,
+        "max": 291
+      }
+    },
+    {
+      "scenario": "transporte",
+      "config": {
+        "population": 15000,
+        "initialInfected": 35,
+        "days": 90,
+        "transmissionRate": 0.34,
+        "recoveryRate": 0.16,
+        "incubationRate": 0.22,
+        "vaccinesPerDay": 180,
+        "interventionDay": 6,
+        "vaccineEfficacy": 0.82,
+        "seed": 314159,
+        "runs": 120,
+        "outbreakLocation": "bus",
+        "totalVaccines": 15120
+      },
+      "strategies": [
+        {
+          "strategy": "targeted",
+          "meanAffected": 3028.016666666667,
+          "p10": 2615.8,
+          "p90": 3450.3,
+          "meanPeak": 416.0083333333333,
+          "meanPeakDay": 48.59166666666667,
+          "dosesUsed": 14572.683333333332,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "random",
+          "meanAffected": 3184.258333333333,
+          "p10": 2735.6,
+          "p90": 3593.7000000000003,
+          "meanPeak": 445.30833333333334,
+          "meanPeakDay": 48.7,
+          "dosesUsed": 14391.716666666667,
+          "dosesAvailable": 15120
+        },
+        {
+          "strategy": "none",
+          "meanAffected": 12322.283333333333,
+          "p10": 12121.9,
+          "p90": 12494.5,
+          "meanPeak": 1722.95,
+          "meanPeakDay": 61.65,
+          "dosesUsed": 0,
+          "dosesAvailable": 0
+        }
+      ],
+      "pairedVsNone": {
+        "mean": 9294.266666666666,
+        "p10": 8993.4,
+        "p90": 9596.2,
+        "min": 8693,
+        "max": 9901
+      },
+      "pairedVsRandom": {
+        "mean": 156.24166666666667,
+        "p10": 91.9,
+        "p90": 221.60000000000005,
+        "min": 31,
+        "max": 308
+      }
+    }
+  ],
+  "negativeExample": {
+    "config": {
+      "population": 100,
+      "initialInfected": 1,
+      "days": 30,
+      "transmissionRate": 0.34,
+      "recoveryRate": 0.16,
+      "incubationRate": 0.22,
+      "vaccinesPerDay": 2,
+      "interventionDay": 6,
+      "vaccineEfficacy": 0.82,
+      "seed": 14,
+      "runs": 1,
+      "outbreakLocation": "mercado",
+      "totalVaccines": 10
+    },
+    "savedVsRandom": -1
+  }
+}

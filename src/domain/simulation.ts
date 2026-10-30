@@ -22,6 +22,15 @@ export type SimulationInput = {
   seed: number
   runs: number
   outbreakLocation: LocationId
+  totalVaccines?: number
+}
+
+export const ALGORITHM_VERSION = 'seir-places-2.0.0'
+export const DEFAULT_INPUT: SimulationInput = {
+  population: 15000, initialInfected: 35, days: 90, transmissionRate: .34,
+  recoveryRate: .16, incubationRate: .22, vaccinesPerDay: 180,
+  interventionDay: 6, vaccineEfficacy: .82, seed: 2026, runs: 120,
+  outbreakLocation: 'mercado', totalVaccines: 15120,
 }
 
 export type DayState = {
@@ -41,6 +50,9 @@ export type RunResult = {
   protectedPeople: number
   dosesUsed: number
   dosesAvailable: number
+  dosesByLocation: number[]
+  firstAllocation: number[]
+  finalZones: ZoneState[]
 }
 
 export type AggregateDay = { day: number; mean: number; p10: number; p90: number }
@@ -57,6 +69,10 @@ export type StrategySummary = {
   meanProtected: number
   meanDosesUsed: number
   dosesAvailable: number
+  minAffected: number
+  maxAffected: number
+  meanDosesByLocation: number[]
+  meanFirstAllocation: number[]
 }
 
 export type ComparisonResult = {
@@ -66,12 +82,65 @@ export type ComparisonResult = {
   savedVsNone: number
   savedVsRandom: number
   impactPercent: number
+  config: SimulationInput
+  algorithmVersion: string
+  pairedVsNone: DifferenceSummary
+  pairedVsRandom: DifferenceSummary
+  warnings: string[]
+  example: Record<StrategyId, RunResult>
 }
 
-type ZoneState = { susceptible: number; exposed: number; infected: number; recovered: number; vaccinated: number }
+export type DifferenceSummary = { mean: number; p10: number; p90: number; min: number; max: number }
+
+export type ZoneState = { susceptible: number; exposed: number; infected: number; recovered: number; vaccinated: number }
 type Random = () => number
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
+
+export function validateInput(input: SimulationInput): void {
+  if (!input || typeof input !== 'object') throw new Error('Se requiere una configuración.')
+  const limits: [keyof SimulationInput, number, number][] = [
+    ['population', 100, 50000], ['days', 1, 180], ['runs', 1, 300],
+    ['initialInfected', 0, input.population], ['vaccinesPerDay', 0, input.population],
+    ['interventionDay', 1, input.days + 1], ['seed', 0, 4294967295],
+  ]
+  for (const [name, min, max] of limits) {
+    const value = input[name]
+    if (typeof value !== 'number' || !Number.isSafeInteger(value) || value < min || value > max) {
+      throw new Error(`${name}: entero entre ${min} y ${max}.`)
+    }
+  }
+  for (const name of ['transmissionRate', 'recoveryRate', 'incubationRate', 'vaccineEfficacy'] as const) {
+    if (!Number.isFinite(input[name]) || input[name] < 0 || input[name] > 1) throw new Error(`${name}: valor finito entre 0 y 1.`)
+  }
+  if (input.totalVaccines !== undefined && (!Number.isSafeInteger(input.totalVaccines) || input.totalVaccines < 0 || input.totalVaccines > 1000000)) {
+    throw new Error('totalVaccines: entero entre 0 y 1000000.')
+  }
+  if (!LOCATIONS.some(location => location.id === input.outbreakLocation)) throw new Error('outbreakLocation: lugar desconocido.')
+  const capacity = locationPopulations(input.population)[locationIndex(input.outbreakLocation)]
+  if (input.initialInfected > capacity) throw new Error(`initialInfected: el lugar inicial admite como máximo ${capacity} personas.`)
+}
+
+export function locationPopulations(population: number): number[] {
+  let assigned = 0
+  return LOCATIONS.map((location, index) => {
+    const size = index === LOCATIONS.length - 1 ? population - assigned : Math.round(population * location.share)
+    assigned += size
+    return size
+  })
+}
+
+// A fresh deterministic stream for each run/day/place/event keeps branches in
+// one distribution from shifting the random draws of any later event.
+function eventRandom(seed: number, run: number, day: number, zone: number, event: number): Random {
+  let value = seed >>> 0
+  for (const key of [run, day, zone, event]) {
+    value = Math.imul(value ^ key ^ 0x9e3779b9, 0x21f0aaad)
+    value = Math.imul(value ^ (value >>> 16), 0x735a2d97)
+    value = (value ^ (value >>> 15)) >>> 0
+  }
+  return createRandom(value)
+}
 
 // Mulberry32: pequeño, rápido y determinista. No se usa con fines criptográficos.
 export function createRandom(seed: number): Random {
@@ -109,11 +178,8 @@ function locationIndex(id: LocationId) {
 }
 
 function createZones(input: SimulationInput): ZoneState[] {
-  const population = Math.max(1, Math.round(input.population))
-  let assigned = 0
-  const zones = LOCATIONS.map((location, index) => {
-    const size = index === LOCATIONS.length - 1 ? population - assigned : Math.round(population * location.share)
-    assigned += size
+  const population = input.population
+  const zones = locationPopulations(population).map(size => {
     return { susceptible: size, exposed: 0, infected: 0, recovered: 0, vaccinated: 0 }
   })
   const initial = clamp(Math.round(input.initialInfected), 0, population)
@@ -172,58 +238,54 @@ function targetedAllocation(zones: ZoneState[], doses: number) {
   return allocation
 }
 
-function randomAllocation(zones: ZoneState[], doses: number, random: Random) {
+export function randomAllocation(zones: ZoneState[], doses: number, random: Random) {
   const allocation = zones.map(() => 0)
-  let remaining = Math.min(doses, zones.reduce((sum, zone) => sum + zone.susceptible, 0))
-  let eligible = zones.reduce((sum, zone) => sum + zone.susceptible, 0)
-  for (let index = 0; index < zones.length; index += 1) {
-    if (remaining === 0) break
-    const available = zones[index].susceptible
-    const amount = index === zones.length - 1
-      ? Math.min(remaining, available)
-      : Math.min(remaining, available, binomial(remaining, available / Math.max(1, eligible), random))
-    allocation[index] = amount
-    remaining -= amount
-    eligible -= available
+  const total = zones.reduce((sum, zone) => sum + zone.susceptible, 0)
+  const amount = Math.min(doses, total)
+  // Exact sampling without replacement among susceptible individuals. Sampling
+  // the excluded set is equivalent and cheaper when almost everyone gets a dose.
+  const complement = amount > total / 2
+  let eligible = total
+  for (let draw = 0; draw < (complement ? total - amount : amount); draw++) {
+    let ticket = Math.floor(random() * eligible)
+    for (let zone = 0; zone < zones.length; zone++) {
+      const available = zones[zone].susceptible - allocation[zone]
+      if (ticket < available) { allocation[zone]++; break }
+      ticket -= available
+    }
+    eligible--
   }
-  for (let index = 0; remaining > 0 && index < zones.length; index += 1) {
-    const amount = Math.min(remaining, zones[index].susceptible - allocation[index])
-    allocation[index] += amount
-    remaining -= amount
-  }
-  return allocation
+  return complement ? zones.map((zone, index) => zone.susceptible - allocation[index]) : allocation
 }
 
 export function simulateOnce(input: SimulationInput, strategy: StrategyId, runIndex = 0): RunResult {
-  const safeInput = {
-    ...input,
-    days: clamp(Math.round(input.days), 1, 365),
-    interventionDay: clamp(Math.round(input.interventionDay), 0, Math.round(input.days)),
-    vaccinesPerDay: Math.max(0, Math.round(input.vaccinesPerDay)),
-    vaccineEfficacy: clamp(input.vaccineEfficacy, 0, 1),
-  }
-  const diseaseRandom = createRandom((safeInput.seed + Math.imul(runIndex + 1, 0x9E3779B1)) >>> 0)
-  const allocationRandom = createRandom((safeInput.seed ^ Math.imul(runIndex + 11, 0x85EBCA6B)) >>> 0)
+  validateInput(input)
+  if (!['targeted', 'random', 'none'].includes(strategy)) throw new Error('Estrategia desconocida.')
+  if (!Number.isSafeInteger(runIndex) || runIndex < 0) throw new Error('Índice de corrida inválido.')
+  const safeInput = { ...input }
   const zones = createZones(safeInput)
   const timeline: DayState[] = []
   let totalAffected = Math.round(safeInput.initialInfected)
   let dosesUsed = 0
-  const activeDays = strategy === 'none' ? 0 : Math.max(0, safeInput.days - safeInput.interventionDay)
-  const dosesAvailable = activeDays * safeInput.vaccinesPerDay
+  const activeDays = strategy === 'none' ? 0 : Math.max(0, safeInput.days - safeInput.interventionDay + 1)
+  const dosesAvailable = Math.min(input.totalVaccines ?? Infinity, activeDays * safeInput.vaccinesPerDay)
+  const dosesByLocation = zones.map(() => 0)
+  let firstAllocation = zones.map(() => 0)
 
-  for (let day = 0; day <= safeInput.days; day += 1) {
-    timeline.push(totals(zones, day))
-    if (day === safeInput.days) break
+  timeline.push(totals(zones, 0))
+  for (let day = 1; day <= safeInput.days; day += 1) {
 
     if (strategy !== 'none' && day >= safeInput.interventionDay) {
       const allocation = strategy === 'targeted'
-        ? targetedAllocation(zones, safeInput.vaccinesPerDay)
-        : randomAllocation(zones, safeInput.vaccinesPerDay, allocationRandom)
+        ? targetedAllocation(zones, Math.min(safeInput.vaccinesPerDay, dosesAvailable - dosesUsed))
+        : randomAllocation(zones, Math.min(safeInput.vaccinesPerDay, dosesAvailable - dosesUsed), eventRandom(input.seed, runIndex, day, 0, 4))
+      if (day === safeInput.interventionDay) firstAllocation = [...allocation]
       allocation.forEach((amount, index) => {
-        const protectedPeople = binomial(amount, safeInput.vaccineEfficacy, allocationRandom)
+        const protectedPeople = binomial(amount, safeInput.vaccineEfficacy, eventRandom(input.seed, runIndex, day, index, 3))
         zones[index].susceptible -= protectedPeople
         zones[index].vaccinated += protectedPeople
         dosesUsed += amount
+        dosesByLocation[index] += amount
       })
     }
 
@@ -237,9 +299,9 @@ export function simulateOnce(input: SimulationInput, strategy: StrategyId, runIn
         return sum + link * infected / Math.max(1, populations[other])
       }, 0) / Math.max(1, zones.length - 1)
       const force = safeInput.transmissionRate * (0.74 * local + 0.26 * connected)
-      const newExposed = binomial(zone.susceptible, 1 - Math.exp(-force), diseaseRandom)
-      const newInfectious = binomial(zone.exposed, safeInput.incubationRate, diseaseRandom)
-      const newRecovered = binomial(zone.infected, safeInput.recoveryRate, diseaseRandom)
+      const newExposed = binomial(zone.susceptible, 1 - Math.exp(-force), eventRandom(input.seed, runIndex, day, index, 0))
+      const newInfectious = binomial(zone.exposed, safeInput.incubationRate, eventRandom(input.seed, runIndex, day, index, 1))
+      const newRecovered = binomial(zone.infected, safeInput.recoveryRate, eventRandom(input.seed, runIndex, day, index, 2))
       totalAffected += newExposed
       return {
         susceptible: zone.susceptible - newExposed,
@@ -250,6 +312,7 @@ export function simulateOnce(input: SimulationInput, strategy: StrategyId, runIn
       }
     })
     next.forEach((zone, index) => { zones[index] = zone })
+    timeline.push(totals(zones, day))
   }
 
   const peak = timeline.reduce((best, current) => current.infected > best.infected ? current : best)
@@ -261,6 +324,7 @@ export function simulateOnce(input: SimulationInput, strategy: StrategyId, runIn
     protectedPeople: timeline.at(-1)?.vaccinated ?? 0,
     dosesUsed,
     dosesAvailable,
+    dosesByLocation, firstAllocation, finalZones: zones.map(zone => ({ ...zone })),
   }
 }
 
@@ -292,22 +356,35 @@ function aggregate(id: StrategyId, label: string, runs: RunResult[]): StrategySu
     meanProtected: mean(runs.map(run => run.protectedPeople)),
     meanDosesUsed: mean(runs.map(run => run.dosesUsed)),
     dosesAvailable: runs[0]?.dosesAvailable ?? 0,
+    minAffected: Math.min(...affected), maxAffected: Math.max(...affected),
+    meanDosesByLocation: LOCATIONS.map((_, index) => mean(runs.map(run => run.dosesByLocation[index]))),
+    meanFirstAllocation: LOCATIONS.map((_, index) => mean(runs.map(run => run.firstAllocation[index]))),
   }
 }
 
-export function compareStrategies(input: SimulationInput): ComparisonResult {
-  const runCount = clamp(Math.round(input.runs), 10, 1000)
+export function summarizeDifferences(values: number[]): DifferenceSummary {
+  if (!values.length || values.some(value => !Number.isFinite(value))) throw new Error('Muestra de diferencias inválida.')
+  return { mean: mean(values), p10: quantile(values, .1), p90: quantile(values, .9), min: Math.min(...values), max: Math.max(...values) }
+}
+
+export function compareStrategies(input: SimulationInput, onProgress?: (completed: number, total: number) => void): ComparisonResult {
+  validateInput(input)
+  input = { ...input }
+  const runCount = input.runs
   const strategies: Record<StrategyId, RunResult[]> = { targeted: [], random: [], none: [] }
   for (let run = 0; run < runCount; run += 1) {
     strategies.targeted.push(simulateOnce(input, 'targeted', run))
     strategies.random.push(simulateOnce(input, 'random', run))
     strategies.none.push(simulateOnce(input, 'none', run))
+    onProgress?.(run + 1, runCount)
   }
   const targeted = aggregate('targeted', '7DaysToSurvive', strategies.targeted)
   const random = aggregate('random', 'Intervención al azar', strategies.random)
   const none = aggregate('none', 'No intervenir', strategies.none)
-  const savedVsNone = Math.max(0, none.meanAffected - targeted.meanAffected)
-  const savedVsRandom = Math.max(0, random.meanAffected - targeted.meanAffected)
+  const pairedVsNone = summarizeDifferences(strategies.none.map((run, index) => run.totalAffected - strategies.targeted[index].totalAffected))
+  const pairedVsRandom = summarizeDifferences(strategies.random.map((run, index) => run.totalAffected - strategies.targeted[index].totalAffected))
+  const savedVsNone = pairedVsNone.mean
+  const savedVsRandom = pairedVsRandom.mean
   return {
     targeted,
     random,
@@ -315,5 +392,14 @@ export function compareStrategies(input: SimulationInput): ComparisonResult {
     savedVsNone,
     savedVsRandom,
     impactPercent: none.meanAffected ? savedVsNone / none.meanAffected * 100 : 0,
+    config: { ...input }, algorithmVersion: ALGORITHM_VERSION, pairedVsNone, pairedVsRandom,
+    example: { targeted: strategies.targeted[0], random: strategies.random[0], none: strategies.none[0] },
+    warnings: [
+      'Población, lugares y parámetros sintéticos; sin calibración sanitaria de Manta.',
+      'P10–P90 describe variabilidad de corridas, no un intervalo de confianza de la media.',
+      'La estrategia dirigida es una heurística; puede perder frente al azar.',
+      ...(input.runs < 30 ? ['Menos de 30 corridas: percentiles inestables.'] : []),
+      ...(input.interventionDay > input.days ? ['La intervención empieza fuera del horizonte.'] : []),
+    ],
   }
 }
