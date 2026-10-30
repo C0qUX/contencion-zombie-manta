@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { LOCATIONS, type ComparisonResult, type StrategyId, type ZoneState } from '../domain/simulation'
 import { INITIAL_MAP_VIEW, MAP_ANCHORS, MAP_HEIGHT, MAP_WIDTH, mapPosition, mapTiles, zoomView } from '../features/map'
+import { MayorReport } from './MayorReport'
 const states: { key: keyof ZoneState; name: string; color: string }[] = [
   { key: 'susceptible', name: 'Sanas', color: '#76b4a2' },
   { key: 'exposed', name: 'En riesgo', color: '#eea34b' },
@@ -18,7 +19,8 @@ export function PlaceNetwork({ result }: { result: ComparisonResult }) {
   const [showHeat, setShowHeat] = useState(true)
   const [tileFailed, setTileFailed] = useState(false)
   const [tileLoaded, setTileLoaded] = useState(false)
-  const [speed, setSpeed] = useState(500)
+  const [speed, setSpeed] = useState(1000)
+  const [presentation, setPresentation] = useState(false)
   const [reduced, setReduced] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   const [view, setView] = useState(INITIAL_MAP_VIEW)
   const section = useRef<HTMLElement>(null)
@@ -34,16 +36,24 @@ export function PlaceNetwork({ result }: { result: ComparisonResult }) {
   }, [])
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const change = () => { setReduced(media.matches); if (media.matches) setPlaying(false) }
+    const change = () => setReduced(media.matches)
     media.addEventListener('change', change)
     return () => media.removeEventListener('change', change)
   }, [])
-  useEffect(() => { setDay(0); setPlaying(!window.matchMedia('(prefers-reduced-motion: reduce)').matches) }, [result])
+  useEffect(() => { setDay(0); setPlaying(true) }, [result])
   useEffect(() => {
-    if (!playing || reduced || !visible) return
+    if (!presentation) return
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') setPresentation(false) }
+    window.addEventListener('keydown', escape)
+    return () => { document.body.style.overflow = previous; window.removeEventListener('keydown', escape) }
+  }, [presentation])
+  useEffect(() => {
+    if (!playing) return
     const timer = window.setInterval(() => setDay(current => Math.min(current + 1, result.config.days)), speed)
     return () => window.clearInterval(timer)
-  }, [playing, speed, reduced, visible, result.config.days])
+  }, [playing, speed, result.config.days])
   useEffect(() => { if (day >= result.config.days) setPlaying(false) }, [day, result.config.days])
   const run = result.example[strategy]
   const hasHistory = !!run.zonesTimeline && run.zonesTimeline.length === result.config.days + 1
@@ -64,22 +74,24 @@ export function PlaceNetwork({ result }: { result: ComparisonResult }) {
   const givenToday = todayDoses.reduce((a, b) => a + b, 0)
   const actionPlace = givenToday ? LOCATIONS[todayDoses.indexOf(Math.max(...todayDoses))].label : ''
   const stock = result.config.totalVaccines ?? result.config.vaccinesPerDay * result.config.days
-  return <section ref={section} id="mapa-manta" className="panel places live-map" aria-labelledby="manta-map-title">
+  return <section ref={section} id="mapa-manta" className={'panel places live-map' + (presentation ? ' presentation' : '')} aria-labelledby="manta-map-title">
     <p className="eyebrow">MANTA · MAPA INTERACTIVO</p><h2 id="manta-map-title">Mira cómo cambia la ciudad</h2>
     <p>Avanza los días y compara qué pasa cuando protegemos primero los lugares de mayor riesgo.</p>
     <div className="map-controls">
       <label>Estrategia ilustrada<select value={strategy} onChange={event => setStrategy(event.target.value as StrategyId)}>{[result.targeted, result.random, result.none].map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></label>
-      <label>Velocidad<select value={speed} onChange={event => setSpeed(Number(event.target.value))}><option value={1000}>1 día / segundo</option><option value={500}>2 días / segundo</option><option value={200}>5 días / segundo</option></select></label>
-      <button disabled={!hasHistory || reduced} onClick={() => { if (day >= result.config.days) setDay(0); setPlaying(value => !value) }}>{playing ? 'Pausar mapa' : 'Reproducir mapa'}</button>
+      <label>Velocidad<select value={speed} onChange={event => setSpeed(Number(event.target.value))}><option value={1000}>×1 · un día por segundo</option><option value={500}>×2 · el doble de rápido</option><option value={333}>×3 · el triple de rápido</option></select></label>
+      <button disabled={!hasHistory} onClick={() => { if (day >= result.config.days) setDay(0); setPlaying(value => !value) }}>{playing ? 'Pausar mapa' : 'Reproducir mapa'}</button>
       <button onClick={() => { setPlaying(false); setDay(0) }} disabled={!hasHistory}>Volver al día 0</button>
     </div>
-    {reduced && <p>Movimiento reducido: avanza con el control de día; la reproducción automática está desactivada.</p>}
+    <button className="presentation-toggle" onClick={() => setPresentation(value => !value)}>{presentation ? 'Cerrar presentación' : 'Ver en modo presentación'}</button>
+    {reduced && <p>Movimiento reducido: el reloj continúa, con efectos visuales desactivados. Puedes pausar cuando quieras.</p>}
     {!hasHistory && <p>Este resultado anterior no contiene historial por lugar; se muestra solo el estado final.</p>}
     <label className="map-day" htmlFor="map-day">Día ilustrado: <b>{shownDay} / {result.config.days}</b><input id="map-day" type="range" min="0" max={result.config.days} step="1" value={shownDay} disabled={!hasHistory} onChange={event => { setPlaying(false); setDay(Number(event.target.value)) }} /></label>
     <div className="map-live-status"><span className={playing ? 'live-indicator active' : 'live-indicator'} /> <b>Día {shownDay}</b><span>{shownDay === 0 ? 'Comienza el brote' : interventionActive ? 'Vacunación en marcha' : strategy === 'none' ? 'Nadie interviene' : 'Esperando para intervenir'}</span><span>+{n(newCases)} personas expuestas hoy</span></div>
     <div className="map-story" aria-live="polite">{givenToday > 0 ? <>Hoy se usan <b>{n(givenToday)} dosis</b>. La mayor asignación va a <b>{actionPlace}</b>.</> : shownDay === 0 ? 'El brote acaba de comenzar. Observa cómo se propaga al avanzar los días.' : strategy === 'none' ? 'En esta comparación no se aplican vacunas.' : 'Hoy no se pudieron asignar dosis; revisa el día de inicio y el stock.'}</div>
     <div className="map-viewport-tools" aria-label="Navegación del mapa"><button aria-label="Acercar mapa" disabled={view.zoom >= 16} onClick={() => setView(value => zoomView(value, 1))}>+ Acercar</button><button aria-label="Alejar mapa" disabled={view.zoom <= 12} onClick={() => setView(value => zoomView(value, -1))}>− Alejar</button><button onClick={() => setView(INITIAL_MAP_VIEW)}>Centrar Manta</button><small>Arrastra el mapa para explorar · zoom {view.zoom}</small></div>
     <div className="map-canvas">
+      <aside className="map-day-popup" aria-label="Resumen del día"><span>DÍA {shownDay} / {result.config.days}</span><strong>{shownDay === 0 ? 'Comienza la historia' : shownDay === result.config.days ? 'Fin del recorrido' : 'Esto pasó hoy'}</strong><p>{n(newCases)} nuevas exposiciones · {n(givenToday)} dosis aplicadas</p><p>{actionPlace ? 'Prioridad de hoy: ' + actionPlace : strategy === 'none' ? 'Plan sin vacunación' : 'Sin asignación de vacunas hoy'}</p></aside>
       <svg viewBox={'0 0 ' + MAP_WIDTH + ' ' + MAP_HEIGHT} aria-labelledby="map-svg-title map-svg-desc" role="img"
         onPointerDown={event => { if ((event.target as Element).closest('[role="button"]')) return; const rect = event.currentTarget.getBoundingClientRect(); gesture.current = { x: event.clientX, y: event.clientY, scale: MAP_WIDTH / rect.width }; event.currentTarget.setPointerCapture(event.pointerId) }}
         onPointerMove={event => { const start = gesture.current; if (start) setDrag({ x: (event.clientX - start.x) * start.scale, y: (event.clientY - start.y) * start.scale }) }}
@@ -114,6 +126,7 @@ export function PlaceNetwork({ result }: { result: ComparisonResult }) {
       </svg>
       <span className="map-attribution">{showStreets && tileLoaded && !tileFailed ? <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap contributors</a> : 'Esquema · sin casos reales por calle'}</span>
     </div>
+    <MayorReport result={result} finished={hasHistory && shownDay >= result.config.days} />
     <div className="map-cartography"><button aria-pressed={showHeat} onClick={() => setShowHeat(value => !value)}>{showHeat ? 'Ocultar avance del brote' : 'Mostrar avance del brote'}</button><button onClick={() => { setShowStreets(value => !value); setTileFailed(false); setTileLoaded(false) }}>{showStreets ? 'Usar fondo esquemático' : 'Mostrar calles de Manta (internet)'}</button>{tileFailed && <button onClick={() => { setTileFailed(false); setTileLoaded(false) }}>Reintentar calles</button>}<a href="https://www.openstreetmap.org/#map=13/-0.973/-80.722" target="_blank" rel="noreferrer">Abrir cartografía</a></div>
     {tileFailed && <p role="status">No se pudo cargar la cartografía. La simulación continúa con el fondo esquemático.</p>}
     <div className="map-legend">{states.map(state => <span key={state.key}><i style={{ background: state.color }} />{state.name}: <b>{n(totals[state.key])}</b></span>)}</div>

@@ -108,3 +108,15 @@ footer { color:#627567; }
 @media(max-width:800px){.map-day-metrics { grid-template-columns:repeat(2,1fr); }}
 @media(max-width:600px){.dashboard-header h1{font-size:34px}.map-day-metrics{grid-template-columns:repeat(2,1fr)}.map-day-metrics b{font-size:22px}.map-live-status{gap:6px}.map-story{font-size:13px}.metrics article{border-top-width:3px}}
 @media print { :root,body,main { color:#111; background:#fff; } .panel,.metrics article,.decision,.map-day-metrics { color:#111; background:#fff; box-shadow:none; } .decision h2,.decision-steps strong,.metrics strong,.map-day-metrics b { color:#111 !important; } }
+.map-day-popup { position:absolute; top:16px; right:16px; z-index:2; width:270px; padding:15px 18px; background:rgba(255,255,255,.96); border:1px solid #b8d8c4; border-left:5px solid #dc354b; border-radius:12px; box-shadow:0 8px 25px #123e2922; pointer-events:none; }
+.map-day-popup span { display:block; color:#a82339; font-size:11px; font-weight:800; letter-spacing:.08em; }
+.map-day-popup strong { display:block; color:#154c32; margin:7px 0; font-size:18px; }
+.map-day-popup p { margin:5px 0; font-size:12px; line-height:1.5; }
+.mayor-report { display:flex; flex-wrap:wrap; align-items:center; gap:20px; justify-content:space-between; background:#edfaef; border:2px solid #6bbf8f; border-radius:12px; padding:20px; margin-top:16px; }
+.mayor-report h3 { margin:8px 0; }
+.mayor-report p { margin:6px 0; }
+.live-map.presentation { position:fixed; inset:10px; z-index:100; overflow:auto; margin:0; border:2px solid #3d9f69; background:white; }
+.live-map.presentation .map-canvas { max-width:1100px; margin:0 auto; }
+.presentation-toggle { margin-bottom:10px; }
+@media(max-width:600px){.map-day-popup{position:relative;top:auto;right:auto;width:auto;margin:10px;box-shadow:none;pointer-events:auto}.live-map.presentation{inset:0;border-radius:0}.map-day-popup strong{font-size:16px}.mayor-report{padding:14px}}
+@media print{.map-day-popup,.presentation-toggle,.mayor-report{display:none!important}.live-map.presentation{position:static;overflow:visible}}
