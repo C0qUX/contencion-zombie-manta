@@ -53,7 +53,7 @@ El stack S3/CloudFront y el script PowerShell del repositorio son una alternativ
 
 - Población cerrada durante el horizonte simulado.
 - Red sintética agregada en cinco tipos de lugar: hogares, colegio, mercado, bus y barrio. No representa personas reales.
-- Grupos excluyentes S/E/I/R/V: susceptible, expuesto, infeccioso, recuperado y protegido por vacuna. La suma de los cinco conserva la población.
+- Grupos excluyentes S/E/I/R/V: S sano (susceptible), E mordido (expuesto, aún no infeccioso), I zombie (infeccioso), R exorcizado (recuperado) y V protegido por vacuna. La suma de los cinco conserva la población.
 - La contagiosidad combina 74 % de exposición dentro del lugar y 26 % entre lugares conectados.
 - Una dosis solo se ofrece a susceptibles. Un fallo consume recurso y conserva S; puede haber otro intento en un día posterior. Se supone protección inmediata y observación perfecta del estado.
 - La estrategia dirigida pondera susceptibles, prevalencia y conectividad. La línea aleatoria recibe el mismo inventario y calendario.
@@ -116,6 +116,7 @@ scripts/            automatización operativa
 - [Plan de implementación para la prueba de fuego](docs/plan-ganar.md)
 - [Modelo, parámetros y evidencia](docs/modelo.md)
 - [Recorrido de cinco minutos y respuestas](docs/demo.md)
+- [Presentación del pitch](docs/presentacion.html) — abrir en navegador, imprimir a PDF para entrega
 
 ## Equipo
 

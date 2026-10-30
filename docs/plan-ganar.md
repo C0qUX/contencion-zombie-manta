@@ -40,11 +40,23 @@ La base pasó 12 pruebas y build con Node 22.23.4. La release v0.1.0 conserva el
 6. No se verificaron correo actual de Budget ni gasto final. No se cambiaron cuenta, región, plan o alertas.
 7. Tras integrar, probar URL pública y registrar commit desplegado.
 8. Confirmar con organización si puede publicarse nueva release o actualizar entrega.
-9. Los PR #1 y #2 siguen abiertos pero proponen el motor SIRV anterior. No integrarlos automáticamente sobre este SEIR; revisar compatibilidad con sus autores.
+9. Los PR #1 y #2 se cerraron sin integrar; proponían el motor SIRV anterior. No reincorporarlos sobre este SEIR.
 
-## Siguiente bloque
+## Siguiente bloque — Preparación para pitch del 30 de octubre
 
-Revisión de equipo, comprobación de correo Budget y ensayo del pitch. P2 (backend, nuevas intervenciones o cómputo distribuido) queda fuera hasta aceptar una demo estable.
+Presentación de cinco minutos en la ULEAM seguida de tres minutos de preguntas del jurado.
+
+Rúbrica de la prueba de fuego (40 % de la nota total):
+- Impacto de la estrategia: 30 %
+- Rigor del modelo: 25 %
+- Brote Sorpresa: 25 %
+- Claridad para decidir: 20 %
+
+Pendientes antes del pitch:
+1. Ensayar el Brote Sorpresa con al menos tres variaciones (contagio ×2, mitad stock, cambio de origen).
+2. Verificar que la demo pública responde en la URL: https://main.d3kt9g5gofzhxh.amplifyapp.com/
+3. Comprobar con el titular el correo de Budget y el gasto actualizado.
+4. Tener la presentación PDF/PPTX lista (docs/presentacion.html → imprimir a PDF).
 
 Este documento sustituye el roadmap anterior, que mezclaba tareas ya completadas y propuestas. Método completo en docs/modelo.md y recorrido en docs/demo.md.
 
