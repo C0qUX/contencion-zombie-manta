@@ -11,3 +11,5 @@ Se conservaron el algoritmo seir-places-3.0.0, sus parámetros, los Workers, los
 Validación: Node 22.23.4, 75 pruebas y build; aceptación general en navegador (incluye jerarquía, desplegables, teclado, pérdidas, exportación e impresión) y las ocho comprobaciones del mapa. La cartografía se intercepta en QA automatizado, por lo que las capturas de prueba muestran el esquema de respaldo. Revisar calles con conexión antes de una presentación.
 
 El dashboard está preparado para revisión en la rama del mapa. Después de integrar en main, verificar Amplify y ejecutar nuevamente scripts/verify-ui.cjs contra la URL pública.
+
+La siguiente revisión visual adopta una base blanca, rojo para avance del brote y verde para protección. Usa títulos y ayuda sencillos para explicar recursos, resultados y semillas a una audiencia no técnica. Conserva en secciones desplegables las tasas, el método y la evidencia que necesita el jurado. El mapa muestra halos de riesgo derivados de los cinco grupos sintéticos; la cartografía de fondo puede mostrar calles reales de OpenStreetMap cuando esté disponible.

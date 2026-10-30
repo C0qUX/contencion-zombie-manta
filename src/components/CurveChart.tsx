@@ -23,7 +23,7 @@ export function CurveChart({ targeted, random, none, interventionDay }: Props) {
       {strategies.map(strategy => <polyline key={strategy.id} points={line(strategy)} className={'curve ' + strategy.id} />)}
       {interventionDay <= days && <g><line x1={x(interventionDay)} x2={x(interventionDay)} y1={top} y2={top + plotHeight} className="intervention-line" /><text x={x(interventionDay) + (interventionDay > days * .7 ? -5 : 5)} textAnchor={interventionDay > days * .7 ? 'end' : 'start'} y={top - 6}>Inicio: día {interventionDay}</text></g>}
     </svg>
-    <p className="chart-caption">Días · Infecciosos activos · Bandas: percentiles 10–90 de cada estrategia, no intervalos de confianza.</p>
+    <p className="chart-caption">La sombra alrededor de cada línea muestra cuánto cambian los resultados entre distintas partidas. La línea vertical marca el primer día de vacunación.</p>
     <details><summary>Consultar datos diarios</summary><div className="table-scroll"><table><caption>Media [P10–P90] de infecciosos</caption><thead><tr><th>Día</th>{strategies.map(strategy => <th key={strategy.id}>{strategy.label}</th>)}</tr></thead><tbody>{targeted.timeline.map((day, index) => <tr key={day.day}><th scope="row">{day.day}</th>{strategies.map(strategy => { const values = strategy.timeline[index]; return <td key={strategy.id}>{values.mean.toFixed(1)} [{values.p10.toFixed(1)}–{values.p90.toFixed(1)}]</td> })}</tr>)}</tbody></table></div></details>
   </div>
 }

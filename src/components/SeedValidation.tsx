@@ -35,12 +35,12 @@ export function SeedValidation({ result }: { result: ComparisonResult }) {
     const anchor = document.createElement('a'); anchor.href = url; anchor.download = '7DaysToSurvive-bateria-semillas.json'; anchor.click()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
-  return <section className="panel seed-validation" aria-labelledby="seed-validation-title"><h2 id="seed-validation-title">Prueba de contención · varias semillas</h2>
-    <p>Mismo escenario aplicado, stock y calendario; {result.config.runs} corridas de evaluación por semilla. Se usan {seeds.join(', ')}. Cada semilla vuelve a seleccionar su política con futuros de calibración separados.</p>
-    <p>Criterio observado: la dirigida debe reducir contagios <b>en promedio frente al azar y a no intervenir</b>. No se garantiza que todas las semillas lo cumplan; se conservan pérdidas y empates.</p>
+  return <section className="panel seed-validation" aria-labelledby="seed-validation-title"><h2 id="seed-validation-title">¿Funciona con otras partidas?</h2>
+    <p>Cambia el número de partida y comprueba si el plan sigue funcionando. Esta prueba usa cinco números distintos y compara los mismos tres planes cada vez.</p>
+    <details><summary>Cómo se hace la prueba</summary><p>Para cada semilla se realizan {result.config.runs} corridas con el mismo stock y calendario. La regla se elige en futuros de calibración distintos de los que se muestran. Se cuentan mejoras medias frente al azar y a no actuar; también se conservan pérdidas y empates.</p></details>
     <div className="report-actions"><button disabled={busy} onClick={() => start.current()}>Evaluar cinco semillas</button>{busy && <button onClick={() => { client.current?.cancel(); setBusy(false); setMessage('Batería cancelada. Solo se muestran las semillas completadas.') }}>Cancelar batería</button>}{rows.length > 0 && <button onClick={download}>Exportar batería JSON</button>}</div>
     <p role="status">{message}</p>
     {rows.length > 0 && <><p><b>{passed} de {rows.length} semillas completadas</b> mejoran ambas referencias en media. {rows.length < 5 ? 'Resultado parcial.' : 'Esto es evidencia del escenario, no una garantía universal.'}</p><div className="table-scroll"><table><caption>Diferencias firmadas de contagios; positivos indican mejora de la dirigida</caption><thead><tr><th>Semilla</th><th>Contagios dirigidos</th><th>Evitados vs. ninguna</th><th>Evitados vs. azar</th><th>P10–P90 vs. azar</th><th>Criterio</th></tr></thead><tbody>{rows.map(row => <tr key={row.seed}><th scope="row">{row.seed}</th><td>{n(row.affected)}</td><td className={row.savedVsNone < 0 ? 'negative' : ''}>{n(row.savedVsNone)}</td><td className={row.savedVsRandom < 0 ? 'negative' : ''}>{n(row.savedVsRandom)}</td><td>{n(row.p10)} a {n(row.p90)}</td><td>{row.savedVsNone > 0 && row.savedVsRandom > 0 ? 'Mejora media' : 'No mejora ambas'}</td></tr>)}</tbody></table></div></>}
-    <p>El modelo cuenta contagios y protección por vacuna, no fallecimientos. La población es una subpoblación ficticia de Manta; esta prueba no valida resultados clínicos sobre sus habitantes reales.</p>
+    <p>Estos resultados son de una ciudad simulada. No representan casos reales de Manta.</p>
   </section>
 }

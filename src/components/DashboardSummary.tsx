@@ -27,8 +27,8 @@ export function DashboardSummary({ result, elapsed, onExport }: { result: Compar
       </details>
     </section>
     <section className="metrics" aria-label="Diferencias de contagios">
-      {[{ label: 'Evitados frente a no actuar', stats: result.pairedVsNone }, { label: 'Evitados frente al azar', stats: result.pairedVsRandom }].map(item => <article key={item.label}><span>{item.label}</span><strong className={item.stats.mean < 0 ? 'negative' : 'good'}>{n(item.stats.mean)}</strong><small>{item.stats.mean < 0 ? 'Más contagios con la dirigida' : 'Contagios menos, en promedio'}</small><small>Rango P10–P90: {n(item.stats.p10)} a {n(item.stats.p90)}</small></article>)}
-      <article><span>Personas protegidas por vacuna</span><strong>{n(targeted.meanProtected)}</strong><small>{n(targeted.meanDosesUsed)} dosis usadas en promedio</small><small>Protección simulada; no equivale a vidas salvadas.</small></article>
+      {[{ label: 'Frente a no hacer nada', stats: result.pairedVsNone }, { label: 'Frente a vacunar al azar', stats: result.pairedVsRandom }].map(item => <article key={item.label}><span>{item.label}</span><strong className={item.stats.mean < 0 ? 'negative' : 'good'}>{n(item.stats.mean)}</strong><small>{item.stats.mean < 0 ? 'Más personas contagiadas' : 'Personas que evitarían el contagio, en promedio'}</small><small>En distintas partidas: de {n(item.stats.p10)} a {n(item.stats.p90)}</small></article>)}
+      <article><span>Protegidas con vacuna</span><strong>{n(targeted.meanProtected)}</strong><small>{n(targeted.meanDosesUsed)} dosis usadas en promedio</small><small>Son cifras simuladas, no personas reales.</small></article>
     </section>
   </>
 }
