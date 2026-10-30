@@ -65,7 +65,7 @@ Pendientes antes del pitch:
 | Estrategia que optimiza | Cumple | Búsqueda entre 32 reglas en 24 futuros de calibración separados; `seir-places-3.0.0` |
 | Media, mediana y P10–P90 | Cumple | Tabla, métricas y decisión muestran la mediana |
 | Impacto frente al azar, escenario oficial | 451,5 contagios evitados (antes 134,7) | [sensibilidad.json](evidencia/sensibilidad.json): 40/40 experimentos positivos |
-| Mapa animado por lugares | Cumple | Deslizador de día y reproducción con barras S/E/I/R/V |
+| Mapa animado por lugares | Cumple | PR #6 de C0qUX: reproducción diaria en Manta con anillos S/E/I/R/V y batería de cinco semillas ([mapa-manta.md](mapa-manta.md)) |
 | Costo de la intervención | Cumple | Costo por dosis editable; costo del plan y por contagio evitado en la decisión |
 | Registro de costos por servicio | Cumple | [costos.md](costos.md#registro-por-servicio) |
 | Brote Sorpresa ensayado | Cumple | Ocho variaciones en la URL pública; la dirigida gana al azar en todas ([demo.md](demo.md#preparación-del-brote-sorpresa)) |

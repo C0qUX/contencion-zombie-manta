@@ -11,7 +11,7 @@ Herramienta de apoyo a decisiones que simula una plaga estocástica sobre una re
 - Estrategia que optimiza: elige su regla entre 32 candidatas en 24 futuros de calibración que nunca entran en la evaluación, y reporta la ganancia frente a la regla fija original.
 - Worker con progreso y cancelación, seis escenarios, exportación JSON, enlace compartible e informe imprimible.
 - Diferencias pareadas firmadas, tres bandas P10–P90 y consumos reales visibles, incluidos escenarios donde la dirigida pierde.
-- Costo del plan y costo por contagio evitado a partir de un costo por dosis editable; mapa de lugares animado día a día con barras S/E/I/R/V.
+- Costo del plan y costo por contagio evitado a partir de un costo por dosis editable; mapa animado día a día con indicadores de contagio y protección.
 - Pruebas de reproducibilidad, conservación, elegibilidad, recursos equivalentes y casos negativos.
 - Despliegue estático en AWS Amplify Hosting; configuración de build versionada.
 
