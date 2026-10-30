@@ -60,7 +60,11 @@ const path = require('node:path')
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.waitForFunction(() => [...document.querySelectorAll('.live-map button')].some(button => button.textContent === 'Reproducir mapa' && button.disabled))
     checks.push('Reduced motion disables autoplay while retaining manual controls')
-    for (const [key, value] of Object.entries({ population: 100, initialInfected: 1, days: 12, runs: 2, vaccinesPerDay: 3, totalVaccines: 20 })) await page.locator('[name=' + key + ']').fill(String(value))
+    for (const [key, value] of Object.entries({ population: 100, initialInfected: 1, days: 12, runs: 2, vaccinesPerDay: 3, totalVaccines: 20 })) {
+      const field = page.locator('[name=' + key + ']')
+      if (!(await field.isVisible())) await page.locator('.advanced-controls > summary').click()
+      await field.fill(String(value))
+    }
     await page.getByRole('button', { name: 'Ejecutar simulación', exact: true }).click()
     await page.getByText('2 corridas · 12 días', { exact: false }).waitFor({ timeout: 60000 })
     await page.getByRole('button', { name: 'Evaluar cinco semillas' }).click()
