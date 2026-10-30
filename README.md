@@ -1,13 +1,14 @@
-# MantaZero
+# 7DaysToSurvive
 
-Herramienta de apoyo a decisiones que simula la propagación de un brote y compara una estrategia de vacunación con dos líneas base: no intervenir e intervenir tarde con menos recursos.
+Herramienta de apoyo a decisiones que simula una plaga estocástica sobre una red sintética de lugares de Manta y compara una asignación dirigida de vacunas con dos líneas base: no intervenir y repartir al azar exactamente los mismos recursos disponibles.
 
 ## Estado del proyecto
 
-- Modelo SIR determinista ejecutado día a día.
-- Interfaz interactiva para modificar población, contagio, vacunas e inicio de la intervención.
-- Comparación cuantitativa de escenarios y recomendación en lenguaje simple.
-- Pruebas de reproducibilidad, conservación de población y comparación de estrategias.
+- Modelo SEIR estocástico ejecutado día a día sobre hogares, colegio, mercado, bus y barrio.
+- Semilla real y 120 repeticiones Monte Carlo por defecto, con media y rango percentil 10–90.
+- Interfaz para el Brote Sorpresa: origen, contagiosidad, vacunas, eficacia, inicio y semilla.
+- Comparación justa entre 7DaysToSurvive, reparto aleatorio y no intervenir.
+- Pruebas de reproducibilidad, conservación, elegibilidad, recursos equivalentes y superioridad en el escenario documentado.
 - Despliegue estático en AWS Amplify Hosting; configuración de build versionada.
 
 ## Ejecución local
@@ -49,12 +50,41 @@ El stack S3/CloudFront y el script PowerShell del repositorio son una alternativ
 ## Supuestos del modelo
 
 - Población cerrada durante el horizonte simulado.
-- Mezcla homogénea: cada persona tiene la misma probabilidad de contacto.
-- Las personas vacunadas dejan de ser susceptibles el mismo día.
-- La intervención también reduce 18 % la transmisión para representar comunicación y medidas preventivas.
+- Red sintética agregada en cinco tipos de lugar: hogares, colegio, mercado, bus y barrio. No representa personas reales.
+- Estados SEIR: susceptible, expuesto, infeccioso y recuperado; vacunado se registra como protección independiente.
+- La contagiosidad combina 74 % de exposición dentro del lugar y 26 % entre lugares conectados.
+- Una dosis solo se ofrece a personas susceptibles. La eficacia decide qué fracción queda protegida; una dosis fallida consume recurso, pero no cambia el estado.
+- La estrategia dirigida pondera susceptibles, prevalencia y conectividad. La línea aleatoria recibe el mismo inventario y calendario.
+- Los contagios, progresiones, recuperaciones y eficacia se muestrean con un generador pseudoaleatorio gobernado por la semilla.
 - No se modelan nacimientos, fallecimientos, reinfección ni pérdida de inmunidad en esta fase.
 
-Los números son parámetros de simulación, no predicciones clínicas. Deben calibrarse con fuentes epidemiológicas antes de tomar decisiones reales.
+### Escenario predeterminado reproducible
+
+| Parámetro | Valor | Origen |
+|---|---:|---|
+| Población | 15.000 | Subpoblación sintética elegida para la demostración; no es un dato censal |
+| Infectados iniciales | 35 en el mercado | Escenario ficticio del reto |
+| Horizonte | 90 días | Ventana operativa de la demostración |
+| Contagiosidad | 0,34 | Supuesto del escenario ficticio, editable en vivo |
+| Progresión expuesto → infeccioso | 0,22/día | Supuesto equivalente a aproximadamente 4,5 días |
+| Recuperación | 0,16/día | Supuesto equivalente a aproximadamente 6,25 días |
+| Vacunas | 180/día desde el día 6 | Restricción ficticia de recursos |
+| Eficacia | 82 % | Supuesto editable para la prueba de variante |
+| Semilla | 2026 | Valor público para reproducir el resultado |
+| Monte Carlo | 120 corridas | Balance entre estabilidad y respuesta inmediata en el navegador |
+
+Para reproducir: abrir la demo, pulsar **Restablecer escenario** y confirmar semilla `2026`. Los números son parámetros educativos, no predicciones clínicas. Antes de una decisión sanitaria deben calibrarse y validarse con datos oficiales.
+
+## Cómo funciona la estrategia
+
+Cada día calcula un puntaje por lugar usando susceptibles disponibles, casos expuestos/infecciosos y conectividad. Distribuye primero las dosis hacia mayor riesgo esperado. La línea aleatoria usa el mismo inventario diario y la misma fecha de inicio, pero reparte sin ese puntaje. La interfaz reporta promedios y percentiles para evitar presentar una trayectoria afortunada como evidencia.
+
+## Limitaciones conocidas
+
+- La red es sintética y agregada; no reproduce calles, movilidad ni población real de Manta.
+- La aproximación binomial para grupos grandes prioriza velocidad de la demo.
+- No existe calibración epidemiológica ni validación clínica.
+- El cálculo corre en el navegador; no se ejecutan todavía miles de corridas distribuidas en AWS.
 
 ## Estructura
 

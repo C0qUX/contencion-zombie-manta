@@ -6,16 +6,16 @@ Auditoría realizada el 30 de octubre de 2026 contra los requisitos oficiales de
 
 | Criterio | Estado | Evidencia o problema |
 |---|---|---|
-| Simulación día a día | Parcial | Existe un SIR determinista agregado, sin red de contactos ni lugares de Manta. |
-| Intervención limitada | Parcial | Hay vacunas por día, pero no eficacia, stock, costo ni calendario de entregas. |
-| Dos líneas base | No cumple | No intervenir existe. La línea llamada aleatoria no es aleatoria y usa 65 % de los recursos. |
-| Repeticiones, promedios y rangos | No cumple | Solo se ejecuta una trayectoria determinista. |
-| Parámetros interactivos | Parcial | Hay controles básicos; faltan semilla editable, variante, eficacia, origen y presupuesto. |
-| Reproducibilidad por semilla | No cumple | La semilla aparece en pantalla, pero el motor no la utiliza. |
-| Estrategia que optimiza | No cumple | La interfaz evalúa la configuración elegida; no busca ni recomienda la mejor asignación. |
+| Simulación día a día | Cumple | SEIR estocástico sobre hogares, colegio, mercado, bus y barrio. |
+| Intervención limitada | Cumple base | Vacunas por día, eficacia y fecha de inicio; presupuesto monetario queda como mejora. |
+| Dos líneas base | Cumple | No intervenir y reparto aleatorio con el mismo inventario/calendario. |
+| Repeticiones, promedios y rangos | Cumple | Monte Carlo configurable con media y percentiles 10–90. |
+| Parámetros interactivos | Cumple | Semilla, contagiosidad, vacunas, eficacia, origen e inicio editables. |
+| Reproducibilidad por semilla | Cumple | PRNG determinista cubierto por pruebas. |
+| Estrategia que optimiza | Cumple base | Heurística de riesgo, conectividad y susceptibles; falta búsqueda global. |
 | AWS | Cumple | Amplify Hosting público en `us-east-2`, con CI y Budget documentados. |
 | Supuestos y fuentes | Parcial | Hay supuestos, pero los números epidemiológicos no tienen fuentes o justificación visible. |
-| Prueba Brote Sorpresa | Riesgo alto | No se puede cambiar origen, eficacia parcial, recursos por día ni comparar incertidumbre. |
+| Prueba Brote Sorpresa | Cumple base | Origen, eficacia, contagiosidad, recursos, inicio y semilla pueden cambiarse en vivo. |
 
 ## P0: obligatorio antes del pitch
 
