@@ -34,6 +34,7 @@ Estas fuentes justifican distinguir fases; **no calibran las tasas del simulador
 | Inicio | Día 6 | Al principio del día, antes de nuevas exposiciones |
 | Eficacia | 0,82 | Protección inmediata por intento |
 | Semilla / corridas | 2026 / 120 | Valor público, configurable; no semilla optimizada |
+| Costo por dosis | 10 USD | Supuesto ficticio editable; solo cambia el costo reportado, no la dinámica |
 
 Las proporciones de lugar son 42/18/14/12/14 %. Sus coeficientes de conectividad son 1; 1,18; 1,35; 1,48; 1,12. Son pesos sintéticos, no centralidades medidas. El residuo de redondeo va al último grupo.
 
@@ -84,6 +85,7 @@ Por corrida: diferencia = contagios de referencia − dirigidos. Después se agr
 - Percentiles por interpolación lineal en posición (n−1)p, conservando el criterio anterior.
 - Pico y día del pico por corrida, después promedio. El día medio puede ser fraccionario.
 - Tres curvas de infecciosos y sus bandas.
+- Costo del plan = dosis usadas medias × costo por dosis. Costo por contagio evitado = costo ÷ contagios evitados frente a no intervenir; no se calcula si no evita contagios. En el escenario oficial: 150.094 USD y 15,40 USD por contagio evitado para la dirigida, frente a 146.386 USD y 15,74 USD para el azar.
 - P10–P90 es variabilidad entre ejecuciones, no intervalo de confianza de la media.
 - Esquema individual: siempre corrida 0, sin selección favorable.
 - Duración fuera del resultado determinista, dependiente del dispositivo.

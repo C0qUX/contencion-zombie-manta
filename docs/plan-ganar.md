@@ -53,7 +53,7 @@ Rúbrica de la prueba de fuego (40 % de la nota total):
 - Claridad para decidir: 20 %
 
 Pendientes antes del pitch:
-1. Ensayar el Brote Sorpresa con al menos tres variaciones (contagio ×2, mitad stock, cambio de origen).
+1. ~~Ensayar el Brote Sorpresa con al menos tres variaciones (contagio ×2, mitad stock, cambio de origen).~~ Hecho en la URL pública con ocho variaciones; la dirigida gana al azar en todas ([resultados](demo.md#preparación-del-brote-sorpresa)).
 2. Verificar que la demo pública responde en la URL: https://main.d3kt9g5gofzhxh.amplifyapp.com/ — verificada con 3.0.0 tras el PR #4: 11/11 comprobaciones.
 3. Comprobar con el titular el correo de Budget y el gasto actualizado.
 4. ~~Tener la presentación PDF/PPTX lista (docs/presentacion.html → imprimir a PDF).~~ Hecho: [presentacion.pdf](presentacion.pdf), 10 páginas de 1920×1080, generado con `scripts/export-presentation.cjs`.
@@ -65,6 +65,10 @@ Pendientes antes del pitch:
 | Estrategia que optimiza | Cumple | Búsqueda entre 32 reglas en 24 futuros de calibración separados; `seir-places-3.0.0` |
 | Media, mediana y P10–P90 | Cumple | Tabla, métricas y decisión muestran la mediana |
 | Impacto frente al azar, escenario oficial | 451,5 contagios evitados (antes 134,7) | [sensibilidad.json](evidencia/sensibilidad.json): 40/40 experimentos positivos |
+| Mapa animado por lugares | Cumple | PR #6 de C0qUX: reproducción diaria en Manta con anillos S/E/I/R/V y batería de cinco semillas ([mapa-manta.md](mapa-manta.md)) |
+| Costo de la intervención | Cumple | Costo por dosis editable; costo del plan y por contagio evitado en la decisión |
+| Registro de costos por servicio | Cumple | [costos.md](costos.md#registro-por-servicio) |
+| Brote Sorpresa ensayado | Cumple | Ocho variaciones en la URL pública; la dirigida gana al azar en todas ([demo.md](demo.md#preparación-del-brote-sorpresa)) |
 | Demo pública verificada | `d4aea38` (3.0.0) publicado a las 16:08 UTC, 11/11 y mismas cifras que en local | [verificacion.json](evidencia/aws/verificacion.json) |
 
 Integrado en `main` con el PR #4 y verificado en la URL pública tras el despliegue de Amplify. Siguen pendientes, por parte del titular de la cuenta AWS: verificar el correo del Budget y registrar el gasto final.

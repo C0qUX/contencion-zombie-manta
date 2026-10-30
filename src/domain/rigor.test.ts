@@ -129,7 +129,7 @@ describe('strict public configuration', () => {
     ['totalVaccines', -1], ['totalVaccines', .5], ['vaccineEfficacy', 1.01],
     ['transmissionRate', Infinity], ['recoveryRate', NaN], ['incubationRate', -.1],
     ['interventionDay', 0], ['interventionDay', 17], ['outbreakLocation', 'desconocido'],
-    ['initialInfected', 15],
+    ['initialInfected', 15], ['costPerDose', -1], ['costPerDose', NaN], ['costPerDose', 100001],
   ])('rejects %s=%s rather than silently correcting it', (key, value) => {
     expect(() => validateInput({ ...small, [key]: value })).toThrow(key)
   })
